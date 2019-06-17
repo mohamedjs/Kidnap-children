@@ -1,0 +1,134 @@
+.customer-dashboard-main-content {
+	background:#EDF2F5;
+	//width: calc(100% - 255.5px);
+}
+.notification-row {
+	padding: 15px 20px;
+	display: flex;
+	&.seen-notify {
+		background:#F7F8FF;
+	}
+	.img {
+		width: 70px;
+		display: inline-block;
+		margin-#{$end-direction}: 15px;
+		line-height: 60px;
+		flex: 70px 0 0;
+		border-radius: 8px;
+		overflow: hidden;
+		& > img {
+			width: 100%;
+
+		}
+	}
+	.info {
+		display: flex;
+		flex-direction: column;
+		margin-top: 7px;
+		h3.brand {
+			color: #3E3E40;
+			font-size: 14px;
+			font-weight: bold;
+		}
+		.subline {
+			display: flex;
+			justify-content: space-between;
+			.time {
+				font-size: 12px;
+				font-weight: 300;
+				margin-#{$end-direction}: 10px;
+			}
+			.title {
+				font-size: 14px;
+				font-weight: 300;
+				color: #383838;
+			}
+		}
+	}
+}
+#notifications-list-dropdown {
+	min-width: 380px;
+	padding: 0;
+	border: 0;
+	@include shadow(0 0px 35px rgba(#030303, 0.15));
+	.notifications-list-title {
+		font-size: 16px;
+		font-weight: bold;
+		color: $puprle;
+		padding: 15px 20px;
+		border-bottom: 1px solid #DAD6D6;
+		.close {
+			font-size: 12px;
+			font-weight: normal;
+			margin-top: 5px;
+		}
+	}
+	.notifications-footer {
+		text-align: center;
+		padding: 12px 0;
+		font-size: 16px;
+		font-weight: bold;
+		a {
+			color: $puprle;
+			font-size: 14px;
+		}
+		border-top: 1px solid #DAD6D6;
+	}
+	.stipped-rows {
+		max-height: calc(100vh - 180px);
+		overflow: auto;
+	}
+}
+.stipped-rows {
+	& >div:nth-child(even) {
+		background:#F7F8FF;
+	}
+}
+.color-blue-grey {
+	color: #8B929E;
+}
+.bg-fff {
+	background:#fff;
+}
+.shadow-3 {
+	-webkit-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
+	-moz-box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
+	box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
+}
+.shadow-15 {
+	-webkit-box-shadow: 0px 15px 20px 0px rgba(69,77,87,0.10);
+	-moz-box-shadow: 0px 15px 20px 0px rgba(69,77,87,0.10);
+	box-shadow: 0px 15px 20px 0px rgba(69,77,87,0.10);
+}
+.round-10 {
+	border-radius: 10px;
+}
+.round-15 {
+	border-radius: 15px;
+}
+.round-20 {
+	border-radius: 20px;
+}
+.round-30 {
+	border-radius: 30px;
+}
+.p-10 {
+	padding: 10px;
+}
+.btn-purple {
+	background: $puprle;
+	color: #fff !important;
+}
+.btn-brown {
+	background: #E1D8CC;
+	color: #7D7D7D !important;
+}
+.fz-16 {
+	font-size: 16px;
+}
+.fw-b {
+	font-weight: bold;
+}
+.ov-h {
+	overflow: hidden;
+}

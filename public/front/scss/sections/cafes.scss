@@ -1,0 +1,162 @@
+.cafes {
+  padding: 70px 0;
+  overflow: hidden;
+  .title {
+    margin-bottom: 20px;
+  }
+  .search-box {
+    float: $end-direction;
+    margin-bottom: 20px;
+  }
+  .cafes-links {
+    .cafe-box {
+      display: block;
+      border-radius: 15px;
+      @include shadow(0 3px 8px rgba(#000, 0.16));
+      position: relative;
+      margin-bottom: 30px;
+      position: relative;
+
+      .cafe-photo {
+        height: 125px;
+        line-height: 95px;
+        padding: 15px;
+        img {
+          width: auto;
+          max-height: 100%;
+        }
+      }
+      .cafe-name {
+        background: #EDF2F5;
+        padding: 10px 0;
+
+        p{
+          margin-bottom: 0;
+          color: $puprle;
+          font-size: 16px;
+          font-weight: bold;
+        }
+      }
+
+      .cafe-rate {
+        max-width: 52px;
+        width: 100%;
+        background: $yellow;
+        padding: 5px;
+        border: {
+          top-#{$start-direction}-radius: 5px;
+          top-#{$end-direction}-radius: 0;
+          bottom-#{$end-direction}-radius: 0;
+          bottom-#{$start-direction}-radius: 5px;
+        };
+        color:#fff;
+        font-size: 10px;
+        font-weight: bold;
+        overflow: hidden;
+        position: absolute;
+        top: 15px;
+        #{$end-direction}: 0;
+        i {
+          float: $start-direction;
+          font-size: 12px;
+          display: inline-block;
+          vertical-align: middle;
+
+        }
+        span {
+          float: $end-direction;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+
+      .mixin-cafe-info-box {
+        visibility: hidden;
+        @include opacity(0);
+        @include transition();
+        position: absolute;
+        top: -130%;
+        #{$end-direction}: 0;
+        width: 550px;
+
+        &:after {
+          content: '';
+          display: block;
+          border: 15px solid transparent;
+          border-top-color: #fff;
+          position: absolute;
+          top: 100%;
+          #{$end-direction}: 25px;
+          border-bottom: 0;
+        }
+      }
+
+      &:hover {
+        .mixin-cafe-info-box {
+          visibility: visible;
+          @include opacity(1);
+          top: -112%
+        }
+      }
+    }
+    @include respond-above(xl) {
+      .cafes-row > *:nth-child(6n+1) .cafe-box .mixin-cafe-info-box,
+      .cafes-row > *:nth-child(6n+2) .cafe-box .mixin-cafe-info-box {
+        #{$start-direction}: 0;
+        #{$end-direction}: auto;
+        &:after {
+          #{$start-direction}: 25px;
+          #{$end-direction}: auto;
+        }
+      }
+    }
+    @include respond-between(lg, xl) {
+      .cafes-row > *:nth-child(4n+1) .cafe-box .mixin-cafe-info-box,
+      .cafes-row > *:nth-child(4n+2) .cafe-box .mixin-cafe-info-box {
+        #{$start-direction}: 0;
+        #{$end-direction}: auto;
+        &:after {
+          #{$start-direction}: 25px;
+          #{$end-direction}: auto;
+        }
+      }
+    }
+    @include respond-between(md, lg) {
+      .cafes-row > *:nth-child(3n+1) .cafe-box .mixin-cafe-info-box {
+        #{$start-direction}: 0;
+        #{$end-direction}: auto;
+        &:after {
+          #{$start-direction}: 25px;
+          #{$end-direction}: auto;
+        }
+      }
+      .cafes-row > *:nth-child(3n+2) .cafe-box .mixin-cafe-info-box {
+        #{$end-direction}: auto;
+        @include center("horizontal");
+        &:after {
+          #{$end-direction}: auto;
+          @include center("horizontal");
+        }
+      }
+    }
+    @include respond-between(sm, md) {
+      .cafes-row > *:nth-child(2n+1) .cafe-box .mixin-cafe-info-box {
+        #{$start-direction}: 0;
+        #{$end-direction}: auto;
+        &:after {
+          #{$start-direction}: 25px;
+          #{$end-direction}: auto;
+        }
+      }
+
+      .cafes-row > * .cafe-box .mixin-cafe-info-box {
+        width: 510px;
+      }
+    }
+    @include respond-below(sm) {
+      .cafes-row > * .cafe-box .mixin-cafe-info-box {
+        display: none;
+      }
+    }
+  }
+}

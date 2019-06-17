@@ -1,0 +1,70 @@
+.custome_according {
+  padding: {
+    top: 50px;
+    bottom: 80px;
+  }
+  background: #F7F8FF;
+
+  .main-title {
+    margin-bottom: 30px;
+  }
+
+
+  .faq-boxs {
+    .faq-box {
+      border-radius: 10px;
+      background-color: #FCFCFC;
+      @include shadow(0px 10px 20px rgba($dark_blue, 0.1));
+      margin-bottom: 30px;
+
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+
+      .accroding-header {
+        border-bottom: 1px solid #EDF2F5;
+        padding: 20px 25px;
+      }
+
+      .faq-box-btn {
+        width: 100%;
+        & > span , & > i {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 16px;
+          color: $puprle;
+        }
+        span {
+          font-weight: 500;
+        }
+
+        &:hover , &:focus {
+          text-decoration: none;
+        }
+      }
+
+      .collapsed {
+        & > i, & > span {
+          color: $dark_blue;
+        }
+
+        & > i {
+          @include rotateZ(180deg);
+        }
+      }
+
+
+      .card-body {
+        padding: 0;
+        padding-top: 15px;
+        color: #7E7C7C;
+        font-size: 16px;
+        line-height: 27px;
+        margin-#{$start-direction}: 10px;
+        padding: 20px 25px;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,6 @@
+.dashboard-notification-page {
+	padding: 30px;
+	@include respond-below(md) {
+		padding: 20px;
+	}
+}

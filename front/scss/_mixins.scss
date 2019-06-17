@@ -1,0 +1,369 @@
+$gradient_red_1: #f54ea2;
+$gradient_red_2: #ff7676;
+
+$gradient_green_1: #42e695;
+$gradient_green_2: #3bb2b8;
+
+$gradient_blue_1: #3483ff;
+$gradient_blue_2: #cd0fd8;
+
+$gradient_new_blue_1: #4886ff;
+$gradient_new_blue_2: #24cdff;
+
+$gradient_dark_1: #ca4966;
+$gradient_dark_2: #5f2c82;
+
+
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+
+@mixin gradient_text ($color1, $color2) {
+  background: $color1;
+  background: -webkit-linear-gradient(45deg, $color1 0%, $color2 100%);
+  background: -o-linear-gradient(45deg, $color1 0%, $color2 100%);
+  background: -moz-linear-gradient(45deg, $color1 0%, $color2 100%);
+  background: linear-gradient(45deg, $color1 0%, $color2 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+// Define vertical, horizontal, or both position
+@mixin center($position) {
+  position: absolute;
+
+  @if $position == 'vertical' {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  @else if $position == 'horizontal' {
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translate(-50%);
+  }
+  @else if $position == 'both' {
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+}
+
+
+// Define the breakpoints
+$breakpoint-small: 600px;
+$breakpoint-med-small: 960px;
+$breakpoint-med: 1175px;
+
+@mixin screen($size, $type: max, $pixels: $breakpoint-small) {
+  @if $size == 'small' {
+    @media screen and ($type + -width: $breakpoint-small) {
+      @content;
+    }
+  }
+  @else if $size == 'med-small' {
+    @media screen and ($type + -width: $breakpoint-med-small) {
+      @content;
+    }
+  }
+  @else if $size == 'med' {
+    @media screen and ($type + -width: $breakpoint-med) {
+      @content;
+    }
+  }
+  @else if $size == 'large' {
+    @media screen and ($type + -width: $breakpoint-med) {
+      @content;
+    }
+  }
+  @else if $size == 'custom' {
+    @media screen and ($type + -width: $pixels + px) {
+      @content;
+    }
+  }
+  @else {
+    @content;
+  }
+}
+
+
+@mixin background-gradient($start-color, $end-color, $orientation: 45deg) {
+  background: $start-color;
+  background: -webkit-linear-gradient($orientation, $start-color, $end-color);
+  background: -moz-linear-gradient($orientation, $start-color, $end-color);
+  background: -o-linear-gradient($orientation, $start-color, $end-color);
+  background: linear-gradient($orientation, $start-color, $end-color);
+}
+
+
+
+
+
+@mixin skewY($val){
+  -webkit-transform: skewY($val);
+  -moz-transform: skewY($val);
+  -ms-transform: skewY($val);
+  -o-transform: skewY($val);
+  transform: skewY($val);
+}
+@mixin skewX($val){
+  -webkit-transform: skewX($val);
+  -moz-transform: skewX($val);
+  -ms-transform: skewX($val);
+  -o-transform: skewX($val);
+  transform: skewX($val);
+}
+@mixin border-radius($val){
+  -webkit-border-radius: $val;
+  -moz-border-radius: $val;
+  border-radius: $val;
+}
+@mixin rotateZ($val){
+  -webkit-transform:rotate($val);
+  -moz-transform:rotate($val);
+  -o-transform:rotate($val);
+  -ms-transform:rotate($val);
+  transform:rotate($val);
+}
+@mixin rotateY($val){
+  -webkit-transform:rotateY($val);
+  -moz-transform:rotateY($val);
+  -o-transform:rotateY($val);
+  -ms-transform:rotateY($val);
+  transform:rotateY($val);
+}
+@mixin rotateX($val){
+  -webkit-transform:rotateX($val);
+  -moz-transform:rotateX($val);
+  -o-transform:rotateX($val);
+  -ms-transform:rotateX($val);
+  transform:rotateX($val);
+}
+@mixin scaleX($val){
+  -webkit-transform:scaleX($val);
+  -moz-transform:scaleX($val);
+  -o-transform:scaleX($val);
+  -ms-transform:scaleX($val);
+  transform:scaleX($val);
+}
+@mixin scale($val){
+  -webkit-transform:scale($val);
+  -moz-transform:scale($val);
+  -o-transform:scale($val);
+  -ms-transform:scale($val);
+  transform:scale($val);
+}
+@mixin translateY($val){
+  -webkit-transform:translateY($val);
+  -moz-transform:translateY($val);
+  -o-transform:translateY($val);
+  -ms-transform:translateY($val);
+  transform:translateY($val);
+}
+@mixin translateX($val){
+  -webkit-transform:translateX($val);
+  -moz-transform:translateX($val);
+  -o-transform:translateX($val);
+  -ms-transform:translateX($val);
+  transform:translateX($val);
+}
+@mixin transition($for: all , $time: 0.25s, $func: ease-in-out, $delay: 0s){
+  -webkit-transition: $for $time $func $delay;
+  -moz-transition: $for $time $func $delay;
+  -o-transition: $for $time $func $delay;
+  transition: $for $time $func $delay;
+}
+@mixin transform($value){
+  -webkit-transform: $value;
+  -moz-transform: $value;
+  -o-transform: $value;
+  -ms-transform: $value;
+  transform: $value;
+}
+@mixin transform-origin($value){
+  -webkit-transform-origin: $value;
+  -moz-transform-origin: $value;
+  -o-transform-origin: $value;
+  -ms-transform-origin: $value;
+  transform-origin: $value;
+}
+@mixin shadow($val){
+  -webkit-box-shadow: $val;
+  -moz-box-shadow: $val;
+  -o-box-shadow: $val;
+  box-shadow: $val;
+}
+@mixin backgroundImg($url , $x: center , $y: center, $attachment: fixed){
+  background: url($url) $x $y no-repeat $attachment;
+  background-size: cover;
+}
+@mixin circle($dimensions){
+  display: inline-block;
+  text-align: center;
+  width: $dimensions;
+  height: $dimensions;
+  line-height: $dimensions;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+@mixin section_padding ($_top: 0px, $_bottom: 0px) {
+  padding: {
+    top: 110px - $_top;
+    bottom: 110px - $_bottom;
+  };
+}
+
+
+// responsive mixin
+$breakpoints: (
+  // Extra small screen / phone
+        xs: 0,
+  // Small screen / phone
+        sm: 576px,
+  // Medium screen / tablet
+        md: 768px,
+  // Large screen / desktop
+        lg: 992px,
+  // Extra large screen / wide desktop
+        xl: 1200px
+);
+// Respond above.
+@mixin respond-above($breakpoint) {
+
+  // If the breakpoint exists in the map.
+  @if map-has-key($breakpoints, $breakpoint) {
+
+    // Get the breakpoint value.
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+
+    // Write the media query.
+    @media (min-width: $breakpoint-value) {
+      @content;
+    }
+
+    // If the breakpoint doesn't exist in the map.
+  } @else {
+
+    // Log a warning.
+    @warn 'Invalid breakpoint: #{$breakpoint}.';
+  }
+}
+// respond below
+@mixin respond-below($breakpoint) {
+
+  // If the breakpoint exists in the map.
+  @if map-has-key($breakpoints, $breakpoint) {
+
+    // Get the breakpoint value.
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+
+    // Write the media query.
+    @media (max-width: ($breakpoint-value - 1)) {
+      @content;
+    }
+
+    // If the breakpoint doesn't exist in the map.
+  } @else {
+
+    // Log a warning.
+    @warn 'Invalid breakpoint: #{$breakpoint}.';
+  }
+}
+// respond between
+@mixin respond-between($lower, $upper) {
+
+  // If both the lower and upper breakpoints exist in the map.
+  @if map-has-key($breakpoints, $lower) and map-has-key($breakpoints, $upper) {
+
+    // Get the lower and upper breakpoints.
+    $lower-breakpoint: map-get($breakpoints, $lower);
+    $upper-breakpoint: map-get($breakpoints, $upper);
+
+    // Write the media query.
+    @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
+      @content;
+    }
+
+    // If one or both of the breakpoints don't exist.
+  } @else {
+
+    // If lower breakpoint is invalid.
+    @if (map-has-key($breakpoints, $lower) == false) {
+
+      // Log a warning.
+      @warn 'Your lower breakpoint was invalid: #{$lower}.';
+    }
+
+    // If upper breakpoint is invalid.
+    @if (map-has-key($breakpoints, $upper) == false) {
+
+      // Log a warning.
+      @warn 'Your upper breakpoint was invalid: #{$upper}.';
+    }
+  }
+}
+// responsive mixin
+
+// =============================================================================
+// String Replace
+// =============================================================================
+
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+// =============================================================================
+// Font Face
+// =============================================================================
+
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
+  $src: null;
+
+  $extmods: (
+          eot: "?",
+          svg: "#" + str-replace($name, " ", "_")
+  );
+
+  $formats: (
+          otf: "opentype",
+          ttf: "truetype"
+  );
+
+  @each $ext in $exts {
+    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+    $src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+  }
+
+  @font-face {
+    font-family: quote($name);
+    font-style: $style;
+    font-weight: $weight;
+    src: $src;
+  }
+}
+
+
+

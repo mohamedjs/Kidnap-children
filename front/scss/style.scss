@@ -1,0 +1,6 @@
+@import "directions-settings/direction-ltr";
+@import "main";
+
+body{
+  direction: $direction;
+}

@@ -1,0 +1,349 @@
+.list_ofPosts {
+  padding: 0;
+  margin: 0;
+
+  &>li {
+    margin-bottom: 35px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .see-matchresult {
+    display: block;
+    padding: 0 30px;
+    margin-top: 15px;
+    color: $puprle;
+    font-size: 14px;
+    font-weight: bold;
+
+    span {
+      margin-#{$end-direction}: 8px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    i {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+}
+
+.post-data-content {
+  margin-bottom: 35px
+}
+
+
+.post {
+  background: #fff;
+  border-radius: 10px;
+  @include shadow(0 10px 20px rgba(#454D57, 0.16));
+  overflow: hidden;
+
+
+  .setting-dropdown {
+    &> a >i {
+      color: $dark_blue;
+    }
+    .dropdown-menu {
+      #{$end-direction}: 0;
+      #{$start-direction}: auto !important;
+      transform: none !important;
+      top: 15px !important;
+      border: none;
+      border-radius: 10px;
+      @include shadow(0 3px 6px rgba(#000, 0.16));
+      padding: 0;
+      overflow: hidden;
+      .dropdown-item {
+        padding: 12px 20px;
+        border-bottom: 1px solid #F7F8FF;
+        color: #646464;
+        font-size: 13px;
+        font-weight: 500;
+
+        &:last-of-type {
+          border-bottom: 0;
+        }
+
+        &:focus {
+          background: #fff;
+        }
+      }
+
+
+    }
+  }
+
+  &>.photo-box-slider {
+    float: $start-direction;
+    width: 40%;
+
+     img {
+      width: 100%;
+    }
+
+    .photo-arrows  {
+      background: $puprle;
+      @include circle(30px);
+      color: #fff;
+
+      &:focus {
+       outline: none;
+      }
+    }
+
+  }
+
+  .post-data {
+    float: $start-direction;
+    width: 60%;
+    position: relative;
+
+    .post-owner {
+      padding: 15px 30px;
+      margin-bottom: 25px;
+
+      &>.img-box {
+        float: $start-direction;
+        @include circle(50px);
+
+        &>img {
+          width: 100px;
+        }
+      }
+
+      .owner_date {
+        float: $start-direction;
+        padding-#{$start-direction}: 12px;
+
+        .owner-name {
+          margin-top: 5px;
+          margin-bottom: 2px;
+          color: #454D57;
+          font-size: 16px;
+          font-weight: bold;
+
+        }
+
+        .post-time {
+          margin-bottom: 0;
+          color: #8B929E;
+          font-size: 14px;
+        }
+      }
+
+      .icon-box {
+        float: $end-direction;
+        display: block;
+        &>i {
+          font-size: 16px;
+          color: #454D57;
+        }
+      }
+    }
+
+    .lostPerson_data {
+      padding: 0 30px;
+      margin: 0;
+
+
+      li {
+        margin-bottom: 17px;
+
+        &:last-child {
+        margin-bottom: 0;
+      }
+      }
+
+      .label {
+        margin-bottom: 0px;
+        @extend %second_font;
+        color: #8B929E;
+        font-size: 14px;
+        font-weight: bold;
+        display: inline-block;
+
+      }
+
+      .value {
+        display: inline-block;
+        margin-#{$start-direction}: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #454D57;
+      }
+
+      .loatDetails {
+        margin-bottom: 0;
+        font-size: 16px;
+        font-weight: bold;
+        color: #454D57;
+      }
+    }
+
+    .post-btn-list {
+      margin: 0;
+      padding: 0 30px;
+      border-top: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 30px;
+
+
+      .post-btn {
+        padding: 16px 0;
+        display: inline-block;
+        color: #9C9CB1;
+        @include transition();
+
+
+        i {
+          font-size: 14px;
+          margin-#{$end-direction}: 5px;
+          vertical-align: middle;
+        }
+
+        span {
+          font-size: 12px;
+          font-weight: bold;
+
+        }
+        &.active-btn {
+          color: $puprle;
+        }
+
+        &:hover {
+          color: $puprle;
+        }
+      }
+
+    }
+
+    .comments {
+      position: relative;
+      padding-bottom: 90px;
+
+      .user-comments-list {
+        padding: 0 30px;
+        margin: 0;
+
+        &> li {
+          margin-bottom: 15px;
+          overflow: hidden;
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          &>.user-photo {
+            float: $start-direction;
+            @include circle(45px);
+
+            img{
+              width: 100%;
+            }
+          }
+
+          .comment-box {
+            width: calc(100% - (45px + 20px));
+            float: $start-direction;
+            background: #F2F3F5;
+            border-radius: 10px;
+            padding: 12px 10px;
+            margin-#{$start-direction}: 20px;
+
+            .usern-name {
+              font-size: 13px;
+              font-weight: bold;
+              color: $puprle;
+              margin-bottom: 2px;
+            }
+
+            .user-comment {
+              margin-bottom: 0;
+              font-size: 12px;
+              line-height: 18px;
+            }
+          }
+
+
+        }
+      }
+
+      .write-comment {
+        position: absolute;
+        bottom: 0;
+        #{$start-direction}: 0;
+        width: 100%;
+
+        .input-write {
+          width: 100%;
+          background: #EDF2F5;
+          border: 0;
+          padding: 12px 20px;
+          //color: #A1A1A1;
+          font-size: 12px;
+          font-weight: bold;
+          padding-#{$end-direction}: 45px;
+          @extend %second_font;
+
+          &::placeholder {
+            color: #A1A1A1;
+            font-size: 12px;
+            font-weight: bold;
+            @extend %second_font;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        .submit-comment {
+          position: absolute;
+          top:0;
+          #{$end-direction}: 0;
+          background: $puprle;
+          border: 0;
+          padding: 15px;
+
+          &:focus {
+            outline: none;
+          }
+
+          i {
+            color: #fff;
+            display: block;
+            font-size: 13px;
+          }
+        }
+      }
+    }
+
+
+    .post_label {
+      position: absolute;
+      border-radius: 34px 0 0 34px;
+      padding: 8px 19px;
+      font-size: 13px;
+      font-weight: bold;
+      right: 0;
+      top: 60px;
+
+      &.label-missed {
+        background: rgba(255,21,21,0.1);
+        color: #FF1515;
+      }
+
+      &.label-found {
+        background: #CEFFDB;
+        color: #33A753;
+      }
+
+
+    }
+
+    
+  }
+
+}

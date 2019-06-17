@@ -1,0 +1,87 @@
+.download  {
+  padding-top: 70px;
+  @include respond-below(lg) {
+    padding: 50px 0;
+  }
+  .mobile-photo {
+    text-align: center;
+    .img-box {
+      width: 468px;
+      margin: auto;
+
+      @include respond-below(sm) {
+        width: 300px;
+      }
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .info {
+    padding-top: 100px;
+
+    @include respond-below(lg) {
+      padding: 0;
+      text-align: center;
+    }
+
+    .unique {
+      font-size: 30px;
+      @extend %awesome_font;
+      color: $orange;
+      margin-bottom: 15px;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: bold;
+      color:#000;
+      line-height: 1.4em;
+      @include  respond-below(sm) {
+        font-size: 30px;
+      }
+
+      span {
+        color :$red;
+      }
+    }
+
+    .store_app {
+      padding-top: 55px;
+      overflow: hidden;
+      @include respond-below(lg) {
+        padding-top: 20px;
+      }
+      a {
+        float: $start-direction;
+
+        @include respond-below(lg) {
+          float: none;
+        }
+        .img-box {
+          width: 169px;
+          margin: auto;
+          display: inline-block;
+
+          @include respond-below(sm) {
+            width: 135px;
+          }
+
+          img {
+            width: 100%;
+          }
+        }
+
+
+        &:last-child {
+          padding-#{$start-direction}: 30px ;
+          width: calc(100% - 187px);
+
+        }
+      }
+
+    }
+  }
+
+}

@@ -1,0 +1,53 @@
+@import "directions-settings/direction-rtl";
+@import "main";
+
+body{
+  direction: $direction;
+}
+
+.ps__rail-y, .ps__thumb-y {right : auto !important;left : 0 !important;}
+
+.mixin-cafe-info-box .open-btn  {
+  border-radius: 0 34px 34px 0;
+}
+
+.mixin-cafe-info-box .close-btn  {
+  border-radius: 0 34px 34px 0;
+}
+
+.customer-dashboard .customer-dashboard-content-page .chat-box .close-chat-btn {
+  @include rotateZ(180deg);
+}
+
+.mixin-cafe-info-box .cart {
+  border-radius: 0 16px 16px 0;
+}
+.cafes-offer .modal-content .modal-body .modal-offer .offer-box .sale-box {
+  border-radius: 0 16px 16px 0;
+}
+
+.checkout .order-payment .time-box {
+  border-radius: 10px 0 10px 10px !important;
+}
+
+.checkout .delivery-option{
+  border-radius: 10px 0 10px 10px !important;
+}
+
+.search-box .search-submit-btn i {
+  @include rotateZ(180deg);
+}
+
+.cafes .search-box .search-submit-btn i {
+  @include rotateZ(0deg);
+}
+
+.customer-dashboard .customer-dashboard-content .customer-dashboard-content-page .friends-chat .search-box .search-submit-btn i {
+
+  @include rotateZ(0);
+}
+
+.customer-dashboard .customer-dashboard-content-page .chat-box .chat-conversation .left-message li .group-sender-name {
+  left: 9%;
+  
+}

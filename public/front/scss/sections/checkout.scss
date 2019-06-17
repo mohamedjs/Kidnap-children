@@ -1,0 +1,784 @@
+.checkout {
+  background: #F7F8FF;
+  padding-top: 40px;
+  padding-bottom: 70px;
+  .order-payment {
+    margin-bottom: 20px;
+  }
+  .title {
+    overflow: hidden;
+    margin-bottom: 20px;
+
+    .payment-title {
+      float: $start-direction;
+      color: $puprle;
+      font-size: 24px;
+      font-weight: 600;
+      padding-#{$end-direction}: 30px;
+    }
+
+    a {
+      display: inline-block;
+      float: $start-direction;
+      color: $green;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 7px;
+    }
+  }
+  .options {
+    position: relative;
+  }
+  .order-payment {
+
+
+    .deliver-type {
+      display: inline-block;
+      margin-bottom: 0;
+      background: #fff;
+      border-radius: 0;
+      border-top-#{$start-direction}-radius: 10px;
+      border-top-#{$end-direction}-radius: 65px;
+
+      @include shadow(0 3px 6px rgba(#000000, 0.16));
+      padding-#{$start-direction}: 15px;
+      padding-#{$end-direction}: 25px;
+
+      .form-check-label {
+        padding: 20px 20px 10px;
+        padding-#{$start-direction}: 5px;
+        padding-#{$end-direction}: 10px;
+        cursor: pointer;
+        .delivery-name {
+          font-size: 13px;
+          font-weight: 500;
+          color: #383838;
+          padding-#{$start-direction}: 13px;
+          float: $start-direction;
+          width: calc(100% - 21px);
+        }
+      }
+
+      .form-check {
+        padding-#{$start-direction}: 0;
+
+
+
+        .custome-radio-button-group{
+          width: 21px;
+          position: relative;
+          height: 21px;
+          float: $start-direction;
+
+          .form-check-input {
+            margin: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            visibility: hidden;
+          }
+
+          .custome-radio {
+            background: #fff;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #707070;
+            border-radius: 50%;
+          }
+
+          .form-check-input:checked +.custome-radio {
+            border-color: $puprle;
+            position: relative;
+
+            .check-input {
+              width: 8px;
+              height: 8px;
+              background: $puprle;
+              border-radius: 50%;
+              @include center('both');
+            }
+          }
+
+        }
+      }
+
+    }
+    .time-box {
+      background: #fff;
+      border-radius: 0 10px 10px 10px;
+      @include shadow(0 3px 6px rgba(#000000, 0.16));
+      padding: 25px 30px;
+      margin-bottom: 20px;
+
+      p {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+
+    }
+
+
+
+    .payment-methods {
+      background: #fff;
+      border-radius: 10px;
+      @include shadow(0 3px 6px rgba(#000000, 0.16));
+      padding: 25px 30px;
+      & > .title {
+        margin-bottom: 25px;
+        .payment-title {
+          font-size: 18px;
+          padding-#{$end-direction}: 0;
+        }
+        a{
+          margin-top: 0;
+          float: $end-direction;
+        }
+      }
+    }
+
+
+
+
+    .payment-boxs {
+      li {
+        margin-bottom: 15px;
+      }
+      li > label{
+        max-width: 350px;
+        width: 100%;
+        background: #fff;
+        border-radius: 12px;
+        @include shadow(0 3px 6px rgba(#000000, 0.16));
+        padding: 15px;
+        margin-bottom: 25px;
+        overflow: hidden;
+        display: block;
+        .form-check {
+          float: $start-direction;
+          width: 12px;
+          padding-#{$start-direction}: 0;
+
+        }
+        .method-name {
+          float: $start-direction;
+          width: calc(80% - 12px);
+          padding-#{$start-direction}: 30px ;
+          p {
+            font-size: 16px;
+            margin-bottom: 10px;
+          }
+          span {
+            font-size: 12px;
+            color: #888E9B;
+          }
+        }
+        .method-photo {
+          float: $end-direction;
+          padding: 22px 0;
+          padding-#{$end-direction}: 10px ;
+
+          i {
+            font-size: 25px;
+            color: #6A6A6B;
+          }
+        }
+        &:last-child {
+          margin-bottom: 0;
+
+          p {
+            margin-bottom: 0;
+          }
+
+
+          .method-photo {
+            padding: 0;
+            padding-#{$end-direction}: 10px ;
+            line-height: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .order-summary {
+    background: #fff;
+    border-radius: 18px;
+    @include shadow(0 3px 6px rgba(#000, 0.16));
+    .summary-title {
+      font-size: 18px;
+      color: $puprle;
+      margin-bottom: 20px;
+      font-weight: bold;
+      padding: 20px;
+      padding-bottom: 0;
+     }
+    .orders-type{
+      & > li {
+        padding: 20px;
+        border-top: 0.5px solid #DAD6D6;
+
+        .cafe-name {
+          overflow: hidden;
+          margin-bottom: 15px;
+
+          .img-box {
+            width: 43px;
+            height: 43px;
+            background: #EBEBF9;
+            border-radius: 10px;
+            padding: 1.25px;
+            line-height: 40px;
+            flex: 43px 0 0;
+            float: $start-direction;
+
+            img {
+              width: auto;
+              max-height: 100%;
+            }
+          }
+
+          & > p {
+            float: $start-direction;
+            width: calc(100% - (43px + 108px));
+            padding-#{$start-direction}: 10px ;
+            font-size: 14px;
+            font-weight: bold;
+            color: #3E3E40;
+            margin-top: 10px;
+            margin-bottom: 9px;
+          }
+
+          a{
+            float: $end-direction;
+            display: inline-block;
+            border: 1px solid #383838;
+            border-radius: 20px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #383838;
+            margin-top: 3px;
+          }
+        }
+        .order- {
+
+          li {
+            overflow: hidden;
+            margin-bottom: 15px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .order-photo {
+              width: 64px;
+              //border: 1px solid #707070;
+              border-radius: 8px;
+              float: $start-direction;
+
+            }
+            .order-info {
+              width: calc(100% - 64px);
+              float: $start-direction;
+              padding-#{$start-direction}: 15px;
+              margin-top: 6px;
+
+              p {
+                margin-bottom: 5px;
+                color: #3E3E40;
+                font-size: 16px;
+              }
+              span {
+                font-size: 12px;
+                color: #8E93A0;
+
+                .colored {
+                  font-weight: bold;
+                  color: #676769;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+    .voucher-code {
+      padding: 25px 20px;
+      border-top: 0.5px solid #DAD6D6;
+
+      p{
+        font-size: 13px;
+        color: #383838;
+        font-weight: 500;
+        margin-bottom: 10px;
+      }
+    }
+
+    .order-price {
+      padding: 25px 20px;
+      border-top: 0.5px solid #DAD6D6;
+
+      .subtotal {
+        font-size: 14px;
+        color: #7E7C7C;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .price-info {
+        overflow: hidden;
+        p {
+          font-size: 14px;
+        }
+        .cafe-name  {
+          color: #7E7C7C;
+          margin-bottom: 8px;
+          &:last-of-type {
+            margin-bottom: 0;
+          }
+        }
+        .total {
+          color: #383838;
+          margin-top: 15px;
+          font-weight: 600;
+          margin-bottom: 0;
+        }
+        .left-side {
+          float: $start-direction;
+
+        }
+        .right-side {
+          float: $end-direction;
+        }
+      }
+      .place-order {
+        margin-top: 20px;
+        background: $puprle;
+        padding: 12px 5px;
+        border-radius: 8px;
+        font-family: "Nunito", 'sans-serif';
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        display: block;
+        text-align: center;
+      }
+
+      .price-details {
+        margin-bottom: 0;
+        li {
+          overflow: hidden;
+          margin-bottom: 10px;
+
+          p {
+            float: $start-direction;
+          }
+          span {
+            float: $end-direction;
+          }
+
+          .subtotal {
+            font-size: 14px;
+            color: #7E7C7C;
+            margin-bottom: 0;
+          }
+          .total {
+            font-size: 14px;
+            font-weight: 600;
+            color: #383838;
+            margin-bottom: 0;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+            margin-top: 5px;
+          }
+        }
+      }
+
+    }
+  }
+
+  .pick-up-option {
+    display: none;
+  }
+
+  .delivery-option {
+    border-radius: 0 10px 10px 10px !important;
+    margin-bottom: 20px;
+    display: none;
+
+    label > .method-photo i {
+      font-size: 14px !important;
+    }
+  }
+
+  .show-option {
+    display: block;
+  }
+}
+
+
+
+.payment-modal {
+  .modal-dialog {
+    max-width: 735px;
+  }
+
+  .modal-content {
+    border-radius: 22px;
+    border: 1px solid #707070;
+    color: #fff;
+
+    .modal-header {
+      border-bottom: 0;
+      padding: 30px;
+      border-bottom: 1px solid rgba(#9190D6, 0.10);
+
+      .modal-title {
+        font-weight: 600;
+        font-size: 21px;
+        color: $puprle;
+        margin: 0;
+      }
+
+      .close {
+        opacity: 1;
+
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .close > img {
+        float: #{$end-direction};
+        width: 21px;
+        @extend %unselect;
+      }
+    }
+
+    .modal-body {
+      padding: 30px 40px;
+
+      @include respond-below(sm) {
+        .row > * {
+          margin-bottom: 15px;
+        }
+
+        .form-group {
+          margin-bottom:  0 !important;
+
+          &> .select-box-group {
+            margin-bottom: 15px;
+          }
+        }
+      }
+
+      .payment-type {
+
+        margin-bottom: 30px;
+        padding: 0 20px;
+        overflow: hidden;
+
+        li {
+          width: calc((100% / 3) - 30px);
+          float: $start-direction;
+          margin-right: 30px;
+
+        }
+
+        .cutome-payment-group {
+          position: relative;
+          max-width: 173px;
+          height: 110px;
+          width: 100%;
+
+          .custome-photo-radio {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 110px;
+            border: 2px solid #EDF2F5;
+            border-radius: 10px;
+
+            &> img {
+              padding: 10px 20px;
+            }
+          }
+
+          .form-check-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top:0;
+            #{$start-direction}: 0;
+            margin: 0;
+            padding: 0;
+            visibility: hidden;
+          }
+
+          .form-check-input:checked + .custome-photo-radio {
+            border-color: $puprle;
+          }
+        }
+      }
+
+      .form-content {
+
+        .visa-master-form {
+          display: none;
+        }
+
+
+        .knet-form {
+          display: none;
+          .bank-group {
+            max-width: 100%;
+          }
+          .card-number-grow {
+            max-width: 432px;
+          }
+            .card-number {
+              max-width:  208px;
+            }
+        }
+
+        .show-payment-form {
+          display: block;
+        }
+        .form-group {
+          margin-bottom: 15px;
+
+          .add-payment {
+            max-width: 279px;
+            width: 100%;
+            padding: 21px 42px;
+            text-align: center;
+            background: $puprle;
+            border-radius: 32px;
+            border: 0;
+            color: #fff;
+            @extend %second_font;
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+
+        & > .form-group:last-of-type {
+          margin-bottom: 0;
+        }
+
+        .thrid-input {
+          margin-bottom: 25px;
+          .custome-select-input, .custome-input-text {
+            max-width: 100%;
+            margin-#{$end-direction}: 15px;
+          }
+
+          .select-box-group:last-of-type {
+            .custome-select-input {
+              margin-#{$end-direction}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.address-modal {
+  .modal-dialog {
+    max-width: 735px;
+  }
+  .modal-content {
+    border-radius: 22px;
+    border: 1px solid #707070;
+    color: #fff;
+    display: none;
+
+    .modal-header {
+      border-bottom: 0;
+      padding: 30px;
+      border-bottom: 1px solid rgba(#9190D6, 0.11);
+
+      .modal-title {
+        font-weight: 600;
+        font-size: 21px;
+        color: $puprle;
+        margin: 0;
+      }
+
+      .address-filed {
+        font-size: 14px;
+        font-weight: 600;
+        color: $green;
+        padding-#{$start-direction}: 30px;
+        padding-top: 6px;
+      }
+
+      .close {
+        opacity: 1;
+
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .close > img {
+        float: #{$end-direction};
+        width: 21px;
+        @extend %unselect;
+      }
+    }
+
+
+    .address-content  {
+      padding: 25px 40px;
+
+      ul {
+        margin: 0;
+
+        li {
+          margin-bottom: 15px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          textarea {
+            max-width: 100%;
+            height: 120px;
+            resize: none;
+          }
+
+          .address-btn {
+            display: inline-block;
+            background: #fff;
+            border: 2px solid $puprle;
+            padding: 14px 26px;
+            color: $puprle;
+            @extend %second_font;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            @include transition();
+            max-width: 279px;
+            width: 100%;
+            text-align: center;
+
+            &:hover {
+              background: $puprle;
+              color: #fff;
+            }
+          }
+
+          .confirm-location {
+            background: $puprle;
+            color: #fff;
+            padding: 14px 50px;
+
+            &:hover {
+              background:  #6260e6;
+              border-color: #6260e6;
+            }
+          }
+
+        }
+      }
+
+
+    }
+
+    .map-content {
+      padding: 0;
+      border-radius: 0 0 22px 22px;
+      overflow: hidden;
+
+      .content-box {
+        position: relative;
+
+        .form-group {
+          @include center('horizontal');
+          top: 25px;
+          max-width: 667px;
+          width: 100%;
+
+          .form-control {
+            padding: 20px 25px;
+            padding-#{$start-direction}: 55px;
+            border-radius: 12px;
+            @include shadow(0 3px 6px rgba(#000, 0.16));
+            border: 0;
+            @extend %second_font;
+            font-size: 14px;
+            color: #888E9B;
+            height: auto;
+            &:focus {
+              box-shadow: none;
+            }
+
+            &::placeholder {
+              @extend %second_font;
+              font-size: 14px;
+              color: #888E9B;
+            }
+          }
+
+          .icon-search {
+            @include center('vertical');
+            display: inline-block;
+            #{$start-direction}: 25px;
+            color: #888E9B;
+            font-size: 14px;
+          }
+        }
+
+        .address-btn-group {
+          position: absolute;
+          bottom: 35px;
+          width: 100%;
+          padding: 0 45px;
+
+          .address-btn {
+            display: inline-block;
+            background: #fff;
+            border: 2px solid $puprle;
+            padding: 14px 26px;
+            color: $puprle;
+            @extend %second_font;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            @include transition();
+
+            &:hover {
+              background: $puprle;
+              color: #fff;
+            }
+          }
+
+          .confirm-location {
+            background: $puprle;
+            color: #fff;
+            padding: 14px 50px;
+
+            &:hover {
+              background:  #6260e6;
+              border-color: #6260e6;
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+  .show-add-address-modal-content {
+    display: block;
+  }
+}
+

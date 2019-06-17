@@ -1,0 +1,174 @@
+.kayo-footer {
+
+  color:#dad6d6;
+  // background: url("../images/footer_bg.jpg") no-repeat center center;
+  background-size: cover;
+  //height: 530px;
+  //position: relative;
+
+  .overlay {
+    padding-top: 70px;
+    //position: absolute;
+    top: 0;
+    #{$start-direction}: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .footer-title {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 40px;
+    margin-top: 70px;
+    font-weight: bold;
+
+    @include respond-below(md) {
+      &:last-of-type {
+        margin-top: 15px;
+      }
+    }
+  }
+  .bio {
+    img {
+      margin-bottom: 15px;
+      width: 145px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 28px;
+      color: #dad6d6;
+    }
+    .social-links {
+      margin-top: 25px;
+      margin-bottom: 0;
+      li {
+        margin-#{$end-direction}: 15px;
+        a {
+          width: 35px;
+          height: 35px;
+          display: inline-block;
+          @include border-radius(50%);
+          background: #1c1c1c;
+          color: #fff;
+          text-align: center;
+          i {
+            line-height: 35px;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .links-list {
+    overflow: hidden;
+  }
+  .footer-links {
+
+    float: $start-direction;
+    width: 50%;
+
+    @include respond-below(xs) {
+      float: none;
+      width: 100%;
+    }
+
+    &:last-child {
+      padding-#{$start-direction}: 45px;
+
+      @include respond-below(lg) {
+        padding-#{$start-direction}: 35px;
+      }
+
+      @include respond-below(sm) {
+        padding-#{$start-direction}: 0;
+      }
+    }
+
+    li {
+      margin-bottom: 25px;
+    }
+
+    a {
+      font-size: 14px;
+      color: #dad6d6;
+      display: block;
+      text-decoration: none;
+      i {
+        display: inline-block;
+        margin-#{$end-direction}: 15px;
+        color: #bbb;
+        @if($direction == "rtl") {
+          @include rotateZ(180deg);
+        }
+
+      }
+      span {
+        @include transition();
+        position: relative;
+        left: 0;
+      }
+      &:hover {
+        span {
+          $start-direction: 15px;
+        }
+      }
+    }
+  }
+
+
+  .contact-details {
+    .contact-list {
+      margin-bottom: 20px;
+      li {
+        overflow: hidden;
+        margin-bottom: 25px;
+      }
+      .icon-box {
+        width: 25px;
+        float: $start-direction;
+        text-align: center;
+        font-size: 16px;
+        color: #6f6dff;
+      }
+      p {
+        margin: 0;
+        width: calc(100% - 35px);
+        float: $start-direction;
+        color: #dad6d6;
+        padding-#{$start-direction}: 15px;
+      }
+    }
+
+  }
+
+  .bottom-footer {
+    padding: 40px 0;
+    text-align: center;
+    margin-top: 30px;
+    border-top: 1px solid #444;
+    p {
+      margin: 0;
+      font-size: 14px;
+      color: #dad6d6;
+    }
+  }
+  @include respond-below(lg){
+    .social-links li {
+      margin-#{$end-direction}: 5px;
+    }
+  }
+  @include respond-below(md){
+    .bio{
+      text-align: center;
+    }
+    .social-links li {
+      margin-#{$end-direction}: 10px;
+    }
+    .footer-title{
+      margin-top: 40px;
+    }
+  }
+}

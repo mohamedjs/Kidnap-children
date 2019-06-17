@@ -1,0 +1,312 @@
+.order {
+  background: #F7F8FF;
+  .main-title {
+    margin-bottom: 30px;
+  }
+
+  .nav-tabs {
+    max-width: 580px;
+    margin: auto;
+    margin-bottom: 30px;
+    display: inline-block;
+    padding: 0 35px;
+
+  }
+
+  .orders {
+    margin-bottom: 0;
+
+    li {
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .feedback-modal {
+    .modal-dialog {
+      max-width: 596px;
+    }
+
+    .modal-content {
+      border-radius: 22px;
+      border: none;
+
+      .modal-header {
+        background: #fff;
+        border-bottom: 0;
+        padding: 30px;
+        border-radius: 22px 22px 0 0;
+
+        .modal-title {
+          font-weight: 600;
+          font-size: 21px;
+          color: $puprle;
+          margin: 0;
+
+          span {
+            color: $green
+          }
+        }
+
+        .close {
+          opacity: 1;
+
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+
+        .close > img {
+          float: #{$end-direction};
+          width: 21px;
+          @extend %unselect;
+        }
+      }
+
+      .modal-body {
+        padding: 25px 30px;
+        background: #F8FAFB;
+        border-radius: 0 0 22px 22px;
+
+        .feedback-content {
+          margin-bottom: 0;
+
+          & > li {
+            margin-bottom: 20px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+            & > div {
+              padding: 13px 20px;
+
+              @include shadow(0 3px 6px rgba(#000000, 0.16));
+              background: #fff;
+              border-radius: 15px;
+            }
+
+            .rate {
+              margin-bottom: 0;
+              font-size: 13px;
+              color: #888E9B;
+            }
+
+            .rating-box {
+              margin: 0;
+
+              & > li {
+                padding: {
+                  top: 16px;
+                  bottom: 16px;
+                };
+                border-bottom: 1px solid #EDF2F5;
+
+                &:last-child {
+                  border-bottom: 0;
+                  padding-bottom: 0;
+                }
+              }
+            }
+
+            .stars {
+              margin: 0;
+              & > li {
+                display: inline-block;
+                cursor: pointer;
+                i {
+                  font-size: 18px;
+                  color: $yellow;
+                }
+              }
+            }
+          }
+
+          .feedback-box {
+            .feedback_header {
+              padding-top: 7px;
+              padding-bottom: 18px;
+              border-bottom: 1px solid #EDF2F5;
+
+              .cafe-image {
+                flex: 0 0 58px;
+                border-radius: 10px;
+                background: #EBEBF9;
+                height: 58px;
+              }
+
+              .cafe-name {
+                padding-#{$start-direction}: 20px;
+
+                .name{
+                  margin-bottom: 5px;
+                  color: #3E3E40;
+                  font-size: 14px;
+                  font-weight: bold;
+                  margin-top: 2px;
+                }
+
+                .date {
+                  margin-bottom: 0;
+                  font-size: 13px;
+                  color: #888E9B;
+                }
+              }
+
+              .id {
+                font-size: 13px;
+                color: #3E3E40;
+                font-weight: 600;
+              }
+            }
+
+
+          }
+
+          .qulity-feedback {
+            .quilty-heaer {
+              border-bottom: 1px solid #EDF2F5;
+              padding-top: 9px;
+              padding-bottom: 19px;
+              position: relative;
+
+              .img-box {
+                flex: 0 0 28px;
+              }
+              .header-title {
+                padding-#{$start-direction}: 10px;
+                color: #3E3E40;
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 0;
+                margin-top: 5px;
+              }
+
+              .optial {
+                font-size: 12px;
+                color: #8893AA;
+                display: inline-block;
+                position: absolute;
+                top: 4px;
+                #{$end-direction}: 0
+              }
+            }
+
+            .form-group {
+              margin-top: 14px;
+
+
+              textarea {
+                border: 0;
+                resize: none;
+                color: #888E9B;
+                font-size: 13px;
+
+                &:focus {
+                  box-shadow: none;
+                }
+
+                &::placeholder {
+                  color: #888E9B;
+                  font-size: 13px;
+                }
+              }
+            }
+          }
+        }
+
+        .delivery-btn {
+          margin-top: 34px;
+          display: inline-block;
+          padding: 10px 29px;
+          color: #fff;
+          font-size: 13px;
+          font-weight: 600;
+          border-radius: 5px;
+          background: #33A753;
+        }
+      }
+
+    }
+  }
+}
+
+.traking-modal {
+  .modal-dialog {
+    max-width: 735px;
+  }
+  .modal-content {
+    border-radius: 22px;
+    border: none;
+
+    .modal-header {
+      background: #fff;
+      border-bottom: 0;
+      padding: 30px;
+      border-radius: 22px 22px 0 0;
+
+      .modal-title {
+        font-weight: 600;
+        font-size: 21px;
+        color: $puprle;
+        margin: 0;
+      }
+
+      .close {
+        opacity: 1;
+
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      .close > img {
+        float: #{$end-direction};
+        width: 21px;
+        @extend %unselect;
+      }
+    }
+
+    .modal-body {
+      padding: 0;
+      border-radius: 0 0 22px 22px;
+      overflow: hidden;
+
+      .content-box {
+        position: relative;
+
+
+
+        .traking-btn-content {
+          @include center('horizontal');
+          bottom: 40px;
+          max-width: 302px;
+          width: 100%;
+
+          .traking-btn {
+            display: inline-block;
+            @include shadow(0 3px 5px rgba(#000, 0.16));
+            width: 100%;
+            text-align: center;
+            background: #141110;
+            padding: 14px 26px;
+            color: #fff;
+            @extend %second_font;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            @include transition();
+
+            &:hover {
+              background: $puprle;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+}

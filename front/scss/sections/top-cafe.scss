@@ -1,0 +1,218 @@
+.how-to-use {
+  padding-top: 60px;
+  text-align: center;
+  .title {
+    font-size: 30px;
+    color: $orange;
+    @extend %awesome_font;
+    margin-bottom: 30px;
+    @include respond-below(sm) {
+      font-size: 23px;
+    }
+  }
+  ul {
+    margin-bottom: 15px;
+
+    @include respond-below(sm){
+      text-align: center;
+    }
+    li {
+      display: inline-block;
+      padding-#{$end-direction}: 65px;
+      text-align: center;
+
+      @include respond-below(md) {
+        display: block;
+        padding-#{$end-direction}: 0;
+
+      }
+      img {
+        margin-bottom: 22px;
+      }
+
+      p {
+        font-size: 14px;
+        font-style: italic;
+        color:#686868;
+      }
+
+      &:last-child {
+        padding-#{$end-direction}: 0;
+      }
+
+      @include respond-below(sm) {
+        display: block;
+        padding-#{$end-direction}: 0;
+        margin-bottom: 25px;
+
+        &:last-child {
+          padding-#{$end-direction}: 0;
+        }
+      }
+    }
+  }
+  .line {
+
+    @if($direction== 'rtl') {
+
+      @include rotateY(180deg);
+
+    }
+
+    img {
+      @include respond-below(md){
+        display: none;
+      }
+    }
+  }
+}
+.top-cafe {
+  padding: 75px 0;
+
+  @include respond-below(sm) {
+    padding: 40px 0;
+  }
+
+
+
+  .main-title {
+    margin-bottom: 60px;
+  }
+  .top-cafes-logo {
+    position: relative;
+
+    .swiper-container{
+      padding: 0 25px;
+      padding-bottom: 36px;
+
+      .swiper-pagination-bullet {
+        background: #7F7F7F;
+        opacity: 1;
+      }
+
+      .swiper-pagination-bullet-active {
+        background: $puprle;
+
+      }
+    }
+
+    .top-cafe-pagination {
+      margin-top: 36px;
+    }
+    .top-cafe-slider-prev, .top-cafe-slider-next {
+      padding: 15px;
+      cursor: pointer;
+      @include center('vertical');
+      top:37%;
+
+      @include respond-below(sm) {
+        display: none;
+      }
+
+      @if($direction=='rtl') {
+
+        @include rotateZ(180deg);
+        top: 20%
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      & > i {
+        color: #595972;
+        font-size: 25px;
+      }
+    }
+
+    .top-cafe-slider-next{
+      #{$end-direction}: -24px;
+    }
+
+    .top-cafe-slider-prev {
+      #{$start-direction}: -24px;
+    }
+
+
+    .img-box {
+      //float: $start-direction;
+      //width: calc(100% / 6);
+      margin-#{$end-direction}: 15px;
+
+    }
+
+    .box-colored {
+      background: #f0f0f0;
+    }
+
+
+
+  }
+  .cafe-box {
+    display: block;
+    border-radius: 15px;
+    @include shadow(0 3px 8px rgba(#000, 0.16));
+    position: relative;
+    margin-bottom: 30px;
+    position: relative;
+
+    .cafe-photo {
+      height: 125px;
+      padding: 15px 0;
+      width: 100px;
+      margin: auto;
+
+      @include respond-below(sm) {
+        width: 75px;
+        height: 110px;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+    .cafe-name {
+      background: #EDF2F5;
+      padding: 10px 0;
+
+      p{
+        margin-bottom: 0;
+        color: $puprle;
+        font-size: 16px;
+        font-weight: bold;
+
+        @include respond-below(sm) {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .cafe-rate {
+      max-width: 52px;
+      width: 100%;
+      background: $yellow;
+      padding: 5px;
+      border-top-#{$end-direction}-radius: 5px;
+      border-bottom-#{$end-direction}-radius: 5px;
+      color:#fff;
+      font-size: 10px;
+      font-weight: bold;
+      overflow: hidden;
+      position: absolute;
+      top: 15px;
+
+      i {
+        float: $start-direction;
+        font-size: 12px;
+        display: inline-block;
+        vertical-align: middle;
+
+      }
+      span {
+        float: $end-direction;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+  }
+}

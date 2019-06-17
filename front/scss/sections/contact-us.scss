@@ -1,0 +1,116 @@
+.contact-us {
+  padding: 70px 0;
+  @include respond-below(sm){
+    padding: 50px 0;
+  }
+  h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    color: #264159;
+  }
+
+  .contact-details{
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      margin-top: 40px ;
+      @include respond-below(md){
+        overflow: hidden;
+      }
+      @include respond-below(sm){
+        margin-top: 25px;
+        margin-bottom: 20px;
+      }
+
+      li {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+
+        .polygon{
+          display: inline-block;
+          vertical-align: middle;
+
+          width: 60px;
+          flex: 60px 0 0;
+           img{
+             width: 100%;
+           }
+
+          @include respond-below(lg){
+            float: none;
+            width: auto;
+            display: block;
+            text-align: center;
+            img {
+              width: 60px;
+            }
+
+            @include respond-below(sm){
+              float: $start-direction;
+              width: 60px;
+              text-align: $start-direction;
+              img {
+                width: 100%;
+              }
+            }
+          }
+
+        }
+        p {
+          flex-grow: 1;
+          width: calc(100% - 60px);
+          padding-#{$start-direction}: 15px ;
+          vertical-align: middle;
+          font-size: 14px;
+          line-height: 27px;
+          color: $dark_blue;
+          margin: 0;
+          font-weight: 500;
+
+        }
+
+        &:first-child {
+          p {
+            position: static;
+          }
+        }
+      }
+    }
+  }
+  .contact {
+    .contact-form {
+      margin-top: 40px;
+      @include respond-below(sm){
+        margin-top: 25px;
+      }
+      .form-control {
+        border: 1px solid #e5e5e5;
+        border-radius: 5px;
+        width: 100%;
+        background: #fff;
+        margin-bottom: 30px;
+        padding: .75rem 1rem;
+        font-weight: 500;
+        height: auto;
+        &::placeholder {
+          font-size: 13px;
+          color: #878686;
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+      textarea {
+        min-height: 180px;
+      }
+
+      button {
+        @extend .main-btn
+      }
+    }
+  }
+}
