@@ -27,7 +27,7 @@
               <div id="about-profile">
                 <div class="about-me-tab">
                   <div class="bg-fff shadow-15 round-10">
-                    <h1 class="fz-16 fw-b heading">About<span class="edit float-right"><a href="#"><i class="fas fa-edit"></i>Edit</a></span></h1>
+                    <h1 class="fz-16 fw-b heading">About<span class="edit float-right"><a href="{{url('user'}}"><i class="fas fa-edit"></i>Edit</a></span></h1>
                     <hr class="grey">
                     <div class="row fields">
                       <div class="col-sm-6 col-xs-12">
@@ -76,7 +76,7 @@
                 <li><a class="setting-item" href="#"><i class="fas fa-comments"></i></a></li>
                 <li>
                   <div class="dropdown show setting-dropdown"><a class="setting-item" href="#" role="button" id="profile-setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-                    <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#add-to-group">Add to group</a><a class="dropdown-item" href="#">Unfriend</a><a class="dropdown-item" href="#">Block</a><a class="dropdown-item" href="customer-profile__editProfile.html">Edit Profile</a></div>
+                    <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#add-to-group">Add to group</a><a class="dropdown-item" href="#">Unfriend</a><a class="dropdown-item" href="#">Block</a><a class="dropdown-item" href="{{url('user'}}">Edit Profile</a></div>
                   </div>
                 </li>
               </ul>
