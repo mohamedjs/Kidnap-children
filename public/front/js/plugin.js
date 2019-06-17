@@ -414,15 +414,15 @@ $(document).ready(function(){
     /*********************** [ Delete Order Item ] ***********************/
 
     /*********************** [ Selectize Plugin ] ***********************/
-    var SelectizeOptoins = {
-        create: false,
-        copyClassesToDropdown: true,
-    };
-    $('select').each(function () {
-        if (!$(this).hasClass('destory-selectize')) {
-            $(this).selectize(SelectizeOptoins);
-        }
-    });
+    // var SelectizeOptoins = {
+    //     create: false,
+    //     copyClassesToDropdown: true,
+    // };
+    // $('select').each(function () {
+    //     if (!$(this).hasClass('destory-selectize')) {
+    //         $(this).selectize(SelectizeOptoins);
+    //     }
+    // });
     /*********************** [ Selectize Plugin ] ***********************/
 
     /*********************** [ Handle Social Media ] ***********************/
@@ -546,21 +546,19 @@ $(document).ready(function(){
 
 
     // lost people photo slider
-    const lostPeopleSlider = new Swiper('.photo-box-slider', {
-            slidesPerView: 1,
-            loop: true,
-            navigation: {
-                nextEl: '.lost-people-btn-prev',
-                prevEl: '.lost-people-btn-next',
-            },
-            observer: true,
-            observeParents: true,
-            observerUpdate:true,
-        });
+    // const lostPeopleSlider = new Swiper('.photo-box-slider', {
+    //         slidesPerView: 1,
+    //         loop: true,
+    //         navigation: {
+    //             nextEl: '.lost-people-btn-prev',
+    //             prevEl: '.lost-people-btn-next',
+    //         },
+    //         observer: true,
+    //         observeParents: true,
+    //         observerUpdate:true,
+    //     });
 
-          setTimeout(function () {
-           lostPeopleSlider.update();
-          }, 500);
+
 
 
 
@@ -568,13 +566,14 @@ $(document).ready(function(){
 
     //var x = document.getElementById("#input-file").multiple;
     //document.getElementById(".uploaded-photos").text = x;
-    $('#input-file').change(function(e){
-        var fileName = e.target.files[0].name;
-        var files = $('#input-file').prop("files")
-        var names = $.map(files, function(val) { return val.name; });
-        $('.uploaded-photos').text(names);
-        console.log(names);
-    });
+    // $('#input-file').change(function(e){
+    //     var fileName = e.target.files[0].name;
+    //     var files = $('#input-file').prop("files")
+    //     var names = $.map(files, function(val) { return val.name; });
+    //     $('.uploaded-photos').text(names);
+    //     console.log(names);
+    // });
 
+    $('.date').datepicker({ dateFormat: 'yy-mm-dd' })
 
 });
