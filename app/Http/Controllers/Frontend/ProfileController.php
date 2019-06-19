@@ -35,7 +35,7 @@ class ProfileController extends Controller
     public function update_user(Request $request)
     {
       $date_path = date("Y") . '/' . date("m") . '/' . date("d") . '/';
-      $path = public_path() . '/front/uploads/users/' . $date_path;
+      $path = base_path() . '/front/uploads/users/' . $date_path;
       if (!File::exists($path)) {
           File::makeDirectory($path, 0777, true);
       }
@@ -46,7 +46,7 @@ class ProfileController extends Controller
       $request->request->add(['image' => $user_img]);
       //background iimage
       $date_path = date("Y") . '/' . date("m") . '/' . date("d") . '/';
-      $path = public_path() . '/front/uploads/background/' . $date_path;
+      $path = base_path() . '/front/uploads/background/' . $date_path;
       if (!File::exists($path)) {
           File::makeDirectory($path, 0777, true);
       }

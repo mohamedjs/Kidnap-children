@@ -81,7 +81,7 @@ class Controller extends BaseController
            continue;
         }
       }
-        $client = new Client(['base_uri' => 'https://api-missed-gb.herokuapp.com/']);
+        $client = new Client(['base_uri' => 'http://localhost:5000']);
         $response = $client->request('POST', '/api/detect_image',[
         'multipart' => $output]);
         //return json_decode($response);

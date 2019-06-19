@@ -1,0 +1,4 @@
+.vagrant
+phpunit.xml
+tests/report
+vendor

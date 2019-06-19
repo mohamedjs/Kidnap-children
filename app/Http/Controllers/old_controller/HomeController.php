@@ -16,8 +16,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-        return view('front.home');
+        $posts = Post::all();
+        $online=User::where('online',1)->get();
+        //return $online;
+        return view('front.home',compact('posts','online'));
     }
     public function get_posts()
     {
