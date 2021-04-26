@@ -1,4 +1,4 @@
-##Social Media For Kidnap Children
+## Social Media For Kidnap Children
 It is a system to search for kidnapped children by recognizing their forms through analyzing pictures and finding similarities
 between them as well as different ages. Artificial intelligence was used to solve this problem, and the system was made as a
 social media for easy communication with people and getting acquainted with the kidnapped.sytem
