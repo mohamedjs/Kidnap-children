@@ -23,7 +23,7 @@ class PostStoreRequest extends FormRequest
             'lat' => 'nullable|string',
             'lng' => 'nullable|string',
             'images' => 'nullable|array',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
         ];
     }
 }

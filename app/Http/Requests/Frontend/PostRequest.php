@@ -31,7 +31,7 @@ class PostRequest extends FormRequest
             "lat" => "required",
             "lng" => "required",
             "type" => "required",
-            "images.*" => "image"
+            "images.*" => "image|mimes:jpeg,png,jpg,gif|max:5120"
         ];
 
         if ($this->isMethod('post')) {
