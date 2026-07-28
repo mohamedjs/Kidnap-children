@@ -4,7 +4,7 @@
         <div class="cover-box">
             <div class="profile-info">
               <div class="overlay">
-                <div class="profile-photo"><img class="img-fluid" :src="user.image"></div>
+                <!-- <div class="profile-photo"><img class="img-fluid" :src="base_url+user.image"></div> -->
                 <p class="profile-name">{{user.name}}</p>
                 <ul class="profile-setting list-unstyled">
                   <li><a class="setting-item" href="#"><i class="fas fa-user-plus"></i></a></li>
@@ -69,7 +69,7 @@
         <div class="cover-box">
           <div class="profile-info">
             <div class="overlay">
-              <div class="profile-photo"><img class="img-fluid" :src="user.image"></div>
+              <!-- <div class="profile-photo"><img class="img-fluid" :src="base_url+user.image"></div> -->
               <p class="profile-name">{{user.name}}</p>
               <ul class="profile-setting list-unstyled">
                 <li><a class="setting-item" href="#"><i class="fas fa-user-plus"></i></a></li>

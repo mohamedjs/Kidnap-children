@@ -106985,13 +106985,6 @@ var render = function() {
           _c("div", { staticClass: "cover-box" }, [
             _c("div", { staticClass: "profile-info" }, [
               _c("div", { staticClass: "overlay" }, [
-                _c("div", { staticClass: "profile-photo" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: { src: _vm.user.image }
-                  })
-                ]),
-                _vm._v(" "),
                 _c("p", { staticClass: "profile-name" }, [
                   _vm._v(_vm._s(_vm.user.name))
                 ]),
@@ -107118,13 +107111,6 @@ var render = function() {
           _c("div", { staticClass: "cover-box" }, [
             _c("div", { staticClass: "profile-info" }, [
               _c("div", { staticClass: "overlay" }, [
-                _c("div", { staticClass: "profile-photo" }, [
-                  _c("img", {
-                    staticClass: "img-fluid",
-                    attrs: { src: _vm.user.image }
-                  })
-                ]),
-                _vm._v(" "),
                 _c("p", { staticClass: "profile-name" }, [
                   _vm._v(_vm._s(_vm.user.name))
                 ]),

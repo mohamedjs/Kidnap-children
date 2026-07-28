@@ -453,8 +453,8 @@ export default {
 
   data() {
     return {
-      data: new FormData(),
       posts: [],
+      uploadedFiles: [],
       post: {
         name: '',
         gender: '',
@@ -526,17 +526,17 @@ export default {
 
     add_comment(key, id) {
       var _this = this;
-      this.data.append('comment', this.comment);
-      this.data.append('post_id', id);
-      this.data.append('key', key);
+      var formData = new FormData();
+      formData.append('comment', this.comment);
+      formData.append('post_id', id);
+      formData.append('key', key);
 
       if (this.comment_id !== '') {
-        this.data.append('_method', 'patch');
-        axios.post(base_url + '/comments/' + this.comment_id, this.data)
+        formData.append('_method', 'patch');
+        axios.post(base_url + '/comments/' + this.comment_id, formData)
           .then(function(response) {
             _this.posts[key].comments.splice(_this.remove_comment_key, 1);
             _this.posts[key].comments.push(response.data.comment);
-            _this.data = new FormData();
             _this.comment = '';
             _this.comment_id = '';
           }).catch(error => {
@@ -545,10 +545,9 @@ export default {
             }
           });
       } else {
-        axios.post(base_url + '/comments', this.data)
+        axios.post(base_url + '/comments', formData)
           .then(function(response) {
             _this.posts[key].comments.push(response.data.comment);
-            _this.data = new FormData();
             _this.comment = '';
           }).catch(error => {
             if (error.response && error.response.status === 422) {
@@ -564,7 +563,6 @@ export default {
       axios.delete(base_url + '/comments/' + comment_id)
         .then(function(response) {
           _this.posts[post_key].comments.splice(comment_key, 1);
-          _this.data = new FormData();
         }).catch(error => console.log(error));
     },
 
@@ -602,7 +600,7 @@ export default {
         var img = '<li><div class="img-box"><img class="img-fluid" src="' +
           URL.createObjectURL(event.target.files[i]) + '" alt="Uploaded photo preview"></div></li>';
         $('.uploaded-photos').append(img);
-        this.data.append('images[]', event.target.files[i]);
+        this.uploadedFiles.push(event.target.files[i]);
       }
     },
 
@@ -610,16 +608,25 @@ export default {
       this.posts = [];
       this.loading_posts_result = true;
       var _this = this;
-      this.data.append('name', this.post.name);
-      this.data.append('gender', this.post.gender);
-      this.data.append('description', this.post.description);
-      this.data.append('birth_date', this.post.birth_date);
-      this.data.append('age', this.post.age);
-      this.data.append('lat', 31.022323);
-      this.data.append('lng', 31.12120);
-      this.data.append('type', this.post.type);
+
+      // Create fresh FormData for this submission
+      var formData = new FormData();
+      formData.append('name', this.post.name);
+      formData.append('gender', this.post.gender);
+      formData.append('description', this.post.description);
+      formData.append('birth_date', this.post.birth_date);
+      formData.append('age', this.post.age);
+      formData.append('lat', 31.022323);
+      formData.append('lng', 31.12120);
+      formData.append('type', this.post.type);
+
+      // Add all uploaded files
+      for (var i = 0; i < this.uploadedFiles.length; i++) {
+        formData.append('images[]', this.uploadedFiles[i]);
+      }
+
       const config = { headers: { 'content-type': 'multipart/form-data' } };
-      axios.post(base_url + '/posts', this.data, config)
+      axios.post(base_url + '/posts', formData, config)
         .then(function(response) {
           if (response.data.results && response.data.results.length > 0) {
             _this.posts = response.data.results;
@@ -629,14 +636,31 @@ export default {
           } else {
             _this.loading_posts_result = false;
             _this.get_posts();
-            _this.data = new FormData();
             alert('Report submitted. No immediate AI matches found — your report is now live in the community feed.');
           }
-          _this.form_open = false;
+          _this.resetPostForm();
         }).catch(error => {
           _this.loading_posts_result = false;
+          if (error.response && error.response.status === 422) {
+            _this.validationErrors = error.response.data.errors;
+          }
           console.log(error);
         });
+    },
+
+    resetPostForm() {
+      this.post = {
+        name: '',
+        gender: '',
+        birth_date: moment(new Date()).format('YYYY-MM-DD'),
+        description: '',
+        age: '',
+        type: ''
+      };
+      this.uploadedFiles = [];
+      this.$refs.file.value = '';
+      $('.uploaded-photos').empty();
+      this.form_open = false;
     },
 
     delete_post(post_id, post_key) {
@@ -645,7 +669,6 @@ export default {
       axios.delete(base_url + '/posts/' + post_id)
         .then(function(response) {
           _this.posts.splice(post_key, 1);
-          _this.data = new FormData();
         }).catch(error => console.log(error));
     }
   },

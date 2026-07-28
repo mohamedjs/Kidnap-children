@@ -150,7 +150,7 @@
       <nav class="left-sidebar" aria-label="Main navigation">
         <!-- Current user mini-card -->
         <a class="sidebar-user" href="{{ url('profile') }}" aria-label="Your profile">
-          <img src="{{ Auth::user()->image }}" alt="{{ Auth::user()->name }}" class="sidebar-user-avatar">
+          <img src="{{ asset('front/images/male.svg') ?? Auth::user()->image }}" alt="{{ Auth::user()->name }}" class="sidebar-user-avatar">
           <div class="sidebar-user-info">
             <p class="sidebar-user-name">{{ Auth::user()->name }}</p>
             <p class="sidebar-user-handle">Community Member</p>

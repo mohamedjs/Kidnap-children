@@ -136,7 +136,6 @@ import VueLoadImage from 'vue-load-image'
       components: { carousel , 'vue-load-image': VueLoadImage },
        data(){
         return{
-          data : new FormData(),
           posts:[],
           post:{'name':'' , 'gender':'' , 'birth_date' : moment(new Date()).format('YYYY-MM-DD') , 'description' : '' , 'age' : ''},
           next_url:'',
@@ -160,19 +159,18 @@ import VueLoadImage from 'vue-load-image'
        methods: {
          add_comment(key,id){
            var _this = this
-           this.data.append('comment' , this.comment)
-           this.data.append('post_id' , id)
-           this.data.append('key',key)
+           var formData = new FormData()
+           formData.append('comment' , this.comment)
+           formData.append('post_id' , id)
+           formData.append('key',key)
            if(this.comment_id!='')
            {
-             this.data.append('comment' , this.comment)
-             this.data.append('_method' , 'patch')
-               axios.post(base_url+'/comments/'+this.comment_id , this.data)
+             formData.append('_method' , 'patch')
+               axios.post(base_url+'/comments/'+this.comment_id , formData)
                  .then(function (response){
                     console.log(response.data.comment.data);
                     _this.posts[key].comments.splice(_this.remove_comment_key,1)
                     _this.posts[key].comments.push(response.data.comment)
-                    _this.data = new FormData()
                     _this.comment = ''
                    }).catch(
                      error =>{
@@ -184,10 +182,9 @@ import VueLoadImage from 'vue-load-image'
            }
            else
            {
-             axios.post(base_url+'/comments', this.data )
+             axios.post(base_url+'/comments', formData)
                .then(function (response){
                     _this.posts[key].comments.push(response.data.comment)
-                     _this.data = new FormData()
                      _this.comment = ''
                  }).catch( error =>{
                    if (error.response.status == 422){
@@ -204,7 +201,6 @@ import VueLoadImage from 'vue-load-image'
              axios.delete(base_url+'/comments/'+comment_id)
                .then(function (response){
                     _this.posts[post_key].comments.splice(comment_key , 1)
-                     _this.data = new FormData()
                  }).catch(
                      error => console.log(error)
                  )
@@ -314,8 +310,6 @@ import VueLoadImage from 'vue-load-image'
              axios.delete(base_url+'/posts/'+post_id)
                .then(function (response){
                     _this.posts.splice(post_key,1)
-                     _this.data = new FormData()
-                     //_this.post = ''
                  }).catch(
                      error => console.log(error)
                  )

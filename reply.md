@@ -1,48 +1,76 @@
-## ✅ Asset Serving 404 Issue Fixed
+## File Upload & FormData Issues Identified
 
-The 404 errors were caused by incorrect webpack asset URL resolution. I've identified and fixed the root cause.
+### Root Causes Found
 
-### The Problem
-- Webpack was configured with `setPublicPath('./')` (root directory)
-- CSS files contained absolute URLs like `/fonts/dastnevis.ttf` instead of `/front/fonts/...`
-- When browsers requested `/fonts/...`, they got 404s because actual files were at `/front/fonts/...`
+After investigating the frontend code, I found **two critical issues**:
 
-### The Fix
-Updated `webpack.mix.js` with two critical changes:
+#### Issue 1: FormData Reuse & Accumulation (Primary Cause of 422 Errors)
+In `HomeComponent.vue` line 456 and `add_comment()` method (line 527-559):
 
-1. **Disabled CSS URL Processing**
-   ```javascript
-   .options({ processCssUrls: false })
-   ```
-   Prevents webpack from converting relative paths to absolute root-level URLs.
+```javascript
+// In data()
+data: new FormData(),  // Initialized once at component creation
 
-2. **Corrected Public Path**
-   ```javascript
-   mix.setPublicPath('public')
-   ```
-   Ensures proper asset directory resolution.
-
-### Results
-✅ **CSS now uses correct relative paths:**
-```css
-src: url("../fonts/dastnevis.ttf")         /* CSS → up to front/ → into fonts/ ✓ */
-background: url("../images/background.jpg") /* CSS → up to front/ → into images/ ✓ */
-background: url("../images/cart.svg")
-background: url("../images/profile_cover.png")
+// In create_post() / add_comment()
+this.data.append('age', this.post.age);  // Appends to SAME FormData
 ```
 
-✅ **Asset paths resolved correctly:**
-- CSS: `public/front/css/style.css` ✓
-- Fonts: `public/front/fonts/` ✓
-- Images: `public/front/images/` ✓
-- JS: `public/front/js/app.js` ✓
+**Problem**: FormData object is created once and reused forever. Each form submission **appends** new fields without clearing old ones.
 
-✅ **Build status:**
-- Compiled successfully in 3558ms
-- Zero errors, zero warnings (except caniuse-lite outdated notice)
-- All 215+ modules processed correctly
+**Cascade Effect**:
+1. First submission: FormData has {name, gender, age, description, ...}
+2. If clicked again OR if error occurs: Same FormData now has duplicates
+3. Validation fails because fields appear multiple times
+4. HTTP 422 error occurs
 
-### Testing
-Rebuilt assets with `npm run dev` — all resources compile with correct relative paths that will resolve properly at runtime. The 404 errors should now be resolved, and all design assets (fonts, images, CSS animations) will load correctly.
+#### Issue 2: No Validation Error Reset
+In the error handlers (lines 636-639 and similar):
 
-**Files modified:** `webpack.mix.js`
+```javascript
+.catch(error => {
+  _this.loading_posts_result = false;
+  console.log(error);  // ERROR DATA STAYS IN FormData!
+});
+```
+
+**Problem**: When HTTP 422 error occurs, the FormData is NOT reset. Next submission contains both old AND new data.
+
+#### Issue 3: Double-Click / Race Condition
+The submit button (line 166) has `disabled` state, but:
+- If user clicks twice rapidly, second click may execute before first response completes
+- Both calls append to the same FormData
+- Server receives malformed request with duplicate fields
+
+---
+
+## Solution
+
+Fix the FormData handling by:
+
+1. **Create fresh FormData for each submission** (not once at component init)
+2. **Reset FormData in ALL code paths** (success AND error)
+3. **Reset file input after successful submission**
+4. **Add form validation** to prevent empty submissions
+5. **Ensure button stays disabled** during request
+
+### Changes Needed
+
+**In HomeComponent.vue**:
+- Move `data: new FormData()` creation into `create_post()` method
+- Reset after both success and error
+- Clear file input element after submission
+- Reset form fields after successful submission
+
+**In components with comments**:
+- Move FormData creation into `add_comment()` method  
+- Ensure reset on both success and error paths
+
+### Why This Fixes Your Issues
+
+✅ No more field duplication in requests
+✅ 422 validation errors will disappear
+✅ Form data won't accumulate from failed submissions
+✅ Double-click won't create duplicate requests
+✅ Clean separation between requests
+
+**Implementation**: Fix will be committed shortly.

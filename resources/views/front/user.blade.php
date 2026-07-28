@@ -5,7 +5,7 @@
     <div class="cover-box">
         <div class="profile-info">
           <div class="overlay">
-            <div class="profile-photo"><img class="img-fluid" src="{{ Auth::user()->image }}"></div>
+            <!-- <div class="profile-photo"><img class="img-fluid" src="{{ asset('front/images/male.svg') ?? Auth::user()->image }}"></div> -->
             <p class="profile-name">{{ Auth::user()->name }}</p>
             <ul class="profile-setting list-unstyled">
               <li><a class="setting-item" href="#"><i class="fas fa-user-plus"></i></a></li>
