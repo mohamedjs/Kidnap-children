@@ -18,7 +18,7 @@ $factory->define(User::class, function (Faker $faker) {
         'birth_date' => $faker->date(),
         'gender' => $gender,
         'image' => "https://randomuser.me/api/portraits/{$genderPath}/{$portraitNum}.jpg",
-        'background_image' => 'https://picsum.photos/1200/400?random=' . random_int(1, 10000),
+        'background_image' => "https://randomuser.me/api/portraits/{$genderPath}/" . random_int(1, 32) . ".jpg",
         'remember_token' => \Illuminate\Support\Str::random(10),
     ];
 });

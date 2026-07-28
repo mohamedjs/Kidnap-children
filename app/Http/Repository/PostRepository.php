@@ -9,7 +9,7 @@
 namespace App\Http\Repository;
 
 
-use App\Post;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostRepository
