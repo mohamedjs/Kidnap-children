@@ -104,16 +104,16 @@ Resources are pointers — open them only when relevant to the task. For `github
 
 1. Run `multica issue get 12296ea6-99f7-4c46-b496-88c0f152b5b8 --output json` to understand the issue context
 2. Run `multica issue metadata list 12296ea6-99f7-4c46-b496-88c0f152b5b8 --output json` to see what prior agents pinned — best-effort, empty `{}` and CLI failures are normal. See the `## Issue Metadata` section above for what to look for.
-3. You're resuming the prior session, and the triggering comment is already included above. No other new comments on this issue since your last run. Use the active thread anchor `c88acc9b-84b9-4127-8dfc-d30589ff513b` and triggering comment ID `c88acc9b-84b9-4127-8dfc-d30589ff513b`. If your reply depends on thread context, do not rely only on resumed session memory — first pull the triggering conversation with: `multica issue comment list 12296ea6-99f7-4c46-b496-88c0f152b5b8 --thread c88acc9b-84b9-4127-8dfc-d30589ff513b --tail 30 --output json`.
+3. You're resuming the prior session, and the triggering comment is already included above. No other new comments on this issue since your last run. Use the active thread anchor `9ab3ca5d-1d7f-46ba-9b64-5cc397fc64c9` and triggering comment ID `9ab3ca5d-1d7f-46ba-9b64-5cc397fc64c9`. If your reply depends on thread context, do not rely only on resumed session memory — first pull the triggering conversation with: `multica issue comment list 12296ea6-99f7-4c46-b496-88c0f152b5b8 --thread 9ab3ca5d-1d7f-46ba-9b64-5cc397fc64c9 --tail 30 --output json`.
 
-4. Find the triggering comment (ID: `c88acc9b-84b9-4127-8dfc-d30589ff513b`) and understand what is being asked — do NOT confuse it with previous comments
+4. Find the triggering comment (ID: `9ab3ca5d-1d7f-46ba-9b64-5cc397fc64c9`) and understand what is being asked — do NOT confuse it with previous comments
 5. **Decide whether a reply is warranted.** If you produced actual work this turn (investigated, fixed, answered a real question), post the result via step 7 — that is a normal reply, not a noise comment. If the triggering comment was a pure acknowledgment / thanks / sign-off from another agent AND you produced no work this turn, do NOT post a reply — and do NOT post a comment saying 'No reply needed' or similar. Simply exit with no output. Silence is a valid and preferred way to end agent-to-agent conversations.
 6. If a reply IS warranted: do any requested work first, then **decide whether to include any `@mention` link.** The default is NO mention. Only mention when you are escalating to a human owner who is not yet involved, delegating a concrete new sub-task to another agent for the first time, or the user explicitly asked you to loop someone in. Never @mention the agent you are replying to as a thank-you or sign-off.
 7. **If you reply, post it as a comment — this step is mandatory when you reply.** Text in your terminal or run logs is NOT delivered to the user. If you decide to reply, post it as a comment — always use the trigger comment ID below, do NOT reuse --parent values from previous turns in this session.
 
 Write the reply body to a UTF-8 file with your file-write tool first, then post it with `--content-file` (see ## Comment Formatting above for why inline `--content` and `--content-stdin` HEREDOCs are unsafe — MUL-2904 / #4182):
 
-    multica issue comment add 12296ea6-99f7-4c46-b496-88c0f152b5b8 --parent c88acc9b-84b9-4127-8dfc-d30589ff513b --content-file ./reply.md
+    multica issue comment add 12296ea6-99f7-4c46-b496-88c0f152b5b8 --parent 9ab3ca5d-1d7f-46ba-9b64-5cc397fc64c9 --content-file ./reply.md
     rm ./reply.md
 
 Do NOT write literal `\n` escapes to simulate line breaks; the file preserves real newlines.
