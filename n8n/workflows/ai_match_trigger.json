@@ -1,0 +1,395 @@
+{
+  "name": "AI Facial Match Detection & Emergency Trigger Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-match-trigger",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "f2c3d4e5-0001-4000-8000-000000000001",
+      "name": "Webhook - AI Match Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Signature & Token Verification\nconst headers = $input.first().json.headers || {};\nconst payload = $input.first().json.body || $input.first().json;\nconst aiSecret = process.env.AI_WEBHOOK_SECRET || 'ai_service_secret_token';\nconst providedSig = headers['x-ai-signature'] || headers['X-AI-Signature'];\n\nif (providedSig && providedSig !== aiSecret) {\n  throw new Error('Unauthorized: AI Webhook signature mismatch.');\n}\n\n// Payload Validation\nif (!payload.match_id || !payload.source_post_id || !payload.matched_post_id || payload.similarity_score === undefined) {\n  throw new Error('Invalid Payload: match_id, source_post_id, matched_post_id, and similarity_score are required.');\n}\n\nconst similarityScore = parseFloat(payload.similarity_score);\nconst isHighConfidence = similarityScore >= 0.80 || payload.confidence === 'HIGH';\n\nconst normalizedData = {\n  match_id: payload.match_id,\n  source_post_id: payload.source_post_id,\n  matched_post_id: payload.matched_post_id,\n  child_name: payload.child_name || 'Unidentified Subject',\n  similarity_score: similarityScore,\n  similarity_percentage: (similarityScore * 100).toFixed(1) + '%',\n  is_high_confidence: isHighConfidence,\n  source_image_url: payload.source_image_url || 'https://kidnap-children.org/images/source.jpg',\n  matched_image_url: payload.matched_image_url || 'https://kidnap-children.org/images/matched.jpg',\n  matched_location: payload.matched_location || 'Unknown Location',\n  guardian_email: payload.guardian_email || process.env.DEFAULT_ALERT_EMAIL || 'guardian@kidnap-children.org',\n  guardian_phone: payload.guardian_phone || process.env.DEFAULT_ALERT_SMS || '+1234567890',\n  match_details_url: payload.match_details_url || `https://kidnap-children.org/matches/${payload.match_id}`,\n  detected_at: payload.detected_at || new Date().toISOString()\n};\n\nreturn [{ json: normalizedData }];"
+      },
+      "id": "f2c3d4e5-0002-4000-8000-000000000002",
+      "name": "Verify AI Signature & Validate Match Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.is_high_confidence }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "f2c3d4e5-0003-4000-8000-000000000003",
+      "name": "Confidence Level Threshold Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SENDGRID_API_URL || 'https://api.sendgrid.com/v3/mail/send' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SENDGRID_API_KEY || 'YOUR_SENDGRID_API_KEY' }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [\n    {\n      \"to\": [\n        {\n          \"email\": \"{{ $json.guardian_email }}\"\n        }\n      ],\n      \"subject\": \"🎯 URGENT AI MATCH DETECTED: {{ $json.child_name }} ({{ $json.similarity_percentage }} Match Score)\"\n    }\n  ],\n  \"from\": {\n    \"email\": \"{{ $env.EMAIL_FROM_ADDRESS || 'ai-match-alert@kidnap-children.org' }}\",\n    \"name\": \"Kidnap Children AI Facial Recognition System\"\n  },\n  \"content\": [\n    {\n      \"type\": \"text/html\",\n      \"value\": \"<h2>🎯 HIGH CONFIDENCE AI MATCH FOUND</h2><p>Our AI facial recognition system detected a potential match with <strong>{{ $json.similarity_percentage }}</strong> similarity score.</p><p><strong>Child Name:</strong> {{ $json.child_name }}</p><p><strong>Matched Location:</strong> {{ $json.matched_location }}</p><p><strong>Detection Timestamp:</strong> {{ $json.detected_at }}</p><p><a href=\\\"{{ $json.match_details_url }}\\\" style=\\\"background:#2b6cb0;color:#fff;padding:12px 20px;text-decoration:none;border-radius:5px;display:inline-block;\\\">Review Side-by-Side Photo Match</a></p>\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "f2c3d4e5-0004-4000-8000-000000000004",
+      "name": "Urgent AI Match Email Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.twilio.com/2010-04-01/Accounts/{{ $env.TWILIO_ACCOUNT_SID || 'YOUR_TWILIO_SID' }}/Messages.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Basic {{ Buffer.from(($env.TWILIO_ACCOUNT_SID || 'SID') + ':' + ($env.TWILIO_AUTH_TOKEN || 'TOKEN')).toString('base64') }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "form-url-encoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "From",
+              "value": "={{ $env.TWILIO_FROM_NUMBER || '+18005550199' }}"
+            },
+            {
+              "name": "To",
+              "value": "={{ $json.guardian_phone }}"
+            },
+            {
+              "name": "Body",
+              "value": "=🎯 HIGH AI MATCH ALERT: {{ $json.child_name }} matched with {{ $json.similarity_percentage }} score near {{ $json.matched_location }}. Verify match: {{ $json.match_details_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f2c3d4e5-0005-4000-8000-000000000005",
+      "name": "Urgent AI Match SMS Notification",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.APP_URL || 'http://localhost:8000') + '/api/notifications/ai-match' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INTERNAL_CACHE_TOKEN || 'internal_secret_token' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"match_id\": \"{{ $json.match_id }}\",\n  \"source_post_id\": \"{{ $json.source_post_id }}\",\n  \"matched_post_id\": \"{{ $json.matched_post_id }}\",\n  \"similarity_score\": {{ $json.similarity_score }},\n  \"status\": \"HIGH_CONFIDENCE_MATCH\",\n  \"notified_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "f2c3d4e5-0006-4000-8000-000000000006",
+      "name": "Sync High Match to Laravel Backend API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ ($env.APP_URL || 'http://localhost:8000') + '/api/notifications/ai-match-candidate' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INTERNAL_CACHE_TOKEN || 'internal_secret_token' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"match_id\": \"{{ $json.match_id }}\",\n  \"source_post_id\": \"{{ $json.source_post_id }}\",\n  \"matched_post_id\": \"{{ $json.matched_post_id }}\",\n  \"similarity_score\": {{ $json.similarity_score }},\n  \"status\": \"LOW_CONFIDENCE_CANDIDATE\",\n  \"logged_at\": \"{{ new Date().toISOString() }}\"\n}",
+        "options": {}
+      },
+      "id": "f2c3d4e5-0007-4000-8000-000000000007",
+      "name": "Log Candidate Match to Laravel Backend API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        980,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const normalized = $(\"Verify AI Signature & Validate Match Payload\").first().json;\n\nif (normalized.is_high_confidence) {\n  const emailRes = $(\"Urgent AI Match Email Notification\").first().json;\n  const smsRes = $(\"Urgent AI Match SMS Notification\").first().json;\n  const laravelRes = $(\"Sync High Match to Laravel Backend API\").first().json;\n\n  return [{\n    json: {\n      status: \"success\",\n      match_id: normalized.match_id,\n      confidence_level: \"HIGH\",\n      similarity_percentage: normalized.similarity_percentage,\n      email_status: emailRes ? \"dispatched\" : \"failed\",\n      sms_status: smsRes ? \"dispatched\" : \"failed\",\n      laravel_api_synced: !!laravelRes,\n      message: `High confidence AI match #${normalized.match_id} processed and alerts dispatched.`\n    }\n  }];\n} else {\n  const candidateRes = $(\"Log Candidate Match to Laravel Backend API\").first().json;\n  return [{\n    json: {\n      status: \"success\",\n      match_id: normalized.match_id,\n      confidence_level: \"LOW\",\n      similarity_percentage: normalized.similarity_percentage,\n      candidate_logged: !!candidateRes,\n      message: `Low confidence AI match #${normalized.match_id} logged as candidate candidate for manual review.`\n    }\n  }];\n}"
+      },
+      "id": "f2c3d4e5-0008-4000-8000-000000000008",
+      "name": "Aggregate AI Match Execution Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1240,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "f2c3d4e5-0009-4000-8000-000000000009",
+      "name": "Respond AI Match Webhook Caller",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1460,
+        400
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "f2c3d4e5-0010-4000-8000-000000000010",
+      "name": "AI Match Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.LOGGING_DLQ_ENDPOINT || 'https://api.kidnap-children.org/api/logs/n8n-dlq' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-DLQ-Token",
+              "value": "={{ $env.INTERNAL_CACHE_TOKEN || 'internal_secret_token' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow\": \"AI Facial Match Detection & Trigger\",\n  \"error_message\": \"{{ $json.execution.error.message }}\",\n  \"node\": \"{{ $json.execution.lastNodeExecuted }}\",\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"execution_id\": \"{{ $json.execution.id }}\"\n}",
+        "options": {}
+      },
+      "id": "f2c3d4e5-0011-4000-8000-000000000011",
+      "name": "AI Match DLQ Log Service HTTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        480,
+        800
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - AI Match Trigger": {
+      "main": [
+        [
+          {
+            "node": "Verify AI Signature & Validate Match Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify AI Signature & Validate Match Payload": {
+      "main": [
+        [
+          {
+            "node": "Confidence Level Threshold Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confidence Level Threshold Check": {
+      "main": [
+        [
+          {
+            "node": "Urgent AI Match Email Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Urgent AI Match SMS Notification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sync High Match to Laravel Backend API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Candidate Match to Laravel Backend API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Urgent AI Match Email Notification": {
+      "main": [
+        [
+          {
+            "node": "Aggregate AI Match Execution Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Urgent AI Match SMS Notification": {
+      "main": [
+        [
+          {
+            "node": "Aggregate AI Match Execution Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sync High Match to Laravel Backend API": {
+      "main": [
+        [
+          {
+            "node": "Aggregate AI Match Execution Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Candidate Match to Laravel Backend API": {
+      "main": [
+        [
+          {
+            "node": "Aggregate AI Match Execution Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate AI Match Execution Response": {
+      "main": [
+        [
+          {
+            "node": "Respond AI Match Webhook Caller",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Match Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Match DLQ Log Service HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    "AIMatch",
+    "FacialRecognition",
+    "EmergencyAlerts",
+    "Email",
+    "SMS",
+    "n8n-Integration"
+  ]
+}

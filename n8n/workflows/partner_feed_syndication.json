@@ -1,0 +1,165 @@
+{
+  "name": "Partner Feed & GeoJSON Syndication Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "p1a2b3c4-0001-4000-8000-000000000001",
+      "name": "Schedule - Every 15 Mins",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "refresh-partner-feed",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "p1a2b3c4-0002-4000-8000-000000000002",
+      "name": "Webhook - On-Demand Refresh",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.APP_URL || 'http://localhost:8000' }}/api/posts?status=missing&urgent=true",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "p1a2b3c4-0003-4000-8000-000000000003",
+      "name": "Fetch Urgent Posts from Laravel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        500,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json;\nconst posts = Array.isArray(response) ? response : (response.data || []);\n\n// Generate GeoJSON FeatureCollection for mapping & partner GIS systems\nconst geoFeatures = posts.map(post => ({\n  type: \"Feature\",\n  geometry: {\n    type: \"Point\",\n    coordinates: [post.longitude || 0.0, post.latitude || 0.0]\n  },\n  properties: {\n    case_id: post.id || post.case_id,\n    child_name: post.title || post.child_name,\n    age: post.age,\n    gender: post.gender,\n    last_seen_location: post.address || post.last_seen_location,\n    case_url: `https://kidnap-children.org/posts/${post.id}`,\n    image_url: post.image ? `https://kidnap-children.org/uploads/posts/${post.image}` : null,\n    created_at: post.created_at\n  }\n}));\n\nconst geoJsonFeed = {\n  type: \"FeatureCollection\",\n  generated_at: new Date().toISOString(),\n  total_cases: geoFeatures.length,\n  features: geoFeatures\n};\n\n// Generate Standardized JSON Feed (https://jsonfeed.org/version/1.1)\nconst jsonFeed = {\n  version: \"https://jsonfeed.org/version/1.1\",\n  title: \"Kidnap-Children Urgent Missing Child Feed\",\n  home_page_url: \"https://kidnap-children.org\",\n  feed_url: \"https://kidnap-children.org/api/syndication/feed.json\",\n  description: \"Live broadcast feed of active missing child posts for authorized partner networks.\",\n  expired: false,\n  items: posts.map(post => ({\n    id: String(post.id),\n    url: `https://kidnap-children.org/posts/${post.id}`,\n    title: `URGENT: ${post.title || post.child_name}`,\n    content_text: post.description || post.content,\n    image: post.image ? `https://kidnap-children.org/uploads/posts/${post.image}` : null,\n    date_published: post.created_at,\n    tags: [\"missing_child\", \"urgent_alert\"]\n  }))\n};\n\nreturn [{\n  json: {\n    geoJsonFeed,\n    jsonFeed,\n    total_active_cases: posts.length,\n    updated_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "p1a2b3c4-0004-4000-8000-000000000004",
+      "name": "Transform to GeoJSON & JSON Feed",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        750,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PARTNER_FEED_CACHE_ENDPOINT || 'https://api.kidnap-children.org/internal/cache-partner-feed' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Internal-Token",
+              "value": "={{ $env.INTERNAL_CACHE_TOKEN || 'INTERNAL_SECRET_TOKEN' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"geojson\": {{ JSON.stringify($json.geoJsonFeed) }},\n  \"json_feed\": {{ JSON.stringify($json.jsonFeed) }}\n}",
+        "options": {}
+      },
+      "id": "p1a2b3c4-0005-4000-8000-000000000005",
+      "name": "Cache Feed for High-Speed Distribution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1000,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule - Every 15 Mins": {
+      "main": [
+        [
+          {
+            "node": "Fetch Urgent Posts from Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook - On-Demand Refresh": {
+      "main": [
+        [
+          {
+            "node": "Fetch Urgent Posts from Laravel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Urgent Posts from Laravel": {
+      "main": [
+        [
+          {
+            "node": "Transform to GeoJSON & JSON Feed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to GeoJSON & JSON Feed": {
+      "main": [
+        [
+          {
+            "node": "Cache Feed for High-Speed Distribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    "Feed",
+    "GeoJSON",
+    "PartnerSyndication",
+    "n8n-Marketing"
+  ]
+}

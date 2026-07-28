@@ -1,0 +1,204 @@
+{
+  "name": "CRM & Partner Urgent Case Syndication Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "urgent-case-syndication",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "c1a2b3c4-0001-4000-8000-000000000001",
+      "name": "Webhook - Urgent Case Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate payload structure and normalize missing child fields\nconst payload = $input.first().json.body || $input.first().json;\n\nif (!payload.case_id || !payload.child_name || !payload.last_seen_location) {\n  throw new Error('Invalid payload: case_id, child_name, and last_seen_location are required.');\n}\n\nconst formattedDate = payload.last_seen_date \n  ? new Date(payload.last_seen_date).toISOString() \n  : new Date().toISOString();\n\nconst normalizedData = {\n  case_id: payload.case_id,\n  child_name: payload.child_name,\n  age: payload.age || 'Unknown',\n  gender: payload.gender || 'Not specified',\n  last_seen_date: formattedDate,\n  last_seen_location: payload.last_seen_location,\n  contact_phone: payload.contact_phone || 'Emergency Services / 911',\n  case_url: payload.case_url || `https://kidnap-children.org/posts/${payload.case_id}`,\n  image_url: payload.image_url || 'https://kidnap-children.org/images/default_missing.png',\n  description: payload.description || 'Urgent missing child case broadcast.',\n  priority: payload.priority || 'HIGH_ALERT',\n  syndication_timestamp: new Date().toISOString()\n};\n\nreturn [{ json: normalizedData }];"
+      },
+      "id": "c1a2b3c4-0002-4000-8000-000000000002",
+      "name": "Validate & Normalize Case Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.CRM_HUBSPOT_API_URL || 'https://api.hubapi.com/crm/v3/objects/contacts' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.HUBSPOT_ACCESS_TOKEN || 'YOUR_HUBSPOT_TOKEN' }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n    \"firstname\": \"{{ $json.child_name }}\",\n    \"lastname\": \"[MISSING CHILD CASE #{{ $json.case_id }}]\",\n    \"phone\": \"{{ $json.contact_phone }}\",\n    \"hs_lead_status\": \"URGENT_BROADCAST\",\n    \"address\": \"{{ $json.last_seen_location }}\",\n    \"website\": \"{{ $json.case_url }}\",\n    \"notes\": \"Age: {{ $json.age }} | Gender: {{ $json.gender }} | Last Seen: {{ $json.last_seen_date }}\\nDescription: {{ $json.description }}\"\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "c1a2b3c4-0003-4000-8000-000000000003",
+      "name": "HubSpot CRM - Register Urgent Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        720,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.PARTNER_WEBHOOK_URL || 'https://partners.ngo-alert.org/api/v1/cases/broadcast' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Platform-Api-Key",
+              "value": "={{ $env.PARTNER_API_KEY || 'PARTNER_SECRET_KEY' }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"event_type\": \"URGENT_CHILD_ALERT\",\n  \"case_reference\": \"{{ $json.case_id }}\",\n  \"subject\": {\n    \"name\": \"{{ $json.child_name }}\",\n    \"age\": {{ $json.age }},\n    \"gender\": \"{{ $json.gender }}\",\n    \"last_seen_location\": \"{{ $json.last_seen_location }}\",\n    \"last_seen_timestamp\": \"{{ $json.last_seen_date }}\"\n  },\n  \"media\": {\n    \"primary_photo\": \"{{ $json.image_url }}\",\n    \"case_page\": \"{{ $json.case_url }}\"\n  },\n  \"emergency_contact\": \"{{ $json.contact_phone }}\"\n}",
+        "options": {}
+      },
+      "id": "c1a2b3c4-0004-4000-8000-000000000004",
+      "name": "Partner NGO Webhook Broadcast",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        720,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const hubspotRes = $(\"HubSpot CRM - Register Urgent Record\").first().json;\nconst partnerRes = $(\"Partner NGO Webhook Broadcast\").first().json;\nconst normalized = $(\"Validate & Normalize Case Payload\").first().json;\n\nreturn [{\n  json: {\n    status: \"success\",\n    case_id: normalized.case_id,\n    syndicated_at: new Date().toISOString(),\n    crm_status: hubspotRes.statusCode === 201 || hubspotRes.statusCode === 200 ? \"synced\" : \"warning\",\n    partner_webhook_status: partnerRes ? \"delivered\" : \"failed\",\n    summary: `Urgent case #${normalized.case_id} (${normalized.child_name}) syndicated to CRM and NGO partners successfully.`\n  }\n}];"
+      },
+      "id": "c1a2b3c4-0005-4000-8000-000000000005",
+      "name": "Aggregate Syndication Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        980,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "c1a2b3c4-0006-4000-8000-000000000006",
+      "name": "Respond to Webhook Caller",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Urgent Case Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate & Normalize Case Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate & Normalize Case Payload": {
+      "main": [
+        [
+          {
+            "node": "HubSpot CRM - Register Urgent Record",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Partner NGO Webhook Broadcast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot CRM - Register Urgent Record": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Syndication Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Partner NGO Webhook Broadcast": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Syndication Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Syndication Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook Caller",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    "CRM",
+    "Syndication",
+    "MissingChildAlert",
+    "n8n-Marketing"
+  ]
+}

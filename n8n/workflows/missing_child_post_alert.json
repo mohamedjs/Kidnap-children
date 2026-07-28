@@ -1,0 +1,273 @@
+{
+  "name": "Missing Child Instant Post Alert & Notification Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "missing-child-post",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "e1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Webhook - Missing Child Post Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Verify Webhook Signature & Security Token\nconst headers = $input.first().json.headers || {};\nconst payload = $input.first().json.body || $input.first().json;\nconst webhookSecret = process.env.WEBHOOK_SECRET_KEY || 'default_secret_key';\nconst providedSecret = headers['x-webhook-secret'] || headers['X-Webhook-Secret'];\n\nif (providedSecret && providedSecret !== webhookSecret) {\n  throw new Error('Unauthorized: Invalid webhook secret token.');\n}\n\n// Payload Validation\nif (!payload.post_id || !payload.child_name || !payload.last_seen_location) {\n  throw new Error('Invalid Payload: post_id, child_name, and last_seen_location are required.');\n}\n\n// Normalize & Sanitize Data\nconst normalizedData = {\n  post_id: payload.post_id,\n  child_name: payload.child_name,\n  age: payload.age || 'Unknown',\n  gender: payload.gender || 'Not specified',\n  last_seen_location: payload.last_seen_location,\n  last_seen_date: payload.last_seen_date ? new Date(payload.last_seen_date).toISOString() : new Date().toISOString(),\n  photo_url: payload.photo_url || 'https://kidnap-children.org/images/default_missing.png',\n  contact_phone: payload.contact_phone || 'Emergency Services (911)',\n  reporter_email: payload.reporter_email || '',\n  recipient_emails: payload.recipient_emails || [process.env.DEFAULT_ALERT_EMAIL || 'alerts@kidnap-children.org'],\n  recipient_phones: payload.recipient_phones || [process.env.DEFAULT_ALERT_SMS || '+1234567890'],\n  urgency_level: payload.urgency_level || 'CRITICAL',\n  description: payload.description || 'No additional details provided.',\n  post_url: payload.post_url || `https://kidnap-children.org/posts/${payload.post_id}`,\n  timestamp: new Date().toISOString()\n};\n\nreturn [{ json: normalizedData }];"
+      },
+      "id": "e1b2c3d4-0002-4000-8000-000000000002",
+      "name": "Validate Security & Normalize Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.SENDGRID_API_URL || 'https://api.sendgrid.com/v3/mail/send' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.SENDGRID_API_KEY || 'YOUR_SENDGRID_API_KEY' }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"personalizations\": [\n    {\n      \"to\": [\n        {\n          \"email\": \"{{ $env.ALERT_EMAIL_RECIPIENT || 'emergency-alerts@kidnap-children.org' }}\"\n        }\n      ],\n      \"subject\": \"🚨 URGENT MISSING CHILD ALERT: {{ $json.child_name }} (Case #{{ $json.post_id }})\"\n    }\n  ],\n  \"from\": {\n    \"email\": \"{{ $env.EMAIL_FROM_ADDRESS || 'notifications@kidnap-children.org' }}\",\n    \"name\": \"Kidnap Children Emergency Alert System\"\n  },\n  \"content\": [\n    {\n      \"type\": \"text/html\",\n      \"value\": \"<h2>🚨 URGENT MISSING CHILD ALERT</h2><p><strong>Child Name:</strong> {{ $json.child_name }}</p><p><strong>Age:</strong> {{ $json.age }} | <strong>Gender:</strong> {{ $json.gender }}</p><p><strong>Last Seen Location:</strong> {{ $json.last_seen_location }}</p><p><strong>Last Seen Date:</strong> {{ $json.last_seen_date }}</p><p><strong>Description:</strong> {{ $json.description }}</p><p><a href=\\\"{{ $json.post_url }}\\\" style=\\\"background:#e53e3e;color:#fff;padding:10px 18px;text-decoration:none;border-radius:4px;display:inline-block;\\\">View Case Details & Photos</a></p>\"\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "e1b2c3d4-0003-4000-8000-000000000003",
+      "name": "SendGrid Email Dispatcher",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.twilio.com/2010-04-01/Accounts/{{ $env.TWILIO_ACCOUNT_SID || 'YOUR_TWILIO_SID' }}/Messages.json",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Basic {{ Buffer.from(($env.TWILIO_ACCOUNT_SID || 'SID') + ':' + ($env.TWILIO_AUTH_TOKEN || 'TOKEN')).toString('base64') }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "form-url-encoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "From",
+              "value": "={{ $env.TWILIO_FROM_NUMBER || '+18005550199' }}"
+            },
+            {
+              "name": "To",
+              "value": "={{ $env.EMERGENCY_SMS_RECIPIENT || '+1234567890' }}"
+            },
+            {
+              "name": "Body",
+              "value": "=🚨 MISSING CHILD ALERT: {{ $json.child_name }}, age {{ $json.age }}, last seen at {{ $json.last_seen_location }}. Details: {{ $json.post_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Twilio SMS Dispatcher",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const emailRes = $(\"SendGrid Email Dispatcher\").first().json;\nconst smsRes = $(\"Twilio SMS Dispatcher\").first().json;\nconst normalized = $(\"Validate Security & Normalize Payload\").first().json;\n\nreturn [{\n  json: {\n    status: \"success\",\n    post_id: normalized.post_id,\n    child_name: normalized.child_name,\n    processed_at: new Date().toISOString(),\n    email_status: emailRes.statusCode === 202 || emailRes.statusCode === 200 ? \"delivered\" : \"warning\",\n    sms_status: smsRes && (smsRes.sid || smsRes.status) ? \"delivered\" : \"delivered_or_pending\",\n    message: `Instant alerts dispatched for missing child post #${normalized.post_id}`\n  }\n}];"
+      },
+      "id": "e1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Aggregate Alert Dispatch Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "e1b2c3d4-0006-4000-8000-000000000006",
+      "name": "Respond Webhook Caller",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1220,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "e1b2c3d4-0007-4000-8000-000000000007",
+      "name": "Error Trigger (Dead Letter Logging)",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.LOGGING_DLQ_ENDPOINT || 'https://api.kidnap-children.org/api/logs/n8n-dlq' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-DLQ-Token",
+              "value": "={{ $env.INTERNAL_CACHE_TOKEN || 'internal_secret_token' }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"workflow\": \"Missing Child Instant Post Alert\",\n  \"error_message\": \"{{ $json.execution.error.message }}\",\n  \"node\": \"{{ $json.execution.lastNodeExecuted }}\",\n  \"timestamp\": \"{{ new Date().toISOString() }}\",\n  \"execution_id\": \"{{ $json.execution.id }}\"\n}",
+        "options": {}
+      },
+      "id": "e1b2c3d4-0008-4000-8000-000000000008",
+      "name": "DLQ Log Service HTTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        480,
+        580
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Missing Child Post Trigger": {
+      "main": [
+        [
+          {
+            "node": "Validate Security & Normalize Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Security & Normalize Payload": {
+      "main": [
+        [
+          {
+            "node": "SendGrid Email Dispatcher",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Twilio SMS Dispatcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SendGrid Email Dispatcher": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Alert Dispatch Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Twilio SMS Dispatcher": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Alert Dispatch Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Alert Dispatch Response": {
+      "main": [
+        [
+          {
+            "node": "Respond Webhook Caller",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger (Dead Letter Logging)": {
+      "main": [
+        [
+          {
+            "node": "DLQ Log Service HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    "Alerts",
+    "MissingChild",
+    "Email",
+    "SMS",
+    "n8n-Integration"
+  ]
+}

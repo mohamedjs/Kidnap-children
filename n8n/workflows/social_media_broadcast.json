@@ -1,0 +1,215 @@
+{
+  "name": "Social Media Multi-Channel Broadcast Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "social-broadcast",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "s1a2b3c4-0001-4000-8000-000000000001",
+      "name": "Webhook - Social Broadcast Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Prepare platform-specific messages with character limits & formatting\nconst item = $input.first().json.body || $input.first().json;\n\nconst caseId = item.case_id || 'UNKNOWN';\nconst childName = item.child_name || 'Missing Child';\nconst age = item.age ? `${item.age} years old` : '';\nconst location = item.location || item.last_seen_location || 'Unknown Location';\nconst caseUrl = item.case_url || `https://kidnap-children.org/posts/${caseId}`;\nconst imageUrl = item.image_url || 'https://kidnap-children.org/images/default_missing.png';\nconst contactPhone = item.contact_phone || 'Local Police / Hotline';\nconst hashtags = item.hashtags || '#MissingChild #UrgentAlert #HelpFindChild #KidnapChildren';\n\n// 1. Twitter / X (Max 280 chars)\nconst twitterText = `🚨 URGENT MISSING CHILD 🚨\\nName: ${childName} (${age})\\nLast Seen: ${location}\\nIf seen call: ${contactPhone}\\nDetails: ${caseUrl}\\n${hashtags}`.substring(0, 280);\n\n// 2. Telegram (Markdown)\nconst telegramMessage = `🚨 *URGENT MISSING CHILD ALERT* 🚨\\n\\n*Name:* ${childName}\\n*Age:* ${age}\\n*Last Seen Location:* ${location}\\n*Emergency Contact:* ${contactPhone}\\n\\nPlease share this immediately to help reunite this child with their family.\\n\\n🔗 [View Full Case Details & Submit Sighting](${caseUrl})`;\n\n// 3. Facebook / Meta Graph API\nconst facebookMessage = `🚨 URGENT MISSING CHILD ALERT 🚨\\nName: ${childName} (${age})\\nLast Seen Location: ${location}\\nContact Hotline: ${contactPhone}\\n\\nEvery second counts. Please share this post to reach more people in the area!\\nFull case info: ${caseUrl}\\n\\n${hashtags}`;\n\n// 4. Discord Emergency Channel (Rich Embed)\nconst discordEmbed = {\n  embeds: [\n    {\n      title: `🚨 URGENT MISSING CHILD: ${childName.toUpperCase()}`,\n      description: `Urgent case broadcast for **${childName}** (${age}). Please review the details below and share immediately.`,\n      url: caseUrl,\n      color: 15158332,\n      fields: [\n        { name: \"Last Seen Location\", value: location, inline: true },\n        { name: \"Emergency Hotline\", value: contactPhone, inline: true },\n        { name: \"Case Reference\", value: `#${caseId}`, inline: true }\n      ],\n      image: { url: imageUrl },\n      footer: { text: \"Kidnap-Children Social Broadcast Engine • Emergency Alert System\" },\n      timestamp: new Date().toISOString()\n    }\n  ]\n};\n\nreturn [{\n  json: {\n    case_id: caseId,\n    image_url: imageUrl,\n    case_url: caseUrl,\n    formatted: {\n      twitter: twitterText,\n      telegram: telegramMessage,\n      facebook: facebookMessage,\n      discord: discordEmbed\n    }\n  }\n}];"
+      },
+      "id": "s1a2b3c4-0002-4000-8000-000000000002",
+      "name": "Format Multi-Platform Posts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN || 'BOT_TOKEN_PLACEHOLDER' }}/sendPhoto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHANNEL_ID || '@KidnapChildrenAlerts' }}\",\n  \"photo\": \"{{ $json.image_url }}\",\n  \"caption\": \"{{ $json.formatted.telegram }}\",\n  \"parse_mode\": \"Markdown\",\n  \"reply_markup\": {\n    \"inline_keyboard\": [\n      [\n        {\n          \"text\": \"🚨 Submit Sighting / Info\",\n          \"url\": \"{{ $json.case_url }}\"\n        }\n      ]\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "s1a2b3c4-0003-4000-8000-000000000003",
+      "name": "Broadcast to Telegram Channel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.DISCORD_EMERGENCY_WEBHOOK_URL || 'https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.formatted.discord) }}",
+        "options": {}
+      },
+      "id": "s1a2b3c4-0004-4000-8000-000000000004",
+      "name": "Broadcast to Discord Channel",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v18.0/{{ $env.FACEBOOK_PAGE_ID || 'ME' }}/photos",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $json.image_url }}\",\n  \"message\": \"{{ $json.formatted.facebook }}\",\n  \"access_token\": \"{{ $env.FACEBOOK_PAGE_ACCESS_TOKEN || 'FB_TOKEN_PLACEHOLDER' }}\"\n}",
+        "options": {}
+      },
+      "id": "s1a2b3c4-0005-4000-8000-000000000005",
+      "name": "Broadcast to Facebook Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        740,
+        450
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $(\"Format Multi-Platform Posts\").first().json;\n\nreturn [{\n  json: {\n    status: \"success\",\n    action: \"social_broadcast_completed\",\n    case_id: item.case_id,\n    published_platforms: [\n      \"Telegram Channel\",\n      \"Discord Emergency Channel\",\n      \"Facebook Page\"\n    ],\n    broadcast_time: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "s1a2b3c4-0006-4000-8000-000000000006",
+      "name": "Summarize Social Broadcast",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1000,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "s1a2b3c4-0007-4000-8000-000000000007",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1220,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook - Social Broadcast Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Multi-Platform Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Multi-Platform Posts": {
+      "main": [
+        [
+          {
+            "node": "Broadcast to Telegram Channel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Broadcast to Discord Channel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Broadcast to Facebook Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Broadcast to Telegram Channel": {
+      "main": [
+        [
+          {
+            "node": "Summarize Social Broadcast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Broadcast to Discord Channel": {
+      "main": [
+        [
+          {
+            "node": "Summarize Social Broadcast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Broadcast to Facebook Page": {
+      "main": [
+        [
+          {
+            "node": "Summarize Social Broadcast",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Social Broadcast": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    "SocialMedia",
+    "Broadcast",
+    "EmergencyAlert",
+    "n8n-Marketing"
+  ]
+}

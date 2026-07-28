@@ -1,0 +1,308 @@
+/* ==========================================================================
+   Kidnap-Children Social Platform - Design System & Accessibility (WCAG 2.1 AA)
+   ========================================================================== */
+
+:root {
+  /* Color Palette & Tokens (WCAG 2.1 AA Compliant Contrasts >= 4.5:1) */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-active: #3730a3;
+  --color-primary-light: #e0e7ff;
+  
+  --color-secondary: #0284c7;
+  --color-secondary-hover: #0369a1;
+
+  --color-success: #15803d;
+  --color-success-bg: #dcfce7;
+  
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+
+  --color-warning: #b45309;
+  --color-warning-bg: #fef3c7;
+
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+  --color-text-light: #64748b;
+  --color-text-on-primary: #ffffff;
+
+  --color-bg-body: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-alt: #f1f5f9;
+
+  --color-border: #cbd5e1;
+  --color-border-hover: #94a3b8;
+  --color-focus-ring: #6366f1;
+
+  /* Typography */
+  --font-family-sans: 'Poppins', 'Tajawal', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Elevation & Shadows */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+  --shadow-lg: 0 10px 25px rgba(15, 23, 42, 0.12);
+  --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.4);
+
+  /* Border Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility (WCAG 2.1 AA) Global Enhancements
+   -------------------------------------------------------------------------- */
+
+/* Focus Ring for Keyboard Navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-focus-ring) !important;
+  outline-offset: 2px !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+/* Screen Reader Only Utility Class */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Minimum Touch Target Sizes for Accessible Interactions */
+a, button, input[type="submit"], input[type="button"], .customer-tool-item {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   Standardized UI Components & Layout Polish
+   -------------------------------------------------------------------------- */
+
+/* Cards & Posts */
+.post, .create-post-box, .bg-fff.round-20 {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.post:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Form Controls & Inputs */
+.create-post-input,
+.form-control,
+.custome-select-city {
+  border-radius: var(--radius-md) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-sm);
+  padding: 10px 14px !important;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover {
+    border-color: var(--color-border-hover) !important;
+  }
+
+  &:focus {
+    border-color: var(--color-primary) !important;
+    box-shadow: var(--shadow-focus) !important;
+    outline: none;
+  }
+
+  &.is-invalid {
+    border-color: var(--color-danger) !important;
+    background-color: var(--color-danger-bg);
+  }
+}
+
+/* Primary Action Buttons */
+.submit-post,
+.main-btn,
+.btn-primary-custom {
+  background-color: var(--color-primary) !important;
+  color: var(--color-text-on-primary) !important;
+  font-weight: 600 !important;
+  font-family: var(--font-family-sans);
+  border-radius: var(--radius-md) !important;
+  border: none !important;
+  padding: 10px 24px !important;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover, &:focus {
+    background-color: var(--color-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active {
+    background-color: var(--color-primary-active) !important;
+    transform: translateY(0);
+  }
+}
+
+/* Status Badges */
+.badge-missed {
+  background-color: var(--color-danger-bg) !important;
+  color: var(--color-danger) !important;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  display: inline-block;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.badge-found {
+  background-color: var(--color-success-bg) !important;
+  color: var(--color-success) !important;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  display: inline-block;
+  border: 1px solid rgba(21, 128, 61, 0.2);
+}
+
+/* Notifications Badge */
+.noitfy, .circle {
+  background-color: var(--color-danger) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 11px !important;
+  border-radius: var(--radius-full) !important;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* Modal Dialog Polish */
+.modal-content {
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  background-color: var(--color-bg-surface);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--color-border);
+  padding: 16px 24px;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 16px 24px;
+}
+
+/* Skeleton Loading State Utility */
+.skeleton-box {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  overflow: hidden;
+  background-color: #e2e8f0;
+  border-radius: var(--radius-sm);
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.4) 20%,
+      rgba(255, 255, 255, 0.6) 60%,
+      rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+    content: '';
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Responsive Micro-Fixes for Viewports */
+@media (max-width: 768px) {
+  .dashboard-header.justify-content-between {
+    width: 100% !important;
+    position: relative !important;
+  }
+  
+  #app {
+    padding-top: 15px !important;
+  }
+
+  .customer-dashboard-content {
+    padding: 12px !important;
+  }
+}
