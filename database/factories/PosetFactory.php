@@ -6,14 +6,16 @@ use App\Models\User;
 
 $factory->define(Post::class, function (Faker $faker) {
     return [
-        "user_id" => User::query()->inRandomOrder()->get()[0],
+        "user_id" => function () {
+            return User::inRandomOrder()->first()->id ?? factory(User::class)->create()->id;
+        },
         "name" => $faker->name,
-        "gender" => $faker->randomElement([1, 2]),
-        "age" => random_int(4, 50),
-        "birth_date" => \Carbon\Carbon::now()->toDateString(),
-        "description" => $faker->text,
-        "lat" => $faker->latitude,
-        "lng" => $faker->latitude,
+        "gender" => $faker->randomElement(["male", "female"]),
+        "age" => random_int(1, 17),
+        "birth_date" => $faker->date(),
+        "description" => $faker->paragraph,
+        "lat" => (string)$faker->latitude,
+        "lng" => (string)$faker->longitude,
         "type" => $faker->randomElement(["founded", "missed"])
     ];
 });

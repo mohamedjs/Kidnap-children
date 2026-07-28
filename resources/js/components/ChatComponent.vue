@@ -88,86 +88,172 @@
           image_u:'',
           user_id_send:'',
           user_chats : [],
-          chat_object:{'sender_id':'' , 'reciever_id':1 , 'message' : ''},
+          chat_object:{'sender_id':'' , 'reciever_id':'' , 'message' : ''},
           validationErrors:[],
           base_url:base_url,
           show_dot:false,
-          uri:base_url+'/chat'
+          uri:base_url+'/api/messages'
         }
       },
        props:['user'],
        methods: {
+         scrollBottom() {
+           this.$nextTick(() => {
+             var elem = document.getElementById('Commentbox');
+             if (elem) {
+               elem.scrollTop = elem.scrollHeight;
+             }
+           });
+         },
          get_chat(user_id){
            var _this = this;
-           axios.get(this.uri+'?send_id='+this.user.id+'&recieve_id='+user_id).then(function (response) {
-             console.log(response);
-             _this.user_chats = response.data.all;
-             _this.name_u=response.data.user_info.name
-             _this.image_u=response.data.user_info.image
-             _this.chat_object.reciever_id=response.data.user_info.id
-             var elem = document.getElementById('Commentbox');
-             elem.scrollTop = elem.scrollHeight;
-           }).catch(
-             error => console.log(error)
-           )
+           this.chat_object.reciever_id = user_id;
+           axios.get(this.base_url + '/api/messages/' + user_id)
+             .then(function (response) {
+               if (response.data && response.data.messages !== undefined) {
+                 _this.user_chats = response.data.messages;
+                 let contact = _this.chats.find(c => c.user_id == user_id);
+                 if (contact) {
+                   _this.name_u = contact.user_name;
+                   _this.image_u = contact.user_image;
+                 } else {
+                   axios.get(_this.base_url + '/api/profile/' + user_id).then(res => {
+                     if (res.data && res.data.user) {
+                       _this.name_u = res.data.user.name;
+                       _this.image_u = res.data.user.image;
+                     }
+                   }).catch(e => console.log(e));
+                 }
+               } else if (response.data && response.data.all) {
+                 _this.user_chats = response.data.all;
+                 _this.name_u = response.data.user_info.name;
+                 _this.image_u = response.data.user_info.image;
+               }
+               _this.scrollBottom();
+             }).catch(function (error) {
+               // Fallback to legacy route
+               axios.get(_this.base_url + '/chat?send_id=' + _this.user.id + '&recieve_id=' + user_id)
+                 .then(function (res) {
+                   _this.user_chats = res.data.all;
+                   _this.name_u = res.data.user_info.name;
+                   _this.image_u = res.data.user_info.image;
+                   _this.scrollBottom();
+                 }).catch(err => console.log(err));
+             });
          },
          all_user(){
            var _this = this;
-           axios.get(this.uri+'/'+this.user.id).then(function (response) {
-             console.log(response);
-             _this.chats = response.data
-             if(_this.chats.length > 0){
-               _this.get_chat(_this.chats[0].user_id)
-              }
-              var elem = document.getElementById('Commentbox');
-              elem.scrollTop = elem.scrollHeight;
-           }).catch(
-             error => console.log(error)
-           );
+           axios.get(this.base_url + '/api/messages/conversations')
+             .then(function (response) {
+               if (response.data && response.data.conversations) {
+                 _this.chats = response.data.conversations.map(c => ({
+                   user_id: c.user.id,
+                   user_name: c.user.name,
+                   user_image: c.user.image || (_this.base_url + '/front/images/user.png'),
+                   message: c.last_message ? c.last_message.message : '',
+                   created_at: c.last_message ? moment(c.last_message.created_at).fromNow() : ''
+                 }));
+               } else {
+                 _this.chats = response.data;
+               }
+               if (_this.chats.length > 0 && !_this.name_u) {
+                 _this.get_chat(_this.chats[0].user_id);
+               }
+               _this.scrollBottom();
+             }).catch(function (error) {
+               // Fallback to legacy endpoint
+               axios.get(_this.base_url + '/chat/' + _this.user.id).then(function (res) {
+                 _this.chats = res.data;
+                 if (_this.chats.length > 0 && !_this.name_u) {
+                   _this.get_chat(_this.chats[0].user_id);
+                 }
+                 _this.scrollBottom();
+               }).catch(err => console.log(err));
+             });
          },
          send_message(){
            var _this = this;
-           this.chat_object.sender_id = this.user.id
-           console.log(this.chat_object)
-           axios.post(this.uri,this.chat_object).then(function (response) {
-             console.log(response);
-             _this.get_chat(_this.chat_object.reciever_id);
-             _this.chat_object = {'sender_id':'' , 'reciever_id':'' , 'message' : ''}
-             var elem = document.getElementById('Commentbox');
-             elem.scrollTop = elem.scrollHeight;
-           }).catch(
-             error => console.log(error)
-           )
+           if (!this.chat_object.message || !this.chat_object.reciever_id) return;
+           this.chat_object.sender_id = this.user.id;
+           
+           axios.post(this.base_url + '/api/messages', {
+             reciever_id: this.chat_object.reciever_id,
+             message: this.chat_object.message
+           }).then(function (response) {
+             let sentChat = response.data.chat || response.data;
+             _this.user_chats.push(sentChat);
+             _this.chat_object.message = '';
+             _this.scrollBottom();
+             _this.all_user();
+           }).catch(function (error) {
+             // Fallback to legacy POST endpoint
+             axios.post(_this.base_url + '/chat', _this.chat_object).then(function (res) {
+               _this.get_chat(_this.chat_object.reciever_id);
+               _this.chat_object.message = '';
+               _this.scrollBottom();
+             }).catch(err => console.log(err));
+           });
          },
          showtyping(){
-           var _this = this
-            Echo.private('chat')
-                .whisper('typing', {
-                message: _this.user.name+' is typing',
-                typing: true
-              })
+           var _this = this;
+           if (window.Echo && _this.chat_object.reciever_id) {
+             window.Echo.private('chat.' + _this.chat_object.reciever_id)
+               .whisper('typing', {
+                 message: _this.user.name + ' is typing',
+                 typing: true
+               });
+           }
+           if (window.Echo) {
+             window.Echo.private('chat')
+               .whisper('typing', {
+                 message: _this.user.name + ' is typing',
+                 typing: true
+               });
+           }
          }
        },
        created() {
-         //do something after creating vue instance
-         let _this = this
-         Echo.private('chat')
-           .listen('.chat.created', (e) => {
-             _this.get_chat(_this.chat_object.reciever_id);
-           })
-          .listenForWhisper('typing', (e) => {
-            if(e.typing) {
-              _this.show_dot = true}
-            else {
-               _this.show_dot = false}
-            setTimeout(()=>{
-              _this.show_dot = false
-            },9000)
-          })
+         let _this = this;
+         if (window.Echo && this.user && this.user.id) {
+           // Private channel for target user (ChatMessageSent event broadcasts on chat.{reciever_id})
+           window.Echo.private('chat.' + this.user.id)
+             .listen('.message.sent', (e) => {
+               if (e.chat) {
+                 if (_this.chat_object.reciever_id == e.chat.sender_id || _this.chat_object.reciever_id == e.chat.reciever_id) {
+                   // Append message if current chat conversation matches
+                   let exists = _this.user_chats.some(m => m.id === e.chat.id);
+                   if (!exists) {
+                     _this.user_chats.push(e.chat);
+                     _this.scrollBottom();
+                   }
+                 }
+                 _this.all_user();
+               }
+             })
+             .listenForWhisper('typing', (e) => {
+               if (e.typing) {
+                 _this.show_dot = true;
+                 setTimeout(() => { _this.show_dot = false; }, 4000);
+               }
+             });
+
+           // Global legacy chat channel
+           window.Echo.private('chat')
+             .listen('.chat.created', (e) => {
+               if (_this.chat_object.reciever_id) {
+                 _this.get_chat(_this.chat_object.reciever_id);
+               }
+             })
+             .listenForWhisper('typing', (e) => {
+               if (e.typing) {
+                 _this.show_dot = true;
+                 setTimeout(() => { _this.show_dot = false; }, 4000);
+               }
+             });
+         }
        },
        mounted() {
          this.all_user();
-
-        }
+       }
     }
 </script>

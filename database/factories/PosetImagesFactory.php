@@ -2,14 +2,13 @@
 
 use Faker\Generator as Faker;
 use App\Models\PostImage;
+use App\Models\Post;
 
-$date_path = date("Y") . '/' . date("m") . '/' . date("d") . '/';
-$path = base_path() . '/front/uploads/posts/' . $date_path;
-if (!\File::exists($path)) {
-    \File::makeDirectory($path, 0777, true);
-}
-$factory->define(PostImage::class, function (Faker $faker) use ($path,$date_path){
+$factory->define(PostImage::class, function (Faker $faker) {
     return [
-        "image" => url('GB/front/uploads/posts/' . $date_path).'/'.$faker->image($path,400,300, null, false),
+        "post_id" => function () {
+            return Post::inRandomOrder()->first()->id ?? factory(Post::class)->create()->id;
+        },
+        "image" => "uploads/posts/sample.jpg",
     ];
 });

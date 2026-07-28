@@ -14,9 +14,15 @@ class AddDenderToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('gender')->nullable()->default('male')->after('phone');
-            $table->date('birth_date')->nullable()->default(date('Y-m-d'))->after('password');
-            $table->string('background_image')->nullable()->after('image');
+            if (!Schema::hasColumn('users', 'gender')) {
+                $table->string('gender')->nullable()->default('male')->after('phone');
+            }
+            if (!Schema::hasColumn('users', 'birth_date')) {
+                $table->date('birth_date')->nullable()->after('password');
+            }
+            if (!Schema::hasColumn('users', 'background_image')) {
+                $table->string('background_image')->nullable()->after('image');
+            }
         });
     }
 

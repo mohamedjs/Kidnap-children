@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-      <title>Ecovve</title>
+      <title>Kidnap Children Social Platform | @yield('page_title', 'Home')</title>
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
       <meta name="base_url" content="{{ url('/')}}">
@@ -126,15 +126,15 @@
       <div class="customer-dashboard-asidemenu">
         <div class="close-customer-dashboard-aside"></div>
         <div class="menu-header d-flex justify-content-between align-items-center">
-          <div class="logo-box"><img class="img-fluid" src="{{url('front/images/logo.png')}}"></div><a class="menu-box-btn customer-dashboard-asidemenu-colapse-btn" href="#"><span></span></a><a class="toggle-customer-dashboard-header" href="#"><i class="fas fa-ellipsis-v"></i></a><a class="menu-box-btn customer-dashboard-asidemenu-mobile-btn" href="#"><span></span></a>
+          <div class="logo-box"><img class="img-fluid" src="{{url('front/images/logo.png')}}" alt="Kidnap Children Social Platform Logo"></div><a class="menu-box-btn customer-dashboard-asidemenu-colapse-btn" href="#" aria-label="Collapse Navigation Menu"><span></span></a><a class="toggle-customer-dashboard-header" href="#" aria-label="Toggle Header Menu"><i class="fas fa-ellipsis-v" aria-hidden="true"></i></a><a class="menu-box-btn customer-dashboard-asidemenu-mobile-btn" href="#" aria-label="Open Mobile Menu"><span></span></a>
         </div>
         <div class="menu-body perfect-scroll">
-          <div class="customer-box"><a class="customer-photo" href="#"><img class="img-fluid" src="{{Auth::user()->image}}"></a>
-            <h3 class="customer-name mb-3"><a href="#">{{Auth::user()->name}}</a></h3>
+          <div class="customer-box"><a class="customer-photo" href="{{ url('profile') }}" aria-label="View Profile"><img class="img-fluid" src="{{Auth::user()->image}}" alt="{{Auth::user()->name}} Profile Picture"></a>
+            <h3 class="customer-name mb-3"><a href="{{ url('profile') }}">{{Auth::user()->name}}</a></h3>
             <ul class="customer-tools list-unstyled">
-              <li id="notifiy-count"><a class="customer-tool-item" href="{{ url('all_notification') }}"><i class="fas fa-bell"></i>
+              <li id="notifiy-count"><a class="customer-tool-item" href="{{ url('all_notification') }}" aria-label="Notifications"><i class="fas fa-bell" aria-hidden="true"></i>
                   <div class="noitfy"><span><?php echo \App\Models\Notification::where('receive_id',Auth::id())->where('seen',0)->count() ?></span></div></a></li>
-              <li><a class="customer-tool-item" href="{{ url('chatroom') }}"><i class="fab fa-facebook-messenger"></i>
+              <li><a class="customer-tool-item" href="{{ url('chatroom') }}" aria-label="Messages"><i class="fab fa-facebook-messenger" aria-hidden="true"></i>
                   <div class="noitfy"><span>9</span></div></a></li>
             </ul>
           </div>
@@ -293,6 +293,24 @@
                    source:['{{ asset('front/svg/nice-cut.wav') }}'],
                    volume : 1,
                    conditions: ['docVisible', 'docHidden']
+                 }
+                }).show();
+          })
+          .listen('.ai.match.found', (e) => {
+            _this.get_notification()
+            _this.notification_count = _this.notification_count + 1
+            $('#notifiy-count .noitfy').html('<span>'+_this.notification_count+'</span>')
+            new Noty({
+                  type: 'warning',
+                  theme: 'bootstrap-v3',
+                  layout: 'bottomRight',
+                  closeWith: ['click', 'button'],
+                  buttons     : false,
+                  progressBar : true,
+                  text: e.message || 'AI Match Found! Check post details for confidence score breakdown.',
+                  animation: {
+                     open: 'animated bounceInRight',
+                     close: 'animated bounceOutRight'
                  }
                 }).show();
           })

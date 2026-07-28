@@ -7,8 +7,12 @@ use App\Models\Comment;
 
 $factory->define(Comment::class, function (Faker $faker) {
     return [
-        "user_id" => User::query()->inRandomOrder()->get()[0],
-        "post_id" => Post::query()->inRandomOrder()->get()[0],
-        "comment" => $faker->text(random_int(20, 50))
+        "user_id" => function () {
+            return User::inRandomOrder()->first()->id ?? factory(User::class)->create()->id;
+        },
+        "post_id" => function () {
+            return Post::inRandomOrder()->first()->id ?? factory(Post::class)->create()->id;
+        },
+        "comment" => $faker->sentence
     ];
 });

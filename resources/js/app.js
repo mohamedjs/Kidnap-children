@@ -39,10 +39,10 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('vue-home', require('./components/HomeComponent.vue').default);
 Vue.component('vue-profile', require('./components/ProfileComponent.vue').default);
 Vue.component('inner-post-vue',require('./components/InnerPostComponent').default);
-Vue.component('inner-post-vue',require('./components/InnerPostComponent').default);
 Vue.component('found-person-vue',require('./components/FoundPersonComponent').default);
 Vue.component('missed-person-vue',require('./components/MissedPersonComponent').default);
 Vue.component('chat-vue',require('./components/ChatComponent').default);
+Vue.component('ai-match-comparison', require('./components/AiMatchComparison.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

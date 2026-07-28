@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +16,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name' ,'email' ,'phone' , 'password' , 'address' , 'image' ,'background_image','birh_date'
+        'name',
+        'email',
+        'phone',
+        'password',
+        'address',
+        'gender',
+        'birth_date',
+        'image',
+        'background_image'
     ];
 
     /**
@@ -25,62 +33,42 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    public function sender()
+    public function posts()
     {
-      return $this->belongsToMany('App\User','chats','send_id','receive_id')
-      ->withPivot('id','message' ,'seen','message_type')->withTimestamps();
-    }
-
-    public function receiver()
-    {
-      return $this->belongsToMany('App\User','chats','receive_id','send_id')
-      ->withPivot('id','message' ,'seen','message_type')->withTimestamps();
-    }
-
-    public function misses()
-    {
-      return $this->hasMany('App\Misse','user_id','id');
+        return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
     public function comments()
     {
-      return $this->hasMany('App\Comment','user_id','id');
+        return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 
-    public function historys()
+    public function likes()
     {
-      return $this->hasMany('App\History','user_id','id');
+        return $this->hasMany(Like::class, 'user_id', 'id');
     }
 
-    public function region()
+    public function sentMessages()
     {
-        return $this->belongsTo('App\Region') ;
+        return $this->hasMany(Chat::class, 'sender_id', 'id');
     }
 
-    public function sender_notification()
+    public function receivedMessages()
     {
-      return $this->belongsToMany('App\Models\User','notifications','send_id','receive_id')
-      ->withPivot('id','title' , 'content' , 'notification_url' ,'seen')->withTimestamps();
+        return $this->hasMany(Chat::class, 'reciever_id', 'id');
     }
 
-    public function receiver_notification()
+    public function sentNotifications()
     {
-      return $this->belongsToMany('App\Models\User','notifications','receive_id','send_id')
-      ->withPivot('id','title' , 'content' , 'notification_url' ,'seen')->withTimestamps();
+        return $this->hasMany(Notification::class, 'send_id', 'id');
     }
 
-//    public function setImageAttribute($value){
-//     $img_name = time().rand(0,999).'.'.$value->getClientOriginalExtension();
-//     $value->move(base_path('front/post_images'),$img_name);
-//     $this->attributes['image']= $img_name ;
-//   }
-
-   // public function getImageAttribute($value)
-   // {
-   //   return url('front/post_images/'.$value);
-   // }
-
+    public function receivedNotifications()
+    {
+        return $this->hasMany(Notification::class, 'receive_id', 'id');
+    }
 }

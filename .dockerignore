@@ -1,0 +1,11 @@
+vendor/
+node_modules/
+.git/
+.agents/
+.agent_context/
+ai_service/venv/
+ai_service/.pytest_cache/
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*

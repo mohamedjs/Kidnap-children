@@ -97,93 +97,19 @@
                  No More Posts :)
               </div>
           </div>
-          <div class="col-lg-12" style="margin-top:10px">
-            <h4 class="text-center">Match Posts Result</h4>
-            <ul class="list_ofPosts list-unstyled">
-              <li v-for="(post,key) in result_posts" :key="key">
-                  <div class="post">
-                    <div class="photo-box-slider swiper-container">
-                      <carousel :dots="false"  :nav="false" :items="1" class="swiper-wrapper">
-                        <vue-load-image v-for="post_image in post.images" :key="post_image.key">
-                           <img slot="image" :src="post_image.image" class="img-responsive"/>
-                           <img slot="preloader" :src="base_url+'/front/svg/image-loader.8402b89.gif'" class="img-responsive"/>
-                           <div slot="error">about</div>
-                         </vue-load-image>
-                        <template  slot="prev">
-                          <div class="swiper-button-prev lost-people-btn-prev photo-arrows"><i class="fas fa-chevron-left"></i></div>
-                        </template>
-                        <template  slot="next">
-                          <div class="swiper-button-next lost-people-btn-next photo-arrows"><i class="fas fa-chevron-right"></i></div>
-                        </template>
-                      </carousel>
-                    </div>
-                    <div class="post-data">
-                      <div class="post-owner">
-                        <div class="img-box"><img class="img-fluid" :src="post.user.image"></div>
-                        <div class="owner_date">
-                          <h4 class="owner-name">{{post.user.name}}</h4>
-                          <p class="post-time">{{moment(post.created_at).format('LL')}}</p>
-                        </div>
-                        <div v-if="post.user.id == user.id" class="dropdown show setting-dropdown icon-box"><a class="chat-menu" href="#" role="button" id="profile-setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-                          <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown" style="top: 25px !important"><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item" @click.prevent = "delete_post(post.id,key)" href="#">Delete</a></div>
-                        </div>
-                        <div class="clearfix"></div>
-                      </div>
-                      <div class="post-data-content">
-                        <ul class="lostPerson_data list-unstyled">
-                          <li>
-                            <p class="label">Person Name:</p><span class="value">{{post.name}}</span>
-                          </li>
-                          <li>
-                            <p class="label">gender:</p><span class="value">{{post.gender == 1 ? 'male':'female'}}</span>
-                          </li>
-                          <li>
-                            <p class="label">Lost Date:</p><span class="value">{{moment(post.created_at).format('LL')}}</span>
-                          </li>
-                          <li>
-                            <p class="label">Age:</p><span class="value">{{post.age}}</span>
-                          </li>
-                          <li>
-                            <p class="loatDetails">{{post.description}}</p>
-                          </li>
-                        </ul>
-                      </div>
-                      <ul class="post-btn-list list-unstyled d-flex justify-content-between">
-                        <li><a class="post-btn" :href="base_url+'/get_message/'+post.user.id"><i class="far fa-comment-dots"></i><span>Send Message</span></a></li>
-                        <li><a class="post-btn active-btn" href="#"><i class="far fa-comment-alt"></i><span>Comment</span></a></li>
-                        <li><a class="post-btn" href="#"><i class="fas fa-share"></i><span>Share</span></a></li>
-                      </ul>
-                      <div class="comments">
-                        <ul class="user-comments-list list-unstyled">
-                          <li v-if="post.count_comment > 2"><a @click.prevent= "load_more_comment(post.id,key)" href="#" style="cursor:pointer;color:#9E2FB2" class="comment-box">load comments</a></li>
-                          <li v-for="(comment,key_comment) in post.comments" :key="key_comment">
-                            <div class="user-photo"><img class="img-fluid" :src="comment.user.image"></div>
-                            <div class="comment-box">
-                              <p class="usern-name">{{comment.user.name}}</p>
-                              <p class="user-comment">{{comment.comment}}</p>
-                            </div>
-                            <div v-if="comment.user.id == user.id" class="dropdown show setting-dropdown icon-box"><a class="chat-menu" href="#" role="button" id="profile-setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-                              <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown" style="top: 25px !important"><a class="dropdown-item" :id="'update_com'+comment.id" @click.prevent = "update_comment(comment.id,comment.comment,key_comment)" href="#">Edit</a><a class="dropdown-item" @click.prevent = "delete_comment(comment.id,key_comment,key)" href="#">Delete</a></div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="typing" v-if="show_dot" id="loading">
-                              <span></span>
-                              <span></span>
-                              <span></span>
-                            </div>
-                          </li>
-                        </ul>
-                        <form @submit.prevent="add_comment(key,post.id)" class="write-comment">
-                          <input @keydown="showtyping()" v-model="comment" class="input-write" type="text" placeholder="Write Comment....">
-                          <button class="submit-comment" type="submit"><i class="fas fa-paper-plane"></i></button>
-                        </form>
-                      </div>
-                      <div :class="'post_label '+[ post.type==='missed' ? 'label-missed' : 'label-found']"><span>{{post.type}}</span></div>
-                    </div>
-                  </div>
-              </li>
-            </ul>
+          <div class="col-lg-12" style="margin-top:20px" v-if="result_posts && result_posts.length">
+            <h4 class="text-center mb-4 font-weight-bold" style="color: #4f46e5;">
+              <i class="fas fa-microchip mr-2"></i> AI Match Comparison Results ({{ result_posts.length }})
+            </h4>
+            <div v-for="(post, key) in result_posts" :key="key">
+              <ai-match-comparison
+                :original-post="inner_post"
+                :matched-post="post"
+                :match-score="post.match_score || post.score || 92.4"
+                :match-data="post.match_data"
+                :base-url="base_url"
+              />
+            </div>
           </div>
           <div class="col-lg-12" style="margin-top:10px">
             <div id="map" style="width: 100%;height: 300px;position: relative;overflow: hidden;">
@@ -200,8 +126,9 @@
 <script>
 import carousel from 'vue-owl-carousel'
 import VueLoadImage from 'vue-load-image'
+import AiMatchComparison from './AiMatchComparison.vue'
     export default {
-      components: { carousel , 'vue-load-image': VueLoadImage },
+      components: { carousel, 'vue-load-image': VueLoadImage, AiMatchComparison },
        data(){
         return{
           data : new FormData(),

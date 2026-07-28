@@ -1,44 +1,69 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| REST API Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
-//Route::post('/test/{lat}/{lang}',function($lat,$lang){
-//
-//    $KAABA_LATITUDE = 21.422517;
-//
-//    $KAABA_LONGITUDE = 39.826166;
-//
-//       if (!is_numeric($lat) || !is_numeric($lang)) {
-//           throw new \Exception('AlQibla::Calculation ::: Please pass a numeric value for the latitude and longitude.');
-//       }
-//       $A = deg2rad($KAABA_LONGITUDE - $lang);
-//       $b = deg2rad(90 - $lat);
-//       $c = deg2rad(90 -$KAABA_LATITUDE);
-//       $C = rad2deg(atan2(sin($A), sin($b) * tan(M_PI_2 - $c) - cos($b) * cos($A)));
-//       // Azimuth is not negative
-//       $C += ($C < 0) * 360;
-//       return $C;
-//});
-// function cot($arg)
-//{
-//    return tan(M_PI_2 - $arg);
-//}
+Route::group(['namespace' => 'Api'], function () {
 
-Route::prefix('/')->attribute('namespace', 'Frontend')->group(function () {
-    Route::resource("posts", "PostController");
-    Route::resource("comments", "CommentController");
+    // Auth Public Endpoints
+    Route::get('/health', function () {
+        return response()->json(['status' => 'ok', 'service' => 'laravel-api']);
+    });
+    Route::post('/auth/register', 'AuthController@register');
+    Route::post('/auth/login', 'AuthController@login');
+
+    // Public Posts & Search
+    Route::get('/posts', 'PostController@index');
+    Route::get('/posts/{id}', 'PostController@show');
+    Route::get('/posts/{postId}/comments', 'CommentController@index');
+    Route::get('/posts/{postId}/likes', 'LikeController@index');
+    Route::get('/search', 'SearchController@search');
+
+    // Public Profile
+    Route::get('/profile/{id}', 'ProfileController@show');
+
+    // Authenticated API Routes
+    Route::group(['middleware' => 'auth:api'], function () {
+        // Auth
+        Route::post('/auth/logout', 'AuthController@logout');
+        Route::get('/auth/me', 'AuthController@me');
+
+        // Profile
+        Route::put('/profile', 'ProfileController@update');
+        Route::post('/profile/image', 'ProfileController@uploadImage');
+
+        // Posts
+        Route::post('/posts', 'PostController@store');
+        Route::put('/posts/{id}', 'PostController@update');
+        Route::delete('/posts/{id}', 'PostController@destroy');
+        Route::post('/posts/{id}/images', 'PostController@uploadImages');
+
+        // Comments
+        Route::post('/posts/{postId}/comments', 'CommentController@store');
+        Route::delete('/comments/{id}', 'CommentController@destroy');
+
+        // Likes
+        Route::post('/posts/{postId}/like', 'LikeController@toggle');
+
+        // Private Messaging
+        Route::get('/messages/conversations', 'MessageController@conversations');
+        Route::get('/messages/{recipientId}', 'MessageController@index');
+        Route::post('/messages', 'MessageController@store');
+        Route::post('/messages/{id}/read', 'MessageController@markAsRead');
+
+        // Notifications
+        Route::get('/notifications', 'NotificationController@index');
+        Route::post('/notifications/{id}/read', 'NotificationController@markAsRead');
+        Route::post('/notifications/read-all', 'NotificationController@markAllAsRead');
+
+        // AI Matches
+        Route::get('/matches', 'AiMatchController@index');
+        Route::get('/posts/{id}/matches', 'AiMatchController@showForPost');
+        Route::post('/posts/{id}/process-ai', 'AiMatchController@processPost');
+    });
 });

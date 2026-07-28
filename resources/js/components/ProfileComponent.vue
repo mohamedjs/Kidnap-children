@@ -27,7 +27,7 @@
               <div id="about-profile">
                 <div class="about-me-tab">
                   <div class="bg-fff shadow-15 round-10">
-                    <h1 class="fz-16 fw-b heading">About<span class="edit float-right"><a href="{{url('user'}}"><i class="fas fa-edit"></i>Edit</a></span></h1>
+                    <h1 class="fz-16 fw-b heading">About<span class="edit float-right"><a :href="base_url+'/user'"><i class="fas fa-edit"></i>Edit</a></span></h1>
                     <hr class="grey">
                     <div class="row fields">
                       <div class="col-sm-6 col-xs-12">
@@ -76,7 +76,7 @@
                 <li><a class="setting-item" href="#"><i class="fas fa-comments"></i></a></li>
                 <li>
                   <div class="dropdown show setting-dropdown"><a class="setting-item" href="#" role="button" id="profile-setting-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-                    <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#add-to-group">Add to group</a><a class="dropdown-item" href="#">Unfriend</a><a class="dropdown-item" href="#">Block</a><a class="dropdown-item" href="{{url('user'}}">Edit Profile</a></div>
+                    <div class="dropdown-menu" aria-labelledby="profile-setting-dropdown"><a class="dropdown-item" href="#" data-toggle="modal" data-target="#add-to-group">Add to group</a><a class="dropdown-item" href="#">Unfriend</a><a class="dropdown-item" href="#">Block</a><a class="dropdown-item" :href="base_url+'/user'">Edit Profile</a></div>
                   </div>
                 </li>
               </ul>
@@ -102,8 +102,8 @@
                   </div>
                   <div class="col-6">
                       <label class="icon-box" for="select_area"></label>
-                      <select class="custome-select-city" style="position: relative;" v-model="post.gender" placeholder="Gander">
-                        <option value="">Select Your Area</option>
+                      <select class="custome-select-city" style="position: relative;" v-model="post.gender" aria-label="Gender">
+                        <option value="">Select Gender</option>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
                       </select>
@@ -121,8 +121,8 @@
                 <div class="form-group">
                   <div class="col-6">
                       <label class="icon-box" for="select_area"></label>
-                      <select class="custome-select-city" style="position: relative;" v-model="post.type" placeholder="Post Type">
-                        <option value="">Select Your Area</option>
+                      <select class="custome-select-city" style="position: relative;" v-model="post.type" aria-label="Post Type">
+                        <option value="">Select Post Type</option>
                         <option value="missed">Missed</option>
                         <option value="founded">Found</option>
                       </select>

@@ -17,13 +17,14 @@ class CreatePostsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger("user_id");
             $table->string('name');
-            $table->integer('gender');
-            $table->date('birth_date');
-            $table->text('description');
-            $table->string('lat');
-            $table->string('lng');
-            $table->string('type');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('CASCADE');
+            $table->string('gender')->default('male');
+            $table->integer('age')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->text('description')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
+            $table->string('type')->default('missed');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

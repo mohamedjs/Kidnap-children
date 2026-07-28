@@ -8,7 +8,7 @@ use App\Models\User;
 class Notification extends Model
 {
   protected $fillable = [
-      'send_id' , 'receive_id','title' , 'content' , 'notification_url' ,'seen'
+      'send_id' , 'receive_id','title' , 'content' , 'notification_url', 'type', 'seen'
   ];
 
   public function sender()

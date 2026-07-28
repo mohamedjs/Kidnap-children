@@ -14,7 +14,9 @@ class AddAgeToPost extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->integer('age')->nullable()->after('gender');
+            if (!Schema::hasColumn('posts', 'age')) {
+                $table->integer('age')->nullable()->after('gender');
+            }
         });
     }
 

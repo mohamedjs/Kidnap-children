@@ -12014,6 +12014,528 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'AiMatchComparison',
+  props: {
+    originalPost: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
+    matchedPost: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
+    matchScore: {
+      type: Number,
+      "default": 0
+    },
+    matchData: {
+      type: Object,
+      "default": null
+    },
+    showActions: {
+      type: Boolean,
+      "default": true
+    },
+    baseUrl: {
+      type: String,
+      "default": ''
+    }
+  },
+  data: function data() {
+    return {
+      componentId: Math.random().toString(36).substr(2, 9),
+      viewMode: 'side-by-side',
+      // 'side-by-side' or 'split-slider'
+      showLandmarks: true,
+      sliderPosition: 50,
+      showDetailsModal: false,
+      actionState: null // null | 'verified' | 'rejected'
+
+    };
+  },
+  computed: {
+    computedOverallScore: function computedOverallScore() {
+      if (this.matchScore && this.matchScore > 0) {
+        return Math.round(this.matchScore * 10) / 10;
+      }
+
+      if (this.matchData && this.matchData.overallScore) {
+        return Math.round(this.matchData.overallScore * 10) / 10;
+      } // Calculate a realistic deterministic score if not provided
+
+
+      return 92.4;
+    },
+    confidenceClass: function confidenceClass() {
+      var score = this.computedOverallScore;
+      if (score >= 85) return 'badge-high';
+      if (score >= 60) return 'badge-medium';
+      return 'badge-low';
+    },
+    confidenceLabel: function confidenceLabel() {
+      var score = this.computedOverallScore;
+      if (score >= 85) return 'High Confidence';
+      if (score >= 60) return 'Moderate Match';
+      return 'Low Confidence';
+    },
+    confidenceIcon: function confidenceIcon() {
+      var score = this.computedOverallScore;
+      if (score >= 85) return 'fas fa-shield-alt text-success';
+      if (score >= 60) return 'fas fa-exclamation-triangle text-warning';
+      return 'fas fa-times-circle text-danger';
+    },
+    computedMetrics: function computedMetrics() {
+      if (this.matchData && this.matchData.breakdown) {
+        return this.matchData.breakdown;
+      }
+
+      var score = this.computedOverallScore;
+      return {
+        facialGeometry: Math.min(99, Math.round(score * 1.03)),
+        featureAlignment: Math.min(98, Math.round(score * 0.98)),
+        ageProgression: Math.min(95, Math.round(score * 0.95)),
+        skinTexture: Math.min(94, Math.round(score * 0.92))
+      };
+    },
+    originalName: function originalName() {
+      return this.originalPost.name || (this.originalPost.user ? this.originalPost.user.name : 'Target Person');
+    },
+    originalAge: function originalAge() {
+      return this.originalPost.age || 'Unknown';
+    },
+    originalType: function originalType() {
+      return this.originalPost.type || 'missing';
+    },
+    originalImageUrl: function originalImageUrl() {
+      if (this.originalPost.images && this.originalPost.images.length > 0) {
+        return this.originalPost.images[0].image || this.originalPost.images[0];
+      }
+
+      if (this.originalPost.image) return this.originalPost.image;
+      return (this.baseUrl || '') + '/front/images/child-placeholder.jpg';
+    },
+    matchedName: function matchedName() {
+      return this.matchedPost.name || (this.matchedPost.user ? this.matchedPost.user.name : 'Candidate Person');
+    },
+    matchedAge: function matchedAge() {
+      return this.matchedPost.age || 'Unknown';
+    },
+    matchedType: function matchedType() {
+      return this.matchedPost.type || 'found';
+    },
+    matchedImageUrl: function matchedImageUrl() {
+      if (this.matchedPost.images && this.matchedPost.images.length > 0) {
+        return this.matchedPost.images[0].image || this.matchedPost.images[0];
+      }
+
+      if (this.matchedPost.image) return this.matchedPost.image;
+      return (this.baseUrl || '') + '/front/images/child-placeholder.jpg';
+    },
+    fgImageStyle: function fgImageStyle() {
+      // Scale inner image so it aligns properly with container width
+      if (this.$refs.sliderContainer) {
+        var width = this.$refs.sliderContainer.clientWidth;
+        return {
+          width: width + 'px',
+          maxWidth: 'none'
+        };
+      }
+
+      return {};
+    }
+  },
+  methods: {
+    handleMouseMove: function handleMouseMove(e) {
+      if (this.viewMode !== 'split-slider') return;
+      var rect = this.$refs.sliderContainer.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var percentage = x / rect.width * 100;
+      if (percentage < 0) percentage = 0;
+      if (percentage > 100) percentage = 100;
+      this.sliderPosition = Math.round(percentage);
+    },
+    handleTouchMove: function handleTouchMove(e) {
+      if (this.viewMode !== 'split-slider' || !e.touches[0]) return;
+      var rect = this.$refs.sliderContainer.getBoundingClientRect();
+      var x = e.touches[0].clientX - rect.left;
+      var percentage = x / rect.width * 100;
+      if (percentage < 0) percentage = 0;
+      if (percentage > 100) percentage = 100;
+      this.sliderPosition = Math.round(percentage);
+    },
+    handleAction: function handleAction(type) {
+      if (type === 'verify') {
+        this.actionState = 'verified';
+        this.$emit('match-verified', {
+          originalPost: this.originalPost,
+          matchedPost: this.matchedPost,
+          score: this.computedOverallScore
+        });
+      } else if (type === 'reject') {
+        this.actionState = 'rejected';
+        this.$emit('match-rejected', {
+          originalPost: this.originalPost,
+          matchedPost: this.matchedPost
+        });
+      }
+    },
+    handleChat: function handleChat() {
+      var userId = this.matchedPost.user ? this.matchedPost.user.id : this.matchedPost.user_id || '';
+
+      if (userId) {
+        window.location.href = (this.baseUrl || '') + '/get_message/' + userId;
+      } else {
+        this.$emit('open-chat', this.matchedPost);
+      }
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatComponent.vue?vue&type=script&lang=js&":
 /*!************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatComponent.vue?vue&type=script&lang=js& ***!
@@ -12114,96 +12636,202 @@ __webpack_require__.r(__webpack_exports__);
       user_chats: [],
       chat_object: {
         'sender_id': '',
-        'reciever_id': 1,
+        'reciever_id': '',
         'message': ''
       },
       validationErrors: [],
       base_url: base_url,
       show_dot: false,
-      uri: base_url + '/chat'
+      uri: base_url + '/api/messages'
     };
   },
   props: ['user'],
   methods: {
+    scrollBottom: function scrollBottom() {
+      this.$nextTick(function () {
+        var elem = document.getElementById('Commentbox');
+
+        if (elem) {
+          elem.scrollTop = elem.scrollHeight;
+        }
+      });
+    },
     get_chat: function get_chat(user_id) {
       var _this = this;
 
-      axios.get(this.uri + '?send_id=' + this.user.id + '&recieve_id=' + user_id).then(function (response) {
-        console.log(response);
-        _this.user_chats = response.data.all;
-        _this.name_u = response.data.user_info.name;
-        _this.image_u = response.data.user_info.image;
-        _this.chat_object.reciever_id = response.data.user_info.id;
-        var elem = document.getElementById('Commentbox');
-        elem.scrollTop = elem.scrollHeight;
+      this.chat_object.reciever_id = user_id;
+      axios.get(this.base_url + '/api/messages/' + user_id).then(function (response) {
+        if (response.data && response.data.messages !== undefined) {
+          _this.user_chats = response.data.messages;
+
+          var contact = _this.chats.find(function (c) {
+            return c.user_id == user_id;
+          });
+
+          if (contact) {
+            _this.name_u = contact.user_name;
+            _this.image_u = contact.user_image;
+          } else {
+            axios.get(_this.base_url + '/api/profile/' + user_id).then(function (res) {
+              if (res.data && res.data.user) {
+                _this.name_u = res.data.user.name;
+                _this.image_u = res.data.user.image;
+              }
+            })["catch"](function (e) {
+              return console.log(e);
+            });
+          }
+        } else if (response.data && response.data.all) {
+          _this.user_chats = response.data.all;
+          _this.name_u = response.data.user_info.name;
+          _this.image_u = response.data.user_info.image;
+        }
+
+        _this.scrollBottom();
       })["catch"](function (error) {
-        return console.log(error);
+        // Fallback to legacy route
+        axios.get(_this.base_url + '/chat?send_id=' + _this.user.id + '&recieve_id=' + user_id).then(function (res) {
+          _this.user_chats = res.data.all;
+          _this.name_u = res.data.user_info.name;
+          _this.image_u = res.data.user_info.image;
+
+          _this.scrollBottom();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
       });
     },
     all_user: function all_user() {
       var _this = this;
 
-      axios.get(this.uri + '/' + this.user.id).then(function (response) {
-        console.log(response);
-        _this.chats = response.data;
+      axios.get(this.base_url + '/api/messages/conversations').then(function (response) {
+        if (response.data && response.data.conversations) {
+          _this.chats = response.data.conversations.map(function (c) {
+            return {
+              user_id: c.user.id,
+              user_name: c.user.name,
+              user_image: c.user.image || _this.base_url + '/front/images/user.png',
+              message: c.last_message ? c.last_message.message : '',
+              created_at: c.last_message ? moment(c.last_message.created_at).fromNow() : ''
+            };
+          });
+        } else {
+          _this.chats = response.data;
+        }
 
-        if (_this.chats.length > 0) {
+        if (_this.chats.length > 0 && !_this.name_u) {
           _this.get_chat(_this.chats[0].user_id);
         }
 
-        var elem = document.getElementById('Commentbox');
-        elem.scrollTop = elem.scrollHeight;
+        _this.scrollBottom();
       })["catch"](function (error) {
-        return console.log(error);
+        // Fallback to legacy endpoint
+        axios.get(_this.base_url + '/chat/' + _this.user.id).then(function (res) {
+          _this.chats = res.data;
+
+          if (_this.chats.length > 0 && !_this.name_u) {
+            _this.get_chat(_this.chats[0].user_id);
+          }
+
+          _this.scrollBottom();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
       });
     },
     send_message: function send_message() {
       var _this = this;
 
+      if (!this.chat_object.message || !this.chat_object.reciever_id) return;
       this.chat_object.sender_id = this.user.id;
-      console.log(this.chat_object);
-      axios.post(this.uri, this.chat_object).then(function (response) {
-        console.log(response);
+      axios.post(this.base_url + '/api/messages', {
+        reciever_id: this.chat_object.reciever_id,
+        message: this.chat_object.message
+      }).then(function (response) {
+        var sentChat = response.data.chat || response.data;
 
-        _this.get_chat(_this.chat_object.reciever_id);
+        _this.user_chats.push(sentChat);
 
-        _this.chat_object = {
-          'sender_id': '',
-          'reciever_id': '',
-          'message': ''
-        };
-        var elem = document.getElementById('Commentbox');
-        elem.scrollTop = elem.scrollHeight;
+        _this.chat_object.message = '';
+
+        _this.scrollBottom();
+
+        _this.all_user();
       })["catch"](function (error) {
-        return console.log(error);
+        // Fallback to legacy POST endpoint
+        axios.post(_this.base_url + '/chat', _this.chat_object).then(function (res) {
+          _this.get_chat(_this.chat_object.reciever_id);
+
+          _this.chat_object.message = '';
+
+          _this.scrollBottom();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
       });
     },
     showtyping: function showtyping() {
       var _this = this;
 
-      Echo["private"]('chat').whisper('typing', {
-        message: _this.user.name + ' is typing',
-        typing: true
-      });
+      if (window.Echo && _this.chat_object.reciever_id) {
+        window.Echo["private"]('chat.' + _this.chat_object.reciever_id).whisper('typing', {
+          message: _this.user.name + ' is typing',
+          typing: true
+        });
+      }
+
+      if (window.Echo) {
+        window.Echo["private"]('chat').whisper('typing', {
+          message: _this.user.name + ' is typing',
+          typing: true
+        });
+      }
     }
   },
   created: function created() {
-    //do something after creating vue instance
     var _this = this;
 
-    Echo["private"]('chat').listen('.chat.created', function (e) {
-      _this.get_chat(_this.chat_object.reciever_id);
-    }).listenForWhisper('typing', function (e) {
-      if (e.typing) {
-        _this.show_dot = true;
-      } else {
-        _this.show_dot = false;
-      }
+    if (window.Echo && this.user && this.user.id) {
+      // Private channel for target user (ChatMessageSent event broadcasts on chat.{reciever_id})
+      window.Echo["private"]('chat.' + this.user.id).listen('.message.sent', function (e) {
+        if (e.chat) {
+          if (_this.chat_object.reciever_id == e.chat.sender_id || _this.chat_object.reciever_id == e.chat.reciever_id) {
+            // Append message if current chat conversation matches
+            var exists = _this.user_chats.some(function (m) {
+              return m.id === e.chat.id;
+            });
 
-      setTimeout(function () {
-        _this.show_dot = false;
-      }, 9000);
-    });
+            if (!exists) {
+              _this.user_chats.push(e.chat);
+
+              _this.scrollBottom();
+            }
+          }
+
+          _this.all_user();
+        }
+      }).listenForWhisper('typing', function (e) {
+        if (e.typing) {
+          _this.show_dot = true;
+          setTimeout(function () {
+            _this.show_dot = false;
+          }, 4000);
+        }
+      }); // Global legacy chat channel
+
+      window.Echo["private"]('chat').listen('.chat.created', function (e) {
+        if (_this.chat_object.reciever_id) {
+          _this.get_chat(_this.chat_object.reciever_id);
+        }
+      }).listenForWhisper('typing', function (e) {
+        if (e.typing) {
+          _this.show_dot = true;
+          setTimeout(function () {
+            _this.show_dot = false;
+          }, 4000);
+        }
+      });
+    }
   },
   mounted: function mounted() {
     this.all_user();
@@ -12362,6 +12990,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -12385,11 +13040,13 @@ __webpack_require__.r(__webpack_exports__);
         'gender': '',
         'from': '',
         'to': '',
-        'city': ''
+        'city': '',
+        'query': '',
+        'age': ''
       },
       comment: '',
       comment_id: '',
-      uri: base_url + '/posts',
+      uri: base_url + '/api/posts',
       validationErrors: [],
       base_url: base_url,
       next_comment_url: '',
@@ -12398,7 +13055,8 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       show_dot: false,
       loading_data: false,
-      show_end_message: false
+      show_end_message: false,
+      searchTimer: null
     };
   },
   props: ['user'],
@@ -12414,9 +13072,6 @@ __webpack_require__.r(__webpack_exports__);
         this.data.append('comment', this.comment);
         this.data.append('_method', 'patch');
         axios.post(base_url + '/comments/' + this.comment_id, this.data).then(function (response) {
-          // let obj = _this.posts[key].comments.find(x => x.id === _this.comment_id);
-          // let index = array.indexOf(obj)
-          // _this.posts[key].comments.splice(index,1)
           console.log(response.data.comment.data);
 
           _this.posts[key].comments.splice(_this.remove_comment_key, 1);
@@ -12490,47 +13145,91 @@ __webpack_require__.r(__webpack_exports__);
         typing: true
       });
     },
+    debouncedSearch: function debouncedSearch() {
+      var _this2 = this;
+
+      clearTimeout(this.searchTimer);
+      this.searchTimer = setTimeout(function () {
+        _this2.filter_post();
+      }, 400);
+    },
+    reset_filter: function reset_filter() {
+      this.filter = {
+        'gender': '',
+        'from': '',
+        'to': '',
+        'city': '',
+        'query': '',
+        'age': ''
+      };
+      this.get_posts();
+    },
     get_posts: function get_posts() {
       var _this = this;
 
-      axios.get(this.uri + '?type=' + "founded").then(function (response) {
-        _this.posts = response.data.posts.data;
-        _this.next_url = response.data.posts.next_page_url;
+      this.loading_data = true;
+      axios.get(this.uri, {
+        params: {
+          type: 'founded'
+        }
+      }).then(function (response) {
+        var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+        var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+        _this.posts = postsData;
+        _this.next_url = nextUrl;
+        _this.loading_data = false;
+        _this.show_end_message = !nextUrl;
       })["catch"](function (error) {
-        return console.log(error);
+        console.log(error);
+        _this.loading_data = false;
       });
     },
     filter_post: function filter_post() {
       var _this = this;
 
       this.loading = true;
+      this.loading_data = true;
       this.posts = [];
-      axios.get(base_url + '/posts?type=' + "founded", {
-        params: _this.filter
+      var params = Object.assign({
+        type: 'founded'
+      }, this.filter);
+      axios.get(base_url + '/api/search', {
+        params: params
       }).then(function (response) {
-        _this.posts = response.data.posts.data;
-        _this.next_url = response.data.posts.next_page_url;
+        var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+        var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+        _this.posts = postsData;
+        _this.next_url = nextUrl;
         _this.data = new FormData();
         _this.loading = false;
+        _this.loading_data = false;
+        _this.show_end_message = !nextUrl;
       })["catch"](function (error) {
-        return console.log(error);
+        console.log(error);
+        _this.loading = false;
+        _this.loading_data = false;
       });
     },
     load_posts: function load_posts() {
       var _this = this;
 
-      if (this.next_url) {
+      if (this.next_url && !this.loading_data) {
         this.loading_data = true;
         axios.get(_this.next_url).then(function (response) {
-          if (response.data.posts.data.length > 0) {
-            _this.posts = _this.posts.concat(response.data.posts.data);
-            _this.next_url = response.data.posts.next_page_url;
+          var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+          var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+
+          if (postsData.length > 0) {
+            _this.posts = _this.posts.concat(postsData);
+            _this.next_url = nextUrl;
             _this.loading_data = false;
           } else {
+            _this.loading_data = false;
             _this.show_end_message = true;
           }
         })["catch"](function (error) {
-          return console.log(error);
+          console.log(error);
+          _this.loading_data = false;
         });
       }
     },
@@ -12551,7 +13250,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this3 = this;
 
     //do something after creating vue instance
     var _this = this;
@@ -12579,8 +13278,8 @@ __webpack_require__.r(__webpack_exports__);
       var pageHeight = document.documentElement.scrollHeight;
       var bottomOfPage = visible + scrollY >= pageHeight;
 
-      if ((bottomOfPage || pageHeight < visible) && _this2.next_url) {
-        _this2.load_posts();
+      if ((bottomOfPage || pageHeight < visible) && _this3.next_url) {
+        _this3.load_posts();
       }
     });
     this.load_posts();
@@ -13118,6 +13817,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_load_image__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-load-image */ "./node_modules/vue-load-image/dist/vue-load-image.js");
 /* harmony import */ var vue_load_image__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_load_image__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _AiMatchComparison_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AiMatchComparison.vue */ "./resources/js/components/AiMatchComparison.vue");
 //
 //
 //
@@ -13243,86 +13943,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     carousel: vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default.a,
-    'vue-load-image': vue_load_image__WEBPACK_IMPORTED_MODULE_1___default.a
+    'vue-load-image': vue_load_image__WEBPACK_IMPORTED_MODULE_1___default.a,
+    AiMatchComparison: _AiMatchComparison_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -13637,6 +14265,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13660,11 +14315,13 @@ __webpack_require__.r(__webpack_exports__);
         'gender': '',
         'from': '',
         'to': '',
-        'city': ''
+        'city': '',
+        'query': '',
+        'age': ''
       },
       comment: '',
       comment_id: '',
-      uri: base_url + '/posts',
+      uri: base_url + '/api/posts',
       validationErrors: [],
       base_url: base_url,
       next_comment_url: '',
@@ -13673,7 +14330,8 @@ __webpack_require__.r(__webpack_exports__);
       loading: false,
       show_dot: false,
       loading_data: false,
-      show_end_message: false
+      show_end_message: false,
+      searchTimer: null
     };
   },
   props: ['user'],
@@ -13689,9 +14347,6 @@ __webpack_require__.r(__webpack_exports__);
         this.data.append('comment', this.comment);
         this.data.append('_method', 'patch');
         axios.post(base_url + '/comments/' + this.comment_id, this.data).then(function (response) {
-          // let obj = _this.posts[key].comments.find(x => x.id === _this.comment_id);
-          // let index = array.indexOf(obj)
-          // _this.posts[key].comments.splice(index,1)
           console.log(response.data.comment.data);
 
           _this.posts[key].comments.splice(_this.remove_comment_key, 1);
@@ -13765,47 +14420,91 @@ __webpack_require__.r(__webpack_exports__);
         typing: true
       });
     },
+    debouncedSearch: function debouncedSearch() {
+      var _this2 = this;
+
+      clearTimeout(this.searchTimer);
+      this.searchTimer = setTimeout(function () {
+        _this2.filter_post();
+      }, 400);
+    },
+    reset_filter: function reset_filter() {
+      this.filter = {
+        'gender': '',
+        'from': '',
+        'to': '',
+        'city': '',
+        'query': '',
+        'age': ''
+      };
+      this.get_posts();
+    },
     get_posts: function get_posts() {
       var _this = this;
 
-      axios.get(this.uri + '?type=' + "missed").then(function (response) {
-        _this.posts = response.data.posts.data;
-        _this.next_url = response.data.posts.next_page_url;
+      this.loading_data = true;
+      axios.get(this.uri, {
+        params: {
+          type: 'missed'
+        }
+      }).then(function (response) {
+        var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+        var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+        _this.posts = postsData;
+        _this.next_url = nextUrl;
+        _this.loading_data = false;
+        _this.show_end_message = !nextUrl;
       })["catch"](function (error) {
-        return console.log(error);
+        console.log(error);
+        _this.loading_data = false;
       });
     },
     filter_post: function filter_post() {
       var _this = this;
 
       this.loading = true;
+      this.loading_data = true;
       this.posts = [];
-      axios.get(base_url + '/posts?type=' + "missed", {
-        params: _this.filter
+      var params = Object.assign({
+        type: 'missed'
+      }, this.filter);
+      axios.get(base_url + '/api/search', {
+        params: params
       }).then(function (response) {
-        _this.posts = response.data.posts.data;
-        _this.next_url = response.data.posts.next_page_url;
+        var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+        var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+        _this.posts = postsData;
+        _this.next_url = nextUrl;
         _this.data = new FormData();
         _this.loading = false;
+        _this.loading_data = false;
+        _this.show_end_message = !nextUrl;
       })["catch"](function (error) {
-        return console.log(error);
+        console.log(error);
+        _this.loading = false;
+        _this.loading_data = false;
       });
     },
     load_posts: function load_posts() {
       var _this = this;
 
-      if (this.next_url) {
+      if (this.next_url && !this.loading_data) {
         this.loading_data = true;
         axios.get(_this.next_url).then(function (response) {
-          if (response.data.posts.data.length > 0) {
-            _this.posts = _this.posts.concat(response.data.posts.data);
-            _this.next_url = response.data.posts.next_page_url;
+          var postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+          var nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+
+          if (postsData.length > 0) {
+            _this.posts = _this.posts.concat(postsData);
+            _this.next_url = nextUrl;
             _this.loading_data = false;
           } else {
+            _this.loading_data = false;
             _this.show_end_message = true;
           }
         })["catch"](function (error) {
-          return console.log(error);
+          console.log(error);
+          _this.loading_data = false;
         });
       }
     },
@@ -13826,7 +14525,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    var _this2 = this;
+    var _this3 = this;
 
     //do something after creating vue instance
     var _this = this;
@@ -13854,8 +14553,8 @@ __webpack_require__.r(__webpack_exports__);
       var pageHeight = document.documentElement.scrollHeight;
       var bottomOfPage = visible + scrollY >= pageHeight;
 
-      if ((bottomOfPage || pageHeight < visible) && _this2.next_url) {
-        _this2.load_posts();
+      if ((bottomOfPage || pageHeight < visible) && _this3.next_url) {
+        _this3.load_posts();
       }
     });
     this.load_posts();
@@ -18850,6 +19549,112 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.ai-match-card[data-v-11b01eea] {\n  border-radius: 12px;\n  border: 1px solid rgba(79, 70, 229, 0.15);\n  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);\n  background: #ffffff;\n  overflow: hidden;\n  transition: all 0.25s ease;\n}\n.ai-match-card[data-v-11b01eea]:hover {\n  box-shadow: 0 8px 30px rgba(79, 70, 229, 0.12);\n}\n.ai-match-header[data-v-11b01eea] {\n  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);\n}\n.ai-badge-icon[data-v-11b01eea] {\n  width: 40px;\n  height: 40px;\n  border-radius: 10px;\n  background: #e0e7ff;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  font-size: 1.2rem;\n}\n.title-text[data-v-11b01eea] {\n  color: #1e1b4b;\n  font-size: 1.05rem;\n}\n\n/* Confidence Badges */\n.match-confidence-badge[data-v-11b01eea] {\n  padding: 6px 14px;\n  border-radius: 30px;\n  font-size: 0.9rem;\n  display: flex;\n  align-items: center;\n}\n.badge-high[data-v-11b01eea] {\n  background: #dcfce7;\n  color: #15803d;\n  border: 1px solid #bbf7d0;\n}\n.badge-medium[data-v-11b01eea] {\n  background: #fef3c7;\n  color: #b45309;\n  border: 1px solid #fde68a;\n}\n.badge-low[data-v-11b01eea] {\n  background: #fee2e2;\n  color: #dc2626;\n  border: 1px solid #fecaca;\n}\n\n/* Photo Cards */\n.photo-card[data-v-11b01eea] {\n  background: #f8fafc;\n  border-color: #e2e8f0 !important;\n  transition: -webkit-transform 0.2s ease;\n  transition: transform 0.2s ease;\n  transition: transform 0.2s ease, -webkit-transform 0.2s ease;\n}\n.photo-card.accent-border[data-v-11b01eea] {\n  border-color: #c7d2fe !important;\n}\n.photo-tag[data-v-11b01eea] {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  z-index: 5;\n  font-size: 0.7rem;\n  font-weight: 700;\n  padding: 3px 8px;\n  border-radius: 4px;\n  text-transform: uppercase;\n  letter-spacing: 0.5px;\n}\n.tag-original[data-v-11b01eea] {\n  background: #3b82f6;\n  color: #ffffff;\n}\n.tag-matched[data-v-11b01eea] {\n  background: #4f46e5;\n  color: #ffffff;\n}\n.img-wrapper[data-v-11b01eea] {\n  height: 220px;\n  background: #000;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n.match-img[data-v-11b01eea] {\n  max-height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n  width: 100%;\n}\n\n/* SVG Landmark Overlay */\n.landmark-overlay[data-v-11b01eea] {\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  pointer-events: none;\n}\n.landmark-point[data-v-11b01eea] {\n  fill: #00f0ff;\n  stroke: #ffffff;\n  stroke-width: 0.5;\n  -webkit-filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.8));\n          filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.8));\n}\n.landmark-point.eye[data-v-11b01eea] { fill: #38bdf8;\n}\n.landmark-point.nose[data-v-11b01eea] { fill: #f43f5e;\n}\n.landmark-point.mouth[data-v-11b01eea] { fill: #a855f7;\n}\n.landmark-line[data-v-11b01eea] {\n  fill: none;\n  stroke: rgba(56, 189, 248, 0.6);\n  stroke-width: 0.8;\n  stroke-dasharray: 2, 2;\n}\n.landmark-line-outer[data-v-11b01eea] {\n  fill: none;\n  stroke: rgba(168, 85, 247, 0.4);\n  stroke-width: 0.5;\n}\n\n/* Split Slider */\n.split-slider-container[data-v-11b01eea] {\n  max-height: 300px;\n  background: #0f172a;\n}\n.split-img-bg[data-v-11b01eea] {\n  max-height: 300px;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.split-img-fg[data-v-11b01eea] {\n  max-height: 300px;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.split-slider-handle[data-v-11b01eea] {\n  width: 2px;\n  background: #ffffff;\n  z-index: 10;\n  -webkit-transform: translateX(-50%);\n          transform: translateX(-50%);\n  cursor: ew-resize;\n}\n.handle-circle[data-v-11b01eea] {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  width: 32px;\n  height: 32px;\n  border-radius: 50%;\n  background: #4f46e5;\n  color: white;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  box-shadow: 0 0 10px rgba(0,0,0,0.4);\n}\n.cursor-pointer[data-v-11b01eea] {\n  cursor: pointer;\n}\n.opacity-8[data-v-11b01eea] {\n  opacity: 0.85;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/lib/css-base.js":
+/*!*************************************************!*\
+  !*** ./node_modules/css-loader/lib/css-base.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+
 /***/ "./node_modules/dom7/dist/dom7.modular.js":
 /*!************************************************!*\
   !*** ./node_modules/dom7/dist/dom7.modular.js ***!
@@ -18948,17 +19753,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scroll", function() { return scroll; });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/dist/ssr-window.esm.js");
 /**
- * Dom7 2.1.3
+ * Dom7 2.1.5
  * Minimalistic JavaScript library for DOM manipulation, with a jQuery-compatible API
  * http://framework7.io/docs/dom.html
  *
- * Copyright 2019, Vladimir Kharlampidi
+ * Copyright 2020, Vladimir Kharlampidi
  * The iDangero.us
  * http://www.idangero.us/
  *
  * Licensed under MIT
  *
- * Released on: February 11, 2019
+ * Released on: May 15, 2020
  */
 
 
@@ -80150,95 +80955,692 @@ return /******/ (function(modules) { // webpackBootstrap
 /*!********************************************************!*\
   !*** ./node_modules/ssr-window/dist/ssr-window.esm.js ***!
   \********************************************************/
-/*! exports provided: window, document */
+/*! exports provided: document, extend, window */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "window", function() { return win; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "document", function() { return doc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extend", function() { return extend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "window", function() { return win; });
 /**
- * SSR Window 1.0.1
+ * SSR Window 2.0.0
  * Better handling for window object in SSR environment
  * https://github.com/nolimits4web/ssr-window
  *
- * Copyright 2018, Vladimir Kharlampidi
+ * Copyright 2020, Vladimir Kharlampidi
  *
  * Licensed under MIT
  *
- * Released on: July 18, 2018
+ * Released on: May 12, 2020
  */
-var doc = (typeof document === 'undefined') ? {
-  body: {},
-  addEventListener: function addEventListener() {},
-  removeEventListener: function removeEventListener() {},
-  activeElement: {
-    blur: function blur() {},
-    nodeName: '',
-  },
-  querySelector: function querySelector() {
-    return null;
-  },
-  querySelectorAll: function querySelectorAll() {
-    return [];
-  },
-  getElementById: function getElementById() {
-    return null;
-  },
-  createEvent: function createEvent() {
-    return {
-      initEvent: function initEvent() {},
-    };
-  },
-  createElement: function createElement() {
-    return {
-      children: [],
-      childNodes: [],
-      style: {},
-      setAttribute: function setAttribute() {},
-      getElementsByTagName: function getElementsByTagName() {
-        return [];
-      },
-    };
-  },
-  location: { hash: '' },
-} : document; // eslint-disable-line
+/* eslint-disable no-param-reassign */
+function isObject(obj) {
+    return (obj !== null &&
+        typeof obj === 'object' &&
+        'constructor' in obj &&
+        obj.constructor === Object);
+}
+function extend(target, src) {
+    if (target === void 0) { target = {}; }
+    if (src === void 0) { src = {}; }
+    Object.keys(src).forEach(function (key) {
+        if (typeof target[key] === 'undefined')
+            target[key] = src[key];
+        else if (isObject(src[key]) &&
+            isObject(target[key]) &&
+            Object.keys(src[key]).length > 0) {
+            extend(target[key], src[key]);
+        }
+    });
+}
 
-var win = (typeof window === 'undefined') ? {
-  document: doc,
-  navigator: {
-    userAgent: '',
-  },
-  location: {},
-  history: {},
-  CustomEvent: function CustomEvent() {
-    return this;
-  },
-  addEventListener: function addEventListener() {},
-  removeEventListener: function removeEventListener() {},
-  getComputedStyle: function getComputedStyle() {
-    return {
-      getPropertyValue: function getPropertyValue() {
-        return '';
-      },
-    };
-  },
-  Image: function Image() {},
-  Date: function Date() {},
-  screen: {},
-  setTimeout: function setTimeout() {},
-  clearTimeout: function clearTimeout() {},
-} : window; // eslint-disable-line
+var doc = typeof document !== 'undefined' ? document : {};
+var ssrDocument = {
+    body: {},
+    addEventListener: function () { },
+    removeEventListener: function () { },
+    activeElement: {
+        blur: function () { },
+        nodeName: '',
+    },
+    querySelector: function () {
+        return null;
+    },
+    querySelectorAll: function () {
+        return [];
+    },
+    getElementById: function () {
+        return null;
+    },
+    createEvent: function () {
+        return {
+            initEvent: function () { },
+        };
+    },
+    createElement: function () {
+        return {
+            children: [],
+            childNodes: [],
+            style: {},
+            setAttribute: function () { },
+            getElementsByTagName: function () {
+                return [];
+            },
+        };
+    },
+    createElementNS: function () {
+        return {};
+    },
+    importNode: function () {
+        return null;
+    },
+    location: {
+        hash: '',
+        host: '',
+        hostname: '',
+        href: '',
+        origin: '',
+        pathname: '',
+        protocol: '',
+        search: '',
+    },
+};
+extend(doc, ssrDocument);
+
+var win = typeof window !== 'undefined' ? window : {};
+var ssrWindow = {
+    document: ssrDocument,
+    navigator: {
+        userAgent: '',
+    },
+    location: {
+        hash: '',
+        host: '',
+        hostname: '',
+        href: '',
+        origin: '',
+        pathname: '',
+        protocol: '',
+        search: '',
+    },
+    history: {
+        replaceState: function () { },
+        pushState: function () { },
+        go: function () { },
+        back: function () { },
+    },
+    CustomEvent: function CustomEvent() {
+        return this;
+    },
+    addEventListener: function () { },
+    removeEventListener: function () { },
+    getComputedStyle: function () {
+        return {
+            getPropertyValue: function () {
+                return '';
+            },
+        };
+    },
+    Image: function () { },
+    Date: function () { },
+    screen: {},
+    setTimeout: function () { },
+    clearTimeout: function () { },
+    matchMedia: function () {
+        return {};
+    },
+};
+extend(win, ssrWindow);
 
 
 
 
 /***/ }),
 
-/***/ "./node_modules/swiper/dist/js/swiper.esm.bundle.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/swiper/dist/js/swiper.esm.bundle.js ***!
-  \**********************************************************/
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/addStyles.js":
+/*!****************************************************!*\
+  !*** ./node_modules/style-loader/lib/addStyles.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+
+var stylesInDom = {};
+
+var	memoize = function (fn) {
+	var memo;
+
+	return function () {
+		if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+		return memo;
+	};
+};
+
+var isOldIE = memoize(function () {
+	// Test for IE <= 9 as proposed by Browserhacks
+	// @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+	// Tests for existence of standard globals is to allow style-loader
+	// to operate correctly into non-standard environments
+	// @see https://github.com/webpack-contrib/style-loader/issues/177
+	return window && document && document.all && !window.atob;
+});
+
+var getTarget = function (target, parent) {
+  if (parent){
+    return parent.querySelector(target);
+  }
+  return document.querySelector(target);
+};
+
+var getElement = (function (fn) {
+	var memo = {};
+
+	return function(target, parent) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target, parent);
+			// Special case to return head of iframe instead of iframe itself
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+				try {
+					// This will throw an exception if access to iframe is blocked
+					// due to cross-origin restrictions
+					styleTarget = styleTarget.contentDocument.head;
+				} catch(e) {
+					styleTarget = null;
+				}
+			}
+			memo[target] = styleTarget;
+		}
+		return memo[target]
+	};
+})();
+
+var singleton = null;
+var	singletonCounter = 0;
+var	stylesInsertedAtTop = [];
+
+var	fixUrls = __webpack_require__(/*! ./urls */ "./node_modules/style-loader/lib/urls.js");
+
+module.exports = function(list, options) {
+	if (typeof DEBUG !== "undefined" && DEBUG) {
+		if (typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+	}
+
+	options = options || {};
+
+	options.attrs = typeof options.attrs === "object" ? options.attrs : {};
+
+	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+	// tags it will allow on a page
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+
+	// By default, add <style> tags to the <head> element
+        if (!options.insertInto) options.insertInto = "head";
+
+	// By default, add <style> tags to the bottom of the target
+	if (!options.insertAt) options.insertAt = "bottom";
+
+	var styles = listToStyles(list, options);
+
+	addStylesToDom(styles, options);
+
+	return function update (newList) {
+		var mayRemove = [];
+
+		for (var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+
+			domStyle.refs--;
+			mayRemove.push(domStyle);
+		}
+
+		if(newList) {
+			var newStyles = listToStyles(newList, options);
+			addStylesToDom(newStyles, options);
+		}
+
+		for (var i = 0; i < mayRemove.length; i++) {
+			var domStyle = mayRemove[i];
+
+			if(domStyle.refs === 0) {
+				for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+
+				delete stylesInDom[domStyle.id];
+			}
+		}
+	};
+};
+
+function addStylesToDom (styles, options) {
+	for (var i = 0; i < styles.length; i++) {
+		var item = styles[i];
+		var domStyle = stylesInDom[item.id];
+
+		if(domStyle) {
+			domStyle.refs++;
+
+			for(var j = 0; j < domStyle.parts.length; j++) {
+				domStyle.parts[j](item.parts[j]);
+			}
+
+			for(; j < item.parts.length; j++) {
+				domStyle.parts.push(addStyle(item.parts[j], options));
+			}
+		} else {
+			var parts = [];
+
+			for(var j = 0; j < item.parts.length; j++) {
+				parts.push(addStyle(item.parts[j], options));
+			}
+
+			stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+		}
+	}
+}
+
+function listToStyles (list, options) {
+	var styles = [];
+	var newStyles = {};
+
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var id = options.base ? item[0] + options.base : item[0];
+		var css = item[1];
+		var media = item[2];
+		var sourceMap = item[3];
+		var part = {css: css, media: media, sourceMap: sourceMap};
+
+		if(!newStyles[id]) styles.push(newStyles[id] = {id: id, parts: [part]});
+		else newStyles[id].parts.push(part);
+	}
+
+	return styles;
+}
+
+function insertStyleElement (options, style) {
+	var target = getElement(options.insertInto)
+
+	if (!target) {
+		throw new Error("Couldn't find a style target. This probably means that the value for the 'insertInto' parameter is invalid.");
+	}
+
+	var lastStyleElementInsertedAtTop = stylesInsertedAtTop[stylesInsertedAtTop.length - 1];
+
+	if (options.insertAt === "top") {
+		if (!lastStyleElementInsertedAtTop) {
+			target.insertBefore(style, target.firstChild);
+		} else if (lastStyleElementInsertedAtTop.nextSibling) {
+			target.insertBefore(style, lastStyleElementInsertedAtTop.nextSibling);
+		} else {
+			target.appendChild(style);
+		}
+		stylesInsertedAtTop.push(style);
+	} else if (options.insertAt === "bottom") {
+		target.appendChild(style);
+	} else if (typeof options.insertAt === "object" && options.insertAt.before) {
+		var nextSibling = getElement(options.insertAt.before, target);
+		target.insertBefore(style, nextSibling);
+	} else {
+		throw new Error("[Style Loader]\n\n Invalid value for parameter 'insertAt' ('options.insertAt') found.\n Must be 'top', 'bottom', or Object.\n (https://github.com/webpack-contrib/style-loader#insertat)\n");
+	}
+}
+
+function removeStyleElement (style) {
+	if (style.parentNode === null) return false;
+	style.parentNode.removeChild(style);
+
+	var idx = stylesInsertedAtTop.indexOf(style);
+	if(idx >= 0) {
+		stylesInsertedAtTop.splice(idx, 1);
+	}
+}
+
+function createStyleElement (options) {
+	var style = document.createElement("style");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+
+	if(options.attrs.nonce === undefined) {
+		var nonce = getNonce();
+		if (nonce) {
+			options.attrs.nonce = nonce;
+		}
+	}
+
+	addAttrs(style, options.attrs);
+	insertStyleElement(options, style);
+
+	return style;
+}
+
+function createLinkElement (options) {
+	var link = document.createElement("link");
+
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
+	options.attrs.rel = "stylesheet";
+
+	addAttrs(link, options.attrs);
+	insertStyleElement(options, link);
+
+	return link;
+}
+
+function addAttrs (el, attrs) {
+	Object.keys(attrs).forEach(function (key) {
+		el.setAttribute(key, attrs[key]);
+	});
+}
+
+function getNonce() {
+	if (false) {}
+
+	return __webpack_require__.nc;
+}
+
+function addStyle (obj, options) {
+	var style, update, remove, result;
+
+	// If a transform function was defined, run it on the css
+	if (options.transform && obj.css) {
+	    result = typeof options.transform === 'function'
+		 ? options.transform(obj.css) 
+		 : options.transform.default(obj.css);
+
+	    if (result) {
+	    	// If transform returns a value, use that instead of the original css.
+	    	// This allows running runtime transformations on the css.
+	    	obj.css = result;
+	    } else {
+	    	// If the transform function returns a falsy value, don't add this css.
+	    	// This allows conditional loading of css
+	    	return function() {
+	    		// noop
+	    	};
+	    }
+	}
+
+	if (options.singleton) {
+		var styleIndex = singletonCounter++;
+
+		style = singleton || (singleton = createStyleElement(options));
+
+		update = applyToSingletonTag.bind(null, style, styleIndex, false);
+		remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+
+	} else if (
+		obj.sourceMap &&
+		typeof URL === "function" &&
+		typeof URL.createObjectURL === "function" &&
+		typeof URL.revokeObjectURL === "function" &&
+		typeof Blob === "function" &&
+		typeof btoa === "function"
+	) {
+		style = createLinkElement(options);
+		update = updateLink.bind(null, style, options);
+		remove = function () {
+			removeStyleElement(style);
+
+			if(style.href) URL.revokeObjectURL(style.href);
+		};
+	} else {
+		style = createStyleElement(options);
+		update = applyToTag.bind(null, style);
+		remove = function () {
+			removeStyleElement(style);
+		};
+	}
+
+	update(obj);
+
+	return function updateStyle (newObj) {
+		if (newObj) {
+			if (
+				newObj.css === obj.css &&
+				newObj.media === obj.media &&
+				newObj.sourceMap === obj.sourceMap
+			) {
+				return;
+			}
+
+			update(obj = newObj);
+		} else {
+			remove();
+		}
+	};
+}
+
+var replaceText = (function () {
+	var textStore = [];
+
+	return function (index, replacement) {
+		textStore[index] = replacement;
+
+		return textStore.filter(Boolean).join('\n');
+	};
+})();
+
+function applyToSingletonTag (style, index, remove, obj) {
+	var css = remove ? "" : obj.css;
+
+	if (style.styleSheet) {
+		style.styleSheet.cssText = replaceText(index, css);
+	} else {
+		var cssNode = document.createTextNode(css);
+		var childNodes = style.childNodes;
+
+		if (childNodes[index]) style.removeChild(childNodes[index]);
+
+		if (childNodes.length) {
+			style.insertBefore(cssNode, childNodes[index]);
+		} else {
+			style.appendChild(cssNode);
+		}
+	}
+}
+
+function applyToTag (style, obj) {
+	var css = obj.css;
+	var media = obj.media;
+
+	if(media) {
+		style.setAttribute("media", media)
+	}
+
+	if(style.styleSheet) {
+		style.styleSheet.cssText = css;
+	} else {
+		while(style.firstChild) {
+			style.removeChild(style.firstChild);
+		}
+
+		style.appendChild(document.createTextNode(css));
+	}
+}
+
+function updateLink (link, options, obj) {
+	var css = obj.css;
+	var sourceMap = obj.sourceMap;
+
+	/*
+		If convertToAbsoluteUrls isn't defined, but sourcemaps are enabled
+		and there is no publicPath defined then lets turn convertToAbsoluteUrls
+		on by default.  Otherwise default to the convertToAbsoluteUrls option
+		directly
+	*/
+	var autoFixUrls = options.convertToAbsoluteUrls === undefined && sourceMap;
+
+	if (options.convertToAbsoluteUrls || autoFixUrls) {
+		css = fixUrls(css);
+	}
+
+	if (sourceMap) {
+		// http://stackoverflow.com/a/26603875
+		css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+	}
+
+	var blob = new Blob([css], { type: "text/css" });
+
+	var oldSrc = link.href;
+
+	link.href = URL.createObjectURL(blob);
+
+	if(oldSrc) URL.revokeObjectURL(oldSrc);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/lib/urls.js":
+/*!***********************************************!*\
+  !*** ./node_modules/style-loader/lib/urls.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+/**
+ * When source maps are enabled, `style-loader` uses a link element with a data-uri to
+ * embed the css on the page. This breaks all relative urls because now they are relative to a
+ * bundle instead of the current page.
+ *
+ * One solution is to only use full urls, but that may be impossible.
+ *
+ * Instead, this function "fixes" the relative urls to be absolute according to the current page location.
+ *
+ * A rudimentary test suite is located at `test/fixUrls.js` and can be run via the `npm test` command.
+ *
+ */
+
+module.exports = function (css) {
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
+
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
+
+	// blank or null?
+	if (!css || typeof css !== "string") {
+	  return css;
+  }
+
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+
+	// convert each url(...)
+	/*
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
+              *\) = Match anything and then a close parens
+          )  = Close non-capturing group
+          *  = Match anything
+       )  = Close capturing group
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+		// strip quotes (if they exist)
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+
+		// already a full url? no change
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
+		  return fullMatch;
+		}
+
+		// convert the url to a full url
+		var newUrl;
+
+		if (unquotedOrigUrl.indexOf("//") === 0) {
+		  	//TODO: should we add protocol?
+			newUrl = unquotedOrigUrl;
+		} else if (unquotedOrigUrl.indexOf("/") === 0) {
+			// path should be relative to the base url
+			newUrl = baseUrl + unquotedOrigUrl; // already starts with '/'
+		} else {
+			// path should be relative to current directory
+			newUrl = currentDir + unquotedOrigUrl.replace(/^\.\//, ""); // Strip leading './'
+		}
+
+		// send back the fixed url(...)
+		return "url(" + JSON.stringify(newUrl) + ")";
+	});
+
+	// send back the fixed css
+	return fixedCss;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/swiper/js/swiper.esm.bundle.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/swiper/js/swiper.esm.bundle.js ***!
+  \*****************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -80247,15 +81649,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dom7/dist/dom7.modular */ "./node_modules/dom7/dist/dom7.modular.js");
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/dist/ssr-window.esm.js");
 /**
- * Swiper 4.5.0
+ * Swiper 5.4.5
  * Most modern mobile touch slider and framework with hardware accelerated transitions
- * http://www.idangero.us/swiper/
+ * http://swiperjs.com
  *
- * Copyright 2014-2019 Vladimir Kharlampidi
+ * Copyright 2014-2020 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: February 22, 2019
+ * Released on: June 16, 2020
  */
 
 
@@ -80296,13 +81698,14 @@ const Methods = {
   closest: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["closest"],
   find: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["find"],
   children: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["children"],
+  filter: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["filter"],
   remove: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["remove"],
   add: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["add"],
   styles: dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["styles"],
 };
 
 Object.keys(Methods).forEach((methodName) => {
-  dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"].fn[methodName] = Methods[methodName];
+  dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"].fn[methodName] = dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"].fn[methodName] || Methods[methodName];
 });
 
 const Utils = {
@@ -80337,7 +81740,7 @@ const Utils = {
     if (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].WebKitCSSMatrix) {
       curTransform = curStyle.transform || curStyle.webkitTransform;
       if (curTransform.split(',').length > 6) {
-        curTransform = curTransform.split(', ').map(a => a.replace(',', '.')).join(', ');
+        curTransform = curTransform.split(', ').map((a) => a.replace(',', '.')).join(', ');
       }
       // Some old versions of Webkit choke when 'none' is passed; pass
       // empty string instead in this case
@@ -80374,7 +81777,7 @@ const Utils = {
     let length;
     if (typeof urlToParse === 'string' && urlToParse.length) {
       urlToParse = urlToParse.indexOf('?') > -1 ? urlToParse.replace(/\S*\?/, '') : '';
-      params = urlToParse.split('&').filter(paramsPart => paramsPart !== '');
+      params = urlToParse.split('&').filter((paramsPart) => paramsPart !== '');
       length = params.length;
 
       for (i = 0; i < length; i += 1) {
@@ -80414,32 +81817,10 @@ const Utils = {
 };
 
 const Support = (function Support() {
-  const testDiv = ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].createElement('div');
   return {
-    touch: (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Modernizr && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Modernizr.touch === true) || (function checkTouch() {
-      return !!((ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.maxTouchPoints > 0) || ('ontouchstart' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"]) || (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].DocumentTouch && ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"] instanceof ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].DocumentTouch));
-    }()),
+    touch: !!(('ontouchstart' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"]) || (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].DocumentTouch && ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"] instanceof ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].DocumentTouch)),
 
-    pointerEvents: !!(ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.pointerEnabled || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].PointerEvent || ('maxTouchPoints' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.maxTouchPoints > 0)),
-    prefixedPointerEvents: !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.msPointerEnabled,
-
-    transition: (function checkTransition() {
-      const style = testDiv.style;
-      return ('transition' in style || 'webkitTransition' in style || 'MozTransition' in style);
-    }()),
-    transforms3d: (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Modernizr && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Modernizr.csstransforms3d === true) || (function checkTransforms3d() {
-      const style = testDiv.style;
-      return ('webkitPerspective' in style || 'MozPerspective' in style || 'OPerspective' in style || 'MsPerspective' in style || 'perspective' in style);
-    }()),
-
-    flexbox: (function checkFlexbox() {
-      const style = testDiv.style;
-      const styles = ('alignItems webkitAlignItems webkitBoxAlign msFlexAlign mozBoxAlign webkitFlexDirection msFlexDirection mozBoxDirection mozBoxOrient webkitBoxDirection webkitBoxOrient').split(' ');
-      for (let i = 0; i < styles.length; i += 1) {
-        if (styles[i] in style) return true;
-      }
-      return false;
-    }()),
+    pointerEvents: !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].PointerEvent && ('maxTouchPoints' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator) && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.maxTouchPoints >= 0,
 
     observer: (function checkObserver() {
       return ('MutationObserver' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"] || 'WebkitMutationObserver' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"]);
@@ -80464,19 +81845,6 @@ const Support = (function Support() {
     gestures: (function checkGestures() {
       return 'ongesturestart' in ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"];
     }()),
-  };
-}());
-
-const Browser = (function Browser() {
-  function isSafari() {
-    const ua = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.toLowerCase();
-    return (ua.indexOf('safari') >= 0 && ua.indexOf('chrome') < 0 && ua.indexOf('android') < 0);
-  }
-  return {
-    isIE: !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.match(/Trident/g) || !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.match(/MSIE/g),
-    isEdge: !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.match(/Edge/g),
-    isSafari: isSafari(),
-    isUiWebView: /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent),
   };
 }());
 
@@ -80510,11 +81878,11 @@ class SwiperClass {
     const self = this;
     if (typeof handler !== 'function') return self;
     function onceHandler(...args) {
-      handler.apply(self, args);
       self.off(events, onceHandler);
       if (onceHandler.f7proxy) {
         delete onceHandler.f7proxy;
       }
+      handler.apply(self, args);
     }
     onceHandler.f7proxy = handler;
     return self.on(events, onceHandler, priority);
@@ -80643,7 +82011,7 @@ class SwiperClass {
   static use(module, ...params) {
     const Class = this;
     if (Array.isArray(module)) {
-      module.forEach(m => Class.installModule(m));
+      module.forEach((m) => Class.installModule(m));
       return Class;
     }
     return Class.installModule(module, ...params);
@@ -80694,6 +82062,14 @@ function updateSlides () {
   let snapGrid = [];
   const slidesGrid = [];
   const slidesSizesGrid = [];
+
+  function slidesForMargin(slideIndex) {
+    if (!params.cssMode) return true;
+    if (slideIndex === slides.length - 1) {
+      return false;
+    }
+    return true;
+  }
 
   let offsetBefore = params.slidesOffsetBefore;
   if (typeof offsetBefore === 'function') {
@@ -80750,16 +82126,15 @@ function updateSlides () {
       let newSlideOrderIndex;
       let column;
       let row;
-      if (params.slidesPerColumnFill === 'column') {
-        column = Math.floor(i / slidesPerColumn);
-        row = i - (column * slidesPerColumn);
-        if (column > numFullColumns || (column === numFullColumns && row === slidesPerColumn - 1)) {
-          row += 1;
-          if (row >= slidesPerColumn) {
-            row = 0;
-            column += 1;
-          }
-        }
+      if (params.slidesPerColumnFill === 'row' && params.slidesPerGroup > 1) {
+        const groupIndex = Math.floor(i / (params.slidesPerGroup * params.slidesPerColumn));
+        const slideIndexInGroup = i - params.slidesPerColumn * params.slidesPerGroup * groupIndex;
+        const columnsInGroup = groupIndex === 0
+          ? params.slidesPerGroup
+          : Math.min(Math.ceil((slidesLength - groupIndex * slidesPerColumn * params.slidesPerGroup) / slidesPerColumn), params.slidesPerGroup);
+        row = Math.floor(slideIndexInGroup / columnsInGroup);
+        column = (slideIndexInGroup - row * columnsInGroup) + groupIndex * params.slidesPerGroup;
+
         newSlideOrderIndex = column + ((row * slidesNumberEvenToRows) / slidesPerColumn);
         slide
           .css({
@@ -80769,17 +82144,24 @@ function updateSlides () {
             '-webkit-order': newSlideOrderIndex,
             order: newSlideOrderIndex,
           });
+      } else if (params.slidesPerColumnFill === 'column') {
+        column = Math.floor(i / slidesPerColumn);
+        row = i - (column * slidesPerColumn);
+        if (column > numFullColumns || (column === numFullColumns && row === slidesPerColumn - 1)) {
+          row += 1;
+          if (row >= slidesPerColumn) {
+            row = 0;
+            column += 1;
+          }
+        }
       } else {
         row = Math.floor(i / slidesPerRow);
         column = i - (row * slidesPerRow);
       }
-      slide
-        .css(
-          `margin-${swiper.isHorizontal() ? 'top' : 'left'}`,
-          (row !== 0 && params.spaceBetween) && (`${params.spaceBetween}px`)
-        )
-        .attr('data-swiper-column', column)
-        .attr('data-swiper-row', row);
+      slide.css(
+        `margin-${swiper.isHorizontal() ? 'top' : 'left'}`,
+        (row !== 0 && params.spaceBetween) && (`${params.spaceBetween}px`)
+      );
     }
     if (slide.css('display') === 'none') continue; // eslint-disable-line
 
@@ -80860,7 +82242,7 @@ function updateSlides () {
       slidesGrid.push(slidePosition);
     } else {
       if (params.roundLengths) slidePosition = Math.floor(slidePosition);
-      if ((index) % params.slidesPerGroup === 0) snapGrid.push(slidePosition);
+      if ((index - Math.min(swiper.params.slidesPerGroupSkip, index)) % swiper.params.slidesPerGroup === 0) snapGrid.push(slidePosition);
       slidesGrid.push(slidePosition);
       slidePosition = slidePosition + slideSize + spaceBetween;
     }
@@ -80878,7 +82260,7 @@ function updateSlides () {
     rtl && wrongRTL && (params.effect === 'slide' || params.effect === 'coverflow')) {
     $wrapperEl.css({ width: `${swiper.virtualSize + params.spaceBetween}px` });
   }
-  if (!Support.flexbox || params.setWrapperSize) {
+  if (params.setWrapperSize) {
     if (swiper.isHorizontal()) $wrapperEl.css({ width: `${swiper.virtualSize + params.spaceBetween}px` });
     else $wrapperEl.css({ height: `${swiper.virtualSize + params.spaceBetween}px` });
   }
@@ -80918,9 +82300,23 @@ function updateSlides () {
 
   if (params.spaceBetween !== 0) {
     if (swiper.isHorizontal()) {
-      if (rtl) slides.css({ marginLeft: `${spaceBetween}px` });
-      else slides.css({ marginRight: `${spaceBetween}px` });
-    } else slides.css({ marginBottom: `${spaceBetween}px` });
+      if (rtl) slides.filter(slidesForMargin).css({ marginLeft: `${spaceBetween}px` });
+      else slides.filter(slidesForMargin).css({ marginRight: `${spaceBetween}px` });
+    } else slides.filter(slidesForMargin).css({ marginBottom: `${spaceBetween}px` });
+  }
+
+  if (params.centeredSlides && params.centeredSlidesBounds) {
+    let allSlidesSize = 0;
+    slidesSizesGrid.forEach((slideSizeValue) => {
+      allSlidesSize += slideSizeValue + (params.spaceBetween ? params.spaceBetween : 0);
+    });
+    allSlidesSize -= params.spaceBetween;
+    const maxSnap = allSlidesSize - swiperSize;
+    snapGrid = snapGrid.map((snap) => {
+      if (snap < 0) return -offsetBefore;
+      if (snap > maxSnap) return maxSnap + offsetAfter;
+      return snap;
+    });
   }
 
   if (params.centerInsufficientSlides) {
@@ -80975,10 +82371,16 @@ function updateAutoHeight (speed) {
   }
   // Find slides currently in view
   if (swiper.params.slidesPerView !== 'auto' && swiper.params.slidesPerView > 1) {
-    for (i = 0; i < Math.ceil(swiper.params.slidesPerView); i += 1) {
-      const index = swiper.activeIndex + i;
-      if (index > swiper.slides.length) break;
-      activeSlides.push(swiper.slides.eq(index)[0]);
+    if (swiper.params.centeredSlides) {
+      swiper.visibleSlides.each((index, slide) => {
+        activeSlides.push(slide);
+      });
+    } else {
+      for (i = 0; i < Math.ceil(swiper.params.slidesPerView); i += 1) {
+        const index = swiper.activeIndex + i;
+        if (index > swiper.slides.length) break;
+        activeSlides.push(swiper.slides.eq(index)[0]);
+      }
     }
   } else {
     activeSlides.push(swiper.slides.eq(swiper.activeIndex)[0]);
@@ -81027,11 +82429,11 @@ function updateSlidesProgress (translate = (this && this.translate) || 0) {
     const slideProgress = (
       (offsetCenter + (params.centeredSlides ? swiper.minTranslate() : 0)) - slide.swiperSlideOffset
     ) / (slide.swiperSlideSize + params.spaceBetween);
-    if (params.watchSlidesVisibility) {
+    if (params.watchSlidesVisibility || (params.centeredSlides && params.autoHeight)) {
       const slideBefore = -(offsetCenter - slide.swiperSlideOffset);
       const slideAfter = slideBefore + swiper.slidesSizesGrid[i];
-      const isVisible = (slideBefore >= 0 && slideBefore < swiper.size)
-                || (slideAfter > 0 && slideAfter <= swiper.size)
+      const isVisible = (slideBefore >= 0 && slideBefore < swiper.size - 1)
+                || (slideAfter > 1 && slideAfter <= swiper.size)
                 || (slideBefore <= 0 && slideAfter >= swiper.size);
       if (isVisible) {
         swiper.visibleSlides.push(slide);
@@ -81044,10 +82446,14 @@ function updateSlidesProgress (translate = (this && this.translate) || 0) {
   swiper.visibleSlides = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(swiper.visibleSlides);
 }
 
-function updateProgress (translate = (this && this.translate) || 0) {
+function updateProgress (translate) {
   const swiper = this;
+  if (typeof translate === 'undefined') {
+    const multiplier = swiper.rtlTranslate ? -1 : 1;
+    // eslint-disable-next-line
+    translate = (swiper && swiper.translate && (swiper.translate * multiplier)) || 0;
+  }
   const params = swiper.params;
-
   const translatesDiff = swiper.maxTranslate() - swiper.minTranslate();
   let { progress, isBeginning, isEnd } = swiper;
   const wasBeginning = isBeginning;
@@ -81067,7 +82473,7 @@ function updateProgress (translate = (this && this.translate) || 0) {
     isEnd,
   });
 
-  if (params.watchSlidesProgress || params.watchSlidesVisibility) swiper.updateSlidesProgress(translate);
+  if (params.watchSlidesProgress || params.watchSlidesVisibility || (params.centeredSlides && params.autoHeight)) swiper.updateSlidesProgress(translate);
 
   if (isBeginning && !wasBeginning) {
     swiper.emit('reachBeginning toEdge');
@@ -81177,7 +82583,8 @@ function updateActiveIndex (newActiveIndex) {
   if (snapGrid.indexOf(translate) >= 0) {
     snapIndex = snapGrid.indexOf(translate);
   } else {
-    snapIndex = Math.floor(activeIndex / params.slidesPerGroup);
+    const skip = Math.min(params.slidesPerGroupSkip, activeIndex);
+    snapIndex = skip + Math.floor((activeIndex - skip) / params.slidesPerGroup);
   }
   if (snapIndex >= snapGrid.length) snapIndex = snapGrid.length - 1;
   if (activeIndex === previousIndex) {
@@ -81202,7 +82609,9 @@ function updateActiveIndex (newActiveIndex) {
   if (previousRealIndex !== realIndex) {
     swiper.emit('realIndexChange');
   }
-  swiper.emit('slideChange');
+  if (swiper.initialized || swiper.params.runCallbacksOnInit) {
+    swiper.emit('slideChange');
+  }
 }
 
 function updateClickedSlide (e) {
@@ -81255,6 +82664,9 @@ function getTranslate (axis = this.isHorizontal() ? 'x' : 'y') {
   if (params.virtualTranslate) {
     return rtl ? -translate : translate;
   }
+  if (params.cssMode) {
+    return translate;
+  }
 
   let currentTranslate = Utils.getTranslate($wrapperEl[0], axis);
   if (rtl) currentTranslate = -currentTranslate;
@@ -81265,7 +82677,7 @@ function getTranslate (axis = this.isHorizontal() ? 'x' : 'y') {
 function setTranslate (translate, byController) {
   const swiper = this;
   const {
-    rtlTranslate: rtl, params, $wrapperEl, progress,
+    rtlTranslate: rtl, params, $wrapperEl, wrapperEl, progress,
   } = swiper;
   let x = 0;
   let y = 0;
@@ -81282,9 +82694,10 @@ function setTranslate (translate, byController) {
     y = Math.floor(y);
   }
 
-  if (!params.virtualTranslate) {
-    if (Support.transforms3d) $wrapperEl.transform(`translate3d(${x}px, ${y}px, ${z}px)`);
-    else $wrapperEl.transform(`translate(${x}px, ${y}px)`);
+  if (params.cssMode) {
+    wrapperEl[swiper.isHorizontal() ? 'scrollLeft' : 'scrollTop'] = swiper.isHorizontal() ? -x : -y;
+  } else if (!params.virtualTranslate) {
+    $wrapperEl.transform(`translate3d(${x}px, ${y}px, ${z}px)`);
   }
   swiper.previousTranslate = swiper.translate;
   swiper.translate = swiper.isHorizontal() ? x : y;
@@ -81312,17 +82725,97 @@ function maxTranslate () {
   return (-this.snapGrid[this.snapGrid.length - 1]);
 }
 
+function translateTo (translate = 0, speed = this.params.speed, runCallbacks = true, translateBounds = true, internal) {
+  const swiper = this;
+
+  const {
+    params,
+    wrapperEl,
+  } = swiper;
+
+  if (swiper.animating && params.preventInteractionOnTransition) {
+    return false;
+  }
+
+  const minTranslate = swiper.minTranslate();
+  const maxTranslate = swiper.maxTranslate();
+  let newTranslate;
+  if (translateBounds && translate > minTranslate) newTranslate = minTranslate;
+  else if (translateBounds && translate < maxTranslate) newTranslate = maxTranslate;
+  else newTranslate = translate;
+
+  // Update progress
+  swiper.updateProgress(newTranslate);
+
+  if (params.cssMode) {
+    const isH = swiper.isHorizontal();
+    if (speed === 0) {
+      wrapperEl[isH ? 'scrollLeft' : 'scrollTop'] = -newTranslate;
+    } else {
+      // eslint-disable-next-line
+      if (wrapperEl.scrollTo) {
+        wrapperEl.scrollTo({
+          [isH ? 'left' : 'top']: -newTranslate,
+          behavior: 'smooth',
+        });
+      } else {
+        wrapperEl[isH ? 'scrollLeft' : 'scrollTop'] = -newTranslate;
+      }
+    }
+    return true;
+  }
+
+  if (speed === 0) {
+    swiper.setTransition(0);
+    swiper.setTranslate(newTranslate);
+    if (runCallbacks) {
+      swiper.emit('beforeTransitionStart', speed, internal);
+      swiper.emit('transitionEnd');
+    }
+  } else {
+    swiper.setTransition(speed);
+    swiper.setTranslate(newTranslate);
+    if (runCallbacks) {
+      swiper.emit('beforeTransitionStart', speed, internal);
+      swiper.emit('transitionStart');
+    }
+    if (!swiper.animating) {
+      swiper.animating = true;
+      if (!swiper.onTranslateToWrapperTransitionEnd) {
+        swiper.onTranslateToWrapperTransitionEnd = function transitionEnd(e) {
+          if (!swiper || swiper.destroyed) return;
+          if (e.target !== this) return;
+          swiper.$wrapperEl[0].removeEventListener('transitionend', swiper.onTranslateToWrapperTransitionEnd);
+          swiper.$wrapperEl[0].removeEventListener('webkitTransitionEnd', swiper.onTranslateToWrapperTransitionEnd);
+          swiper.onTranslateToWrapperTransitionEnd = null;
+          delete swiper.onTranslateToWrapperTransitionEnd;
+          if (runCallbacks) {
+            swiper.emit('transitionEnd');
+          }
+        };
+      }
+      swiper.$wrapperEl[0].addEventListener('transitionend', swiper.onTranslateToWrapperTransitionEnd);
+      swiper.$wrapperEl[0].addEventListener('webkitTransitionEnd', swiper.onTranslateToWrapperTransitionEnd);
+    }
+  }
+
+  return true;
+}
+
 var translate = {
   getTranslate,
   setTranslate,
   minTranslate,
   maxTranslate,
+  translateTo,
 };
 
 function setTransition (duration, byController) {
   const swiper = this;
 
-  swiper.$wrapperEl.transition(duration);
+  if (!swiper.params.cssMode) {
+    swiper.$wrapperEl.transition(duration);
+  }
 
   swiper.emit('setTransition', duration, byController);
 }
@@ -81330,6 +82823,7 @@ function setTransition (duration, byController) {
 function transitionStart (runCallbacks = true, direction) {
   const swiper = this;
   const { activeIndex, params, previousIndex } = swiper;
+  if (params.cssMode) return;
   if (params.autoHeight) {
     swiper.updateAutoHeight();
   }
@@ -81359,8 +82853,9 @@ function transitionStart (runCallbacks = true, direction) {
 
 function transitionEnd (runCallbacks = true, direction) {
   const swiper = this;
-  const { activeIndex, previousIndex } = swiper;
+  const { activeIndex, previousIndex, params } = swiper;
   swiper.animating = false;
+  if (params.cssMode) return;
   swiper.setTransition(0);
 
   let dir = direction;
@@ -81398,13 +82893,14 @@ function slideTo (index = 0, speed = this.params.speed, runCallbacks = true, int
   if (slideIndex < 0) slideIndex = 0;
 
   const {
-    params, snapGrid, slidesGrid, previousIndex, activeIndex, rtlTranslate: rtl,
+    params, snapGrid, slidesGrid, previousIndex, activeIndex, rtlTranslate: rtl, wrapperEl,
   } = swiper;
   if (swiper.animating && params.preventInteractionOnTransition) {
     return false;
   }
 
-  let snapIndex = Math.floor(slideIndex / params.slidesPerGroup);
+  const skip = Math.min(swiper.params.slidesPerGroupSkip, slideIndex);
+  let snapIndex = skip + Math.floor((slideIndex - skip) / swiper.params.slidesPerGroup);
   if (snapIndex >= snapGrid.length) snapIndex = snapGrid.length - 1;
 
   if ((activeIndex || params.initialSlide || 0) === (previousIndex || 0) && runCallbacks) {
@@ -81457,8 +82953,29 @@ function slideTo (index = 0, speed = this.params.speed, runCallbacks = true, int
     }
     return false;
   }
+  if (params.cssMode) {
+    const isH = swiper.isHorizontal();
+    let t = -translate;
+    if (rtl) {
+      t = wrapperEl.scrollWidth - wrapperEl.offsetWidth - t;
+    }
+    if (speed === 0) {
+      wrapperEl[isH ? 'scrollLeft' : 'scrollTop'] = t;
+    } else {
+      // eslint-disable-next-line
+      if (wrapperEl.scrollTo) {
+        wrapperEl.scrollTo({
+          [isH ? 'left' : 'top']: t,
+          behavior: 'smooth',
+        });
+      } else {
+        wrapperEl[isH ? 'scrollLeft' : 'scrollTop'] = t;
+      }
+    }
+    return true;
+  }
 
-  if (speed === 0 || !Support.transition) {
+  if (speed === 0) {
     swiper.setTransition(0);
     swiper.setTranslate(translate);
     swiper.updateActiveIndex(slideIndex);
@@ -81508,14 +83025,14 @@ function slideToLoop (index = 0, speed = this.params.speed, runCallbacks = true,
 function slideNext (speed = this.params.speed, runCallbacks = true, internal) {
   const swiper = this;
   const { params, animating } = swiper;
+  const increment = swiper.activeIndex < params.slidesPerGroupSkip ? 1 : params.slidesPerGroup;
   if (params.loop) {
     if (animating) return false;
     swiper.loopFix();
     // eslint-disable-next-line
     swiper._clientLeft = swiper.$wrapperEl[0].clientLeft;
-    return swiper.slideTo(swiper.activeIndex + params.slidesPerGroup, speed, runCallbacks, internal);
   }
-  return swiper.slideTo(swiper.activeIndex + params.slidesPerGroup, speed, runCallbacks, internal);
+  return swiper.slideTo(swiper.activeIndex + increment, speed, runCallbacks, internal);
 }
 
 /* eslint no-unused-vars: "off" */
@@ -81537,11 +83054,16 @@ function slidePrev (speed = this.params.speed, runCallbacks = true, internal) {
     return Math.floor(val);
   }
   const normalizedTranslate = normalize(translate);
-  const normalizedSnapGrid = snapGrid.map(val => normalize(val));
-  const normalizedSlidesGrid = slidesGrid.map(val => normalize(val));
+  const normalizedSnapGrid = snapGrid.map((val) => normalize(val));
+  const normalizedSlidesGrid = slidesGrid.map((val) => normalize(val));
 
   const currentSnap = snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate)];
-  const prevSnap = snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate) - 1];
+  let prevSnap = snapGrid[normalizedSnapGrid.indexOf(normalizedTranslate) - 1];
+  if (typeof prevSnap === 'undefined' && params.cssMode) {
+    snapGrid.forEach((snap) => {
+      if (!prevSnap && normalizedTranslate >= snap) prevSnap = snap;
+    });
+  }
   let prevIndex;
   if (typeof prevSnap !== 'undefined') {
     prevIndex = slidesGrid.indexOf(prevSnap);
@@ -81557,21 +83079,33 @@ function slideReset (speed = this.params.speed, runCallbacks = true, internal) {
 }
 
 /* eslint no-unused-vars: "off" */
-function slideToClosest (speed = this.params.speed, runCallbacks = true, internal) {
+function slideToClosest (speed = this.params.speed, runCallbacks = true, internal, threshold = 0.5) {
   const swiper = this;
   let index = swiper.activeIndex;
-  const snapIndex = Math.floor(index / swiper.params.slidesPerGroup);
+  const skip = Math.min(swiper.params.slidesPerGroupSkip, index);
+  const snapIndex = skip + Math.floor((index - skip) / swiper.params.slidesPerGroup);
 
-  if (snapIndex < swiper.snapGrid.length - 1) {
-    const translate = swiper.rtlTranslate ? swiper.translate : -swiper.translate;
+  const translate = swiper.rtlTranslate ? swiper.translate : -swiper.translate;
 
+  if (translate >= swiper.snapGrid[snapIndex]) {
+    // The current translate is on or after the current snap index, so the choice
+    // is between the current index and the one after it.
     const currentSnap = swiper.snapGrid[snapIndex];
     const nextSnap = swiper.snapGrid[snapIndex + 1];
-
-    if ((translate - currentSnap) > (nextSnap - currentSnap) / 2) {
-      index = swiper.params.slidesPerGroup;
+    if ((translate - currentSnap) > (nextSnap - currentSnap) * threshold) {
+      index += swiper.params.slidesPerGroup;
+    }
+  } else {
+    // The current translate is before the current snap index, so the choice
+    // is between the current index and the one before it.
+    const prevSnap = swiper.snapGrid[snapIndex - 1];
+    const currentSnap = swiper.snapGrid[snapIndex];
+    if ((translate - prevSnap) <= (currentSnap - prevSnap) * threshold) {
+      index -= swiper.params.slidesPerGroup;
     }
   }
+  index = Math.max(index, 0);
+  index = Math.min(index, swiper.slidesGrid.length - 1);
 
   return swiper.slideTo(index, speed, runCallbacks, internal);
 }
@@ -81652,7 +83186,7 @@ function loopCreate () {
 
   if (params.slidesPerView === 'auto' && !params.loopedSlides) params.loopedSlides = slides.length;
 
-  swiper.loopedSlides = parseInt(params.loopedSlides || params.slidesPerView, 10);
+  swiper.loopedSlides = Math.ceil(parseFloat(params.loopedSlides || params.slidesPerView, 10));
   swiper.loopedSlides += params.loopAdditionalSlides;
   if (swiper.loopedSlides > slides.length) {
     swiper.loopedSlides = slides.length;
@@ -81676,8 +83210,11 @@ function loopCreate () {
 
 function loopFix () {
   const swiper = this;
+
+  swiper.emit('beforeLoopFix');
+
   const {
-    params, activeIndex, slides, loopedSlides, allowSlidePrev, allowSlideNext, snapGrid, rtlTranslate: rtl,
+    activeIndex, slides, loopedSlides, allowSlidePrev, allowSlideNext, snapGrid, rtlTranslate: rtl,
   } = swiper;
   let newIndex;
   swiper.allowSlidePrev = true;
@@ -81685,7 +83222,6 @@ function loopFix () {
 
   const snapTranslate = -snapGrid[activeIndex];
   const diff = snapTranslate - swiper.getTranslate();
-
 
   // Fix For Negative Oversliding
   if (activeIndex < loopedSlides) {
@@ -81695,7 +83231,7 @@ function loopFix () {
     if (slideChanged && diff !== 0) {
       swiper.setTranslate((rtl ? -swiper.translate : swiper.translate) - diff);
     }
-  } else if ((params.slidesPerView === 'auto' && activeIndex >= loopedSlides * 2) || (activeIndex >= slides.length - loopedSlides)) {
+  } else if (activeIndex >= slides.length - loopedSlides) {
     // Fix For Positive Oversliding
     newIndex = -slides.length + activeIndex + loopedSlides;
     newIndex += loopedSlides;
@@ -81706,6 +83242,8 @@ function loopFix () {
   }
   swiper.allowSlidePrev = allowSlidePrev;
   swiper.allowSlideNext = allowSlideNext;
+
+  swiper.emit('loopFix');
 }
 
 function loopDestroy () {
@@ -81723,7 +83261,7 @@ var loop = {
 
 function setGrabCursor (moving) {
   const swiper = this;
-  if (Support.touch || !swiper.params.simulateTouch || (swiper.params.watchOverflow && swiper.isLocked)) return;
+  if (Support.touch || !swiper.params.simulateTouch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
   const el = swiper.el;
   el.style.cursor = 'move';
   el.style.cursor = moving ? '-webkit-grabbing' : '-webkit-grab';
@@ -81733,7 +83271,7 @@ function setGrabCursor (moving) {
 
 function unsetGrabCursor () {
   const swiper = this;
-  if (Support.touch || (swiper.params.watchOverflow && swiper.isLocked)) return;
+  if (Support.touch || (swiper.params.watchOverflow && swiper.isLocked) || swiper.params.cssMode) return;
   swiper.el.style.cursor = '';
 }
 
@@ -81901,6 +83439,7 @@ var manipulation = {
 };
 
 const Device = (function Device() {
+  const platform = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.platform;
   const ua = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent;
 
   const device = {
@@ -81908,27 +83447,52 @@ const Device = (function Device() {
     android: false,
     androidChrome: false,
     desktop: false,
-    windows: false,
     iphone: false,
     ipod: false,
     ipad: false,
-    cordova: ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].cordova || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].phonegap,
-    phonegap: ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].cordova || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].phonegap,
+    edge: false,
+    ie: false,
+    firefox: false,
+    macos: false,
+    windows: false,
+    cordova: !!(ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].cordova || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].phonegap),
+    phonegap: !!(ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].cordova || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].phonegap),
+    electron: false,
   };
 
-  const windows = ua.match(/(Windows Phone);?[\s\/]+([\d.]+)?/); // eslint-disable-line
+  const screenWidth = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].screen.width;
+  const screenHeight = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].screen.height;
+
   const android = ua.match(/(Android);?[\s\/]+([\d.]+)?/); // eslint-disable-line
-  const ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
+  let ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
   const ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/);
   const iphone = !ipad && ua.match(/(iPhone\sOS|iOS)\s([\d_]+)/);
+  const ie = ua.indexOf('MSIE ') >= 0 || ua.indexOf('Trident/') >= 0;
+  const edge = ua.indexOf('Edge/') >= 0;
+  const firefox = ua.indexOf('Gecko/') >= 0 && ua.indexOf('Firefox/') >= 0;
+  const windows = platform === 'Win32';
+  const electron = ua.toLowerCase().indexOf('electron') >= 0;
+  let macos = platform === 'MacIntel';
 
-
-  // Windows
-  if (windows) {
-    device.os = 'windows';
-    device.osVersion = windows[2];
-    device.windows = true;
+  // iPadOs 13 fix
+  if (!ipad
+    && macos
+    && Support.touch
+    && (
+      (screenWidth === 1024 && screenHeight === 1366) // Pro 12.9
+      || (screenWidth === 834 && screenHeight === 1194) // Pro 11
+      || (screenWidth === 834 && screenHeight === 1112) // Pro 10.5
+      || (screenWidth === 768 && screenHeight === 1024) // other
+    )
+  ) {
+    ipad = ua.match(/(Version)\/([\d.]+)/);
+    macos = false;
   }
+
+  device.ie = ie;
+  device.edge = edge;
+  device.firefox = firefox;
+
   // Android
   if (android && !windows) {
     device.os = 'android';
@@ -81951,7 +83515,7 @@ const Device = (function Device() {
   }
   if (ipod) {
     device.osVersion = ipod[3] ? ipod[3].replace(/_/g, '.') : null;
-    device.iphone = true;
+    device.ipod = true;
   }
   // iOS 8+ changed UA
   if (device.ios && device.osVersion && ua.indexOf('Version/') >= 0) {
@@ -81960,20 +83524,24 @@ const Device = (function Device() {
     }
   }
 
-  // Desktop
-  device.desktop = !(device.os || device.android || device.webView);
-
   // Webview
-  device.webView = (iphone || ipad || ipod) && ua.match(/.*AppleWebKit(?!.*Safari)/i);
+  device.webView = !!((iphone || ipad || ipod) && (ua.match(/.*AppleWebKit(?!.*Safari)/i) || ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.standalone))
+    || (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].matchMedia && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].matchMedia('(display-mode: standalone)').matches);
+  device.webview = device.webView;
+  device.standalone = device.webView;
 
-  // Minimal UI
-  if (device.os && device.os === 'ios') {
-    const osVersionArr = device.osVersion.split('.');
-    const metaViewport = ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].querySelector('meta[name="viewport"]');
-    device.minimalUi = !device.webView
-      && (ipod || iphone)
-      && (osVersionArr[0] * 1 === 7 ? osVersionArr[1] * 1 >= 1 : osVersionArr[0] * 1 > 7)
-      && metaViewport && metaViewport.getAttribute('content').indexOf('minimal-ui') >= 0;
+  // Desktop
+  device.desktop = !(device.ios || device.android) || electron;
+  if (device.desktop) {
+    device.electron = electron;
+    device.macos = macos;
+    device.windows = windows;
+    if (device.macos) {
+      device.os = 'macos';
+    }
+    if (device.windows) {
+      device.os = 'windows';
+    }
   }
 
   // Pixel Ratio
@@ -81987,21 +83555,27 @@ function onTouchStart (event) {
   const swiper = this;
   const data = swiper.touchEventsData;
   const { params, touches } = swiper;
+
   if (swiper.animating && params.preventInteractionOnTransition) {
     return;
   }
   let e = event;
   if (e.originalEvent) e = e.originalEvent;
+  const $targetEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e.target);
+
+  if (params.touchEventsTarget === 'wrapper') {
+    if (!$targetEl.closest(swiper.wrapperEl).length) return;
+  }
   data.isTouchEvent = e.type === 'touchstart';
   if (!data.isTouchEvent && 'which' in e && e.which === 3) return;
   if (!data.isTouchEvent && 'button' in e && e.button > 0) return;
   if (data.isTouched && data.isMoved) return;
-  if (params.noSwiping && Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e.target).closest(params.noSwipingSelector ? params.noSwipingSelector : `.${params.noSwipingClass}`)[0]) {
+  if (params.noSwiping && $targetEl.closest(params.noSwipingSelector ? params.noSwipingSelector : `.${params.noSwipingClass}`)[0]) {
     swiper.allowClick = true;
     return;
   }
   if (params.swipeHandler) {
-    if (!Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e).closest(params.swipeHandler)[0]) return;
+    if (!$targetEl.closest(params.swipeHandler)[0]) return;
   }
 
   touches.currentX = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
@@ -82009,7 +83583,7 @@ function onTouchStart (event) {
   const startX = touches.currentX;
   const startY = touches.currentY;
 
-  // Do NOT start if iOS edge swipe is detected. Otherwise iOS app (UIWebView) cannot swipe-to-go-back anymore
+  // Do NOT start if iOS edge swipe is detected. Otherwise iOS app cannot swipe-to-go-back anymore
 
   const edgeSwipeDetection = params.edgeSwipeDetection || params.iOSEdgeSwipeDetection;
   const edgeSwipeThreshold = params.edgeSwipeThreshold || params.iOSEdgeSwipeThreshold;
@@ -82038,11 +83612,11 @@ function onTouchStart (event) {
   if (params.threshold > 0) data.allowThresholdMove = false;
   if (e.type !== 'touchstart') {
     let preventDefault = true;
-    if (Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e.target).is(data.formElements)) preventDefault = false;
+    if ($targetEl.is(data.formElements)) preventDefault = false;
     if (
       ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement
       && Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement).is(data.formElements)
-      && ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement !== e.target
+      && ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement !== $targetEl[0]
     ) {
       ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement.blur();
     }
@@ -82067,9 +83641,10 @@ function onTouchMove (event) {
     }
     return;
   }
-  if (data.isTouchEvent && e.type === 'mousemove') return;
-  const pageX = e.type === 'touchmove' ? e.targetTouches[0].pageX : e.pageX;
-  const pageY = e.type === 'touchmove' ? e.targetTouches[0].pageY : e.pageY;
+  if (data.isTouchEvent && e.type !== 'touchmove') return;
+  const targetTouch = e.type === 'touchmove' && e.targetTouches && (e.targetTouches[0] || e.changedTouches[0]);
+  const pageX = e.type === 'touchmove' ? targetTouch.pageX : e.pageX;
+  const pageY = e.type === 'touchmove' ? targetTouch.pageY : e.pageY;
   if (e.preventedByNestedSwiper) {
     touches.startX = pageX;
     touches.startY = pageY;
@@ -82154,7 +83729,9 @@ function onTouchMove (event) {
     return;
   }
   swiper.allowClick = false;
-  e.preventDefault();
+  if (!params.cssMode && e.cancelable) {
+    e.preventDefault();
+  }
   if (params.touchMoveStopPropagation && !params.nested) {
     e.stopPropagation();
   }
@@ -82230,7 +83807,7 @@ function onTouchMove (event) {
     }
   }
 
-  if (!params.followFinger) return;
+  if (!params.followFinger || params.cssMode) return;
 
   // Update active index in free mode
   if (params.freeMode || params.watchSlidesProgress || params.watchSlidesVisibility) {
@@ -82289,17 +83866,9 @@ function onTouchEnd (event) {
   // Tap, doubleTap, Click
   if (swiper.allowClick) {
     swiper.updateClickedSlide(e);
-    swiper.emit('tap', e);
-    if (timeDiff < 300 && (touchEndTime - data.lastClickTime) > 300) {
-      if (data.clickTimeout) clearTimeout(data.clickTimeout);
-      data.clickTimeout = Utils.nextTick(() => {
-        if (!swiper || swiper.destroyed) return;
-        swiper.emit('click', e);
-      }, 300);
-    }
+    swiper.emit('tap click', e);
     if (timeDiff < 300 && (touchEndTime - data.lastClickTime) < 300) {
-      if (data.clickTimeout) clearTimeout(data.clickTimeout);
-      swiper.emit('doubleTap', e);
+      swiper.emit('doubleTap doubleClick', e);
     }
   }
 
@@ -82323,6 +83892,10 @@ function onTouchEnd (event) {
     currentPos = rtl ? swiper.translate : -swiper.translate;
   } else {
     currentPos = -data.currentTranslate;
+  }
+
+  if (params.cssMode) {
+    return;
   }
 
   if (params.freeMode) {
@@ -82424,6 +83997,24 @@ function onTouchEnd (event) {
         } else {
           momentumDuration = Math.abs((newPosition - swiper.translate) / swiper.velocity);
         }
+        if (params.freeModeSticky) {
+          // If freeModeSticky is active and the user ends a swipe with a slow-velocity
+          // event, then durations can be 20+ seconds to slide one (or zero!) slides.
+          // It's easy to see this when simulating touch with mouse events. To fix this,
+          // limit single-slide swipes to the default slide duration. This also has the
+          // nice side effect of matching slide speed if the user stopped moving before
+          // lifting finger or mouse vs. moving slowly before lifting the finger/mouse.
+          // For faster swipes, also apply limits (albeit higher ones).
+          const moveDistance = Math.abs((rtl ? -newPosition : newPosition) - swiper.translate);
+          const currentSlideSize = swiper.slidesSizesGrid[swiper.activeIndex];
+          if (moveDistance < currentSlideSize) {
+            momentumDuration = params.speed;
+          } else if (moveDistance < 2 * currentSlideSize) {
+            momentumDuration = params.speed * 1.5;
+          } else {
+            momentumDuration = params.speed * 2.5;
+          }
+        }
       } else if (params.freeModeSticky) {
         swiper.slideToClosest();
         return;
@@ -82438,13 +84029,14 @@ function onTouchEnd (event) {
         $wrapperEl.transitionEnd(() => {
           if (!swiper || swiper.destroyed || !data.allowMomentumBounce) return;
           swiper.emit('momentumBounce');
-
           swiper.setTransition(params.speed);
-          swiper.setTranslate(afterBouncePosition);
-          $wrapperEl.transitionEnd(() => {
-            if (!swiper || swiper.destroyed) return;
-            swiper.transitionEnd();
-          });
+          setTimeout(() => {
+            swiper.setTranslate(afterBouncePosition);
+            $wrapperEl.transitionEnd(() => {
+              if (!swiper || swiper.destroyed) return;
+              swiper.transitionEnd();
+            });
+          }, 0);
         });
       } else if (swiper.velocity) {
         swiper.updateProgress(newPosition);
@@ -82480,11 +84072,12 @@ function onTouchEnd (event) {
   // Find current slide
   let stopIndex = 0;
   let groupSize = swiper.slidesSizesGrid[0];
-  for (let i = 0; i < slidesGrid.length; i += params.slidesPerGroup) {
-    if (typeof slidesGrid[i + params.slidesPerGroup] !== 'undefined') {
-      if (currentPos >= slidesGrid[i] && currentPos < slidesGrid[i + params.slidesPerGroup]) {
+  for (let i = 0; i < slidesGrid.length; i += (i < params.slidesPerGroupSkip ? 1 : params.slidesPerGroup)) {
+    const increment = (i < params.slidesPerGroupSkip - 1 ? 1 : params.slidesPerGroup);
+    if (typeof slidesGrid[i + increment] !== 'undefined') {
+      if (currentPos >= slidesGrid[i] && currentPos < slidesGrid[i + increment]) {
         stopIndex = i;
-        groupSize = slidesGrid[i + params.slidesPerGroup] - slidesGrid[i];
+        groupSize = slidesGrid[i + increment] - slidesGrid[i];
       }
     } else if (currentPos >= slidesGrid[i]) {
       stopIndex = i;
@@ -82494,6 +84087,7 @@ function onTouchEnd (event) {
 
   // Find current slide size
   const ratio = (currentPos - slidesGrid[stopIndex]) / groupSize;
+  const increment = (stopIndex < params.slidesPerGroupSkip - 1 ? 1 : params.slidesPerGroup);
 
   if (timeDiff > params.longSwipesMs) {
     // Long touches
@@ -82502,11 +84096,11 @@ function onTouchEnd (event) {
       return;
     }
     if (swiper.swipeDirection === 'next') {
-      if (ratio >= params.longSwipesRatio) swiper.slideTo(stopIndex + params.slidesPerGroup);
+      if (ratio >= params.longSwipesRatio) swiper.slideTo(stopIndex + increment);
       else swiper.slideTo(stopIndex);
     }
     if (swiper.swipeDirection === 'prev') {
-      if (ratio > (1 - params.longSwipesRatio)) swiper.slideTo(stopIndex + params.slidesPerGroup);
+      if (ratio > (1 - params.longSwipesRatio)) swiper.slideTo(stopIndex + increment);
       else swiper.slideTo(stopIndex);
     }
   } else {
@@ -82515,10 +84109,17 @@ function onTouchEnd (event) {
       swiper.slideTo(swiper.activeIndex);
       return;
     }
-    if (swiper.swipeDirection === 'next') {
-      swiper.slideTo(stopIndex + params.slidesPerGroup);
-    }
-    if (swiper.swipeDirection === 'prev') {
+    const isNavButtonTarget = swiper.navigation && (e.target === swiper.navigation.nextEl || e.target === swiper.navigation.prevEl);
+    if (!isNavButtonTarget) {
+      if (swiper.swipeDirection === 'next') {
+        swiper.slideTo(stopIndex + increment);
+      }
+      if (swiper.swipeDirection === 'prev') {
+        swiper.slideTo(stopIndex);
+      }
+    } else if (e.target === swiper.navigation.nextEl) {
+      swiper.slideTo(stopIndex + increment);
+    } else {
       swiper.slideTo(stopIndex);
     }
   }
@@ -82546,22 +84147,15 @@ function onResize () {
   swiper.updateSize();
   swiper.updateSlides();
 
-  if (params.freeMode) {
-    const newTranslate = Math.min(Math.max(swiper.translate, swiper.maxTranslate()), swiper.minTranslate());
-    swiper.setTranslate(newTranslate);
-    swiper.updateActiveIndex();
-    swiper.updateSlidesClasses();
-
-    if (params.autoHeight) {
-      swiper.updateAutoHeight();
-    }
+  swiper.updateSlidesClasses();
+  if ((params.slidesPerView === 'auto' || params.slidesPerView > 1) && swiper.isEnd && !swiper.isBeginning && !swiper.params.centeredSlides) {
+    swiper.slideTo(swiper.slides.length - 1, 0, false, true);
   } else {
-    swiper.updateSlidesClasses();
-    if ((params.slidesPerView === 'auto' || params.slidesPerView > 1) && swiper.isEnd && !swiper.params.centeredSlides) {
-      swiper.slideTo(swiper.slides.length - 1, 0, false, true);
-    } else {
-      swiper.slideTo(swiper.activeIndex, 0, false, true);
-    }
+    swiper.slideTo(swiper.activeIndex, 0, false, true);
+  }
+
+  if (swiper.autoplay && swiper.autoplay.running && swiper.autoplay.paused) {
+    swiper.autoplay.run();
   }
   // Return locks after resize
   swiper.allowSlidePrev = allowSlidePrev;
@@ -82583,50 +84177,98 @@ function onClick (e) {
   }
 }
 
+function onScroll () {
+  const swiper = this;
+  const { wrapperEl, rtlTranslate } = swiper;
+  swiper.previousTranslate = swiper.translate;
+  if (swiper.isHorizontal()) {
+    if (rtlTranslate) {
+      swiper.translate = ((wrapperEl.scrollWidth - wrapperEl.offsetWidth) - wrapperEl.scrollLeft);
+    } else {
+      swiper.translate = -wrapperEl.scrollLeft;
+    }
+  } else {
+    swiper.translate = -wrapperEl.scrollTop;
+  }
+  // eslint-disable-next-line
+  if (swiper.translate === -0) swiper.translate = 0;
+
+  swiper.updateActiveIndex();
+  swiper.updateSlidesClasses();
+
+  let newProgress;
+  const translatesDiff = swiper.maxTranslate() - swiper.minTranslate();
+  if (translatesDiff === 0) {
+    newProgress = 0;
+  } else {
+    newProgress = (swiper.translate - swiper.minTranslate()) / (translatesDiff);
+  }
+  if (newProgress !== swiper.progress) {
+    swiper.updateProgress(rtlTranslate ? -swiper.translate : swiper.translate);
+  }
+
+  swiper.emit('setTranslate', swiper.translate, false);
+}
+
+let dummyEventAttached = false;
+function dummyEventListener() {}
+
 function attachEvents() {
   const swiper = this;
   const {
     params, touchEvents, el, wrapperEl,
   } = swiper;
 
-  {
-    swiper.onTouchStart = onTouchStart.bind(swiper);
-    swiper.onTouchMove = onTouchMove.bind(swiper);
-    swiper.onTouchEnd = onTouchEnd.bind(swiper);
+  swiper.onTouchStart = onTouchStart.bind(swiper);
+  swiper.onTouchMove = onTouchMove.bind(swiper);
+  swiper.onTouchEnd = onTouchEnd.bind(swiper);
+  if (params.cssMode) {
+    swiper.onScroll = onScroll.bind(swiper);
   }
 
   swiper.onClick = onClick.bind(swiper);
 
-  const target = params.touchEventsTarget === 'container' ? el : wrapperEl;
   const capture = !!params.nested;
 
   // Touch Events
-  {
-    if (!Support.touch && (Support.pointerEvents || Support.prefixedPointerEvents)) {
-      target.addEventListener(touchEvents.start, swiper.onTouchStart, false);
-      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener(touchEvents.move, swiper.onTouchMove, capture);
-      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener(touchEvents.end, swiper.onTouchEnd, false);
-    } else {
-      if (Support.touch) {
-        const passiveListener = touchEvents.start === 'touchstart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
-        target.addEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
-        target.addEventListener(touchEvents.move, swiper.onTouchMove, Support.passiveListener ? { passive: false, capture } : capture);
-        target.addEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
+  if (!Support.touch && Support.pointerEvents) {
+    el.addEventListener(touchEvents.start, swiper.onTouchStart, false);
+    ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener(touchEvents.move, swiper.onTouchMove, capture);
+    ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener(touchEvents.end, swiper.onTouchEnd, false);
+  } else {
+    if (Support.touch) {
+      const passiveListener = touchEvents.start === 'touchstart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+      el.addEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
+      el.addEventListener(touchEvents.move, swiper.onTouchMove, Support.passiveListener ? { passive: false, capture } : capture);
+      el.addEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
+      if (touchEvents.cancel) {
+        el.addEventListener(touchEvents.cancel, swiper.onTouchEnd, passiveListener);
       }
-      if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
-        target.addEventListener('mousedown', swiper.onTouchStart, false);
-        ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener('mousemove', swiper.onTouchMove, capture);
-        ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener('mouseup', swiper.onTouchEnd, false);
+      if (!dummyEventAttached) {
+        ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener('touchstart', dummyEventListener);
+        dummyEventAttached = true;
       }
     }
-    // Prevent Links Clicks
-    if (params.preventClicks || params.preventClicksPropagation) {
-      target.addEventListener('click', swiper.onClick, true);
+    if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
+      el.addEventListener('mousedown', swiper.onTouchStart, false);
+      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener('mousemove', swiper.onTouchMove, capture);
+      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].addEventListener('mouseup', swiper.onTouchEnd, false);
     }
+  }
+  // Prevent Links Clicks
+  if (params.preventClicks || params.preventClicksPropagation) {
+    el.addEventListener('click', swiper.onClick, true);
+  }
+  if (params.cssMode) {
+    wrapperEl.addEventListener('scroll', swiper.onScroll);
   }
 
   // Resize handler
-  swiper.on((Device.ios || Device.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize, true);
+  if (params.updateOnWindowResize) {
+    swiper.on((Device.ios || Device.android ? 'resize orientationchange observerUpdate' : 'resize observerUpdate'), onResize, true);
+  } else {
+    swiper.on('observerUpdate', onResize, true);
+  }
 }
 
 function detachEvents() {
@@ -82636,32 +84278,36 @@ function detachEvents() {
     params, touchEvents, el, wrapperEl,
   } = swiper;
 
-  const target = params.touchEventsTarget === 'container' ? el : wrapperEl;
   const capture = !!params.nested;
 
   // Touch Events
-  {
-    if (!Support.touch && (Support.pointerEvents || Support.prefixedPointerEvents)) {
-      target.removeEventListener(touchEvents.start, swiper.onTouchStart, false);
-      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
-      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener(touchEvents.end, swiper.onTouchEnd, false);
-    } else {
-      if (Support.touch) {
-        const passiveListener = touchEvents.start === 'onTouchStart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
-        target.removeEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
-        target.removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
-        target.removeEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
-      }
-      if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
-        target.removeEventListener('mousedown', swiper.onTouchStart, false);
-        ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener('mousemove', swiper.onTouchMove, capture);
-        ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener('mouseup', swiper.onTouchEnd, false);
+  if (!Support.touch && Support.pointerEvents) {
+    el.removeEventListener(touchEvents.start, swiper.onTouchStart, false);
+    ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
+    ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener(touchEvents.end, swiper.onTouchEnd, false);
+  } else {
+    if (Support.touch) {
+      const passiveListener = touchEvents.start === 'onTouchStart' && Support.passiveListener && params.passiveListeners ? { passive: true, capture: false } : false;
+      el.removeEventListener(touchEvents.start, swiper.onTouchStart, passiveListener);
+      el.removeEventListener(touchEvents.move, swiper.onTouchMove, capture);
+      el.removeEventListener(touchEvents.end, swiper.onTouchEnd, passiveListener);
+      if (touchEvents.cancel) {
+        el.removeEventListener(touchEvents.cancel, swiper.onTouchEnd, passiveListener);
       }
     }
-    // Prevent Links Clicks
-    if (params.preventClicks || params.preventClicksPropagation) {
-      target.removeEventListener('click', swiper.onClick, true);
+    if ((params.simulateTouch && !Device.ios && !Device.android) || (params.simulateTouch && !Support.touch && Device.ios)) {
+      el.removeEventListener('mousedown', swiper.onTouchStart, false);
+      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener('mousemove', swiper.onTouchMove, capture);
+      ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].removeEventListener('mouseup', swiper.onTouchEnd, false);
     }
+  }
+  // Prevent Links Clicks
+  if (params.preventClicks || params.preventClicksPropagation) {
+    el.removeEventListener('click', swiper.onClick, true);
+  }
+
+  if (params.cssMode) {
+    wrapperEl.removeEventListener('scroll', swiper.onScroll);
   }
 
   // Resize handler
@@ -82676,18 +84322,18 @@ var events = {
 function setBreakpoint () {
   const swiper = this;
   const {
-    activeIndex, initialized, loopedSlides = 0, params,
+    activeIndex, initialized, loopedSlides = 0, params, $el,
   } = swiper;
   const breakpoints = params.breakpoints;
   if (!breakpoints || (breakpoints && Object.keys(breakpoints).length === 0)) return;
 
-  // Set breakpoint for window width and update parameters
+  // Get breakpoint for window width and update parameters
   const breakpoint = swiper.getBreakpoint(breakpoints);
 
   if (breakpoint && swiper.currentBreakpoint !== breakpoint) {
     const breakpointOnlyParams = breakpoint in breakpoints ? breakpoints[breakpoint] : undefined;
     if (breakpointOnlyParams) {
-      ['slidesPerView', 'spaceBetween', 'slidesPerGroup'].forEach((param) => {
+      ['slidesPerView', 'spaceBetween', 'slidesPerGroup', 'slidesPerGroupSkip', 'slidesPerColumn'].forEach((param) => {
         const paramValue = breakpointOnlyParams[param];
         if (typeof paramValue === 'undefined') return;
         if (param === 'slidesPerView' && (paramValue === 'AUTO' || paramValue === 'auto')) {
@@ -82701,6 +84347,17 @@ function setBreakpoint () {
     }
 
     const breakpointParams = breakpointOnlyParams || swiper.originalParams;
+    const wasMultiRow = params.slidesPerColumn > 1;
+    const isMultiRow = breakpointParams.slidesPerColumn > 1;
+    if (wasMultiRow && !isMultiRow) {
+      $el.removeClass(`${params.containerModifierClass}multirow ${params.containerModifierClass}multirow-column`);
+    } else if (!wasMultiRow && isMultiRow) {
+      $el.addClass(`${params.containerModifierClass}multirow`);
+      if (breakpointParams.slidesPerColumnFill === 'column') {
+        $el.addClass(`${params.containerModifierClass}multirow-column`);
+      }
+    }
+
     const directionChanged = breakpointParams.direction && breakpointParams.direction !== params.direction;
     const needsReLoop = params.loop && (breakpointParams.slidesPerView !== params.slidesPerView || directionChanged);
 
@@ -82730,22 +84387,23 @@ function setBreakpoint () {
 }
 
 function getBreakpoint (breakpoints) {
-  const swiper = this;
   // Get breakpoint for window width
   if (!breakpoints) return undefined;
   let breakpoint = false;
-  const points = [];
-  Object.keys(breakpoints).forEach((point) => {
-    points.push(point);
+
+  const points = Object.keys(breakpoints).map((point) => {
+    if (typeof point === 'string' && point.indexOf('@') === 0) {
+      const minRatio = parseFloat(point.substr(1));
+      const value = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].innerHeight * minRatio;
+      return { value, point };
+    }
+    return { value: point, point };
   });
-  points.sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+
+  points.sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
   for (let i = 0; i < points.length; i += 1) {
-    const point = points[i];
-    if (swiper.params.breakpointsInverse) {
-      if (point <= ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].innerWidth) {
-        breakpoint = point;
-      }
-    } else if (point >= ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].innerWidth && !breakpoint) {
+    const { point, value } = points[i];
+    if (value <= ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].innerWidth) {
       breakpoint = point;
     }
   }
@@ -82767,9 +84425,6 @@ function addClasses () {
   if (params.freeMode) {
     suffixes.push('free-mode');
   }
-  if (!Support.flexbox) {
-    suffixes.push('no-flexbox');
-  }
   if (params.autoHeight) {
     suffixes.push('autoheight');
   }
@@ -82778,6 +84433,9 @@ function addClasses () {
   }
   if (params.slidesPerColumn > 1) {
     suffixes.push('multirow');
+    if (params.slidesPerColumnFill === 'column') {
+      suffixes.push('multirow-column');
+    }
   }
   if (Device.android) {
     suffixes.push('android');
@@ -82785,9 +84443,9 @@ function addClasses () {
   if (Device.ios) {
     suffixes.push('ios');
   }
-  // WP8 Touch Events Fix
-  if ((Browser.isIE || Browser.isEdge) && (Support.pointerEvents || Support.prefixedPointerEvents)) {
-    suffixes.push(`wp8-${params.direction}`);
+
+  if (params.cssMode) {
+    suffixes.push('css-mode');
   }
 
   suffixes.forEach((suffix) => {
@@ -82811,7 +84469,9 @@ function loadImage (imageEl, src, srcset, sizes, checkForComplete, callback) {
   function onReady() {
     if (callback) callback();
   }
-  if (!imageEl.complete || !checkForComplete) {
+  const isPicture = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(imageEl).parent('picture')[0];
+
+  if (!isPicture && (!imageEl.complete || !checkForComplete)) {
     if (src) {
       image = new ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Image();
       image.onload = onReady;
@@ -82865,9 +84525,16 @@ var images = {
 
 function checkOverflow() {
   const swiper = this;
+  const params = swiper.params;
   const wasLocked = swiper.isLocked;
+  const lastSlidePosition = swiper.slides.length > 0 && (params.slidesOffsetBefore + (params.spaceBetween * (swiper.slides.length - 1)) + ((swiper.slides[0]).offsetWidth) * swiper.slides.length);
 
-  swiper.isLocked = swiper.snapGrid.length === 1;
+  if (params.slidesOffsetBefore && params.slidesOffsetAfter && lastSlidePosition) {
+    swiper.isLocked = lastSlidePosition <= swiper.size;
+  } else {
+    swiper.isLocked = swiper.snapGrid.length === 1;
+  }
+
   swiper.allowSlideNext = !swiper.isLocked;
   swiper.allowSlidePrev = !swiper.isLocked;
 
@@ -82876,7 +84543,7 @@ function checkOverflow() {
 
   if (wasLocked && wasLocked !== swiper.isLocked) {
     swiper.isEnd = false;
-    swiper.navigation.update();
+    if (swiper.navigation) swiper.navigation.update();
   }
 }
 
@@ -82888,10 +84555,12 @@ var defaults = {
   touchEventsTarget: 'container',
   initialSlide: 0,
   speed: 300,
+  cssMode: false,
+  updateOnWindowResize: true,
   //
   preventInteractionOnTransition: false,
 
-  // To support iOS's swipe-to-go-back gesture (when being used in-app, with UIWebView).
+  // To support iOS's swipe-to-go-back gesture (when being used in-app).
   edgeSwipeDetection: false,
   edgeSwipeThreshold: 20,
 
@@ -82919,7 +84588,6 @@ var defaults = {
 
   // Breakpoints
   breakpoints: undefined,
-  breakpointsInverse: false,
 
   // Slides grid
   spaceBetween: 0,
@@ -82927,7 +84595,9 @@ var defaults = {
   slidesPerColumn: 1,
   slidesPerColumnFill: 'column',
   slidesPerGroup: 1,
+  slidesPerGroupSkip: 0,
   centeredSlides: false,
+  centeredSlidesBounds: false,
   slidesOffsetBefore: 0, // in px
   slidesOffsetAfter: 0, // in px
   normalizeSlideIndex: true,
@@ -82950,7 +84620,7 @@ var defaults = {
   followFinger: true,
   allowTouchMove: true,
   threshold: 0,
-  touchMoveStopPropagation: true,
+  touchMoveStopPropagation: false,
   touchStartPreventDefault: true,
   touchStartForcePreventDefault: false,
   touchReleaseOnEdges: false,
@@ -83114,8 +84784,14 @@ class Swiper extends SwiperClass {
     $el.data('swiper', swiper);
 
     // Find Wrapper
-    const $wrapperEl = $el.children(`.${swiper.params.wrapperClass}`);
-
+    let $wrapperEl;
+    if (el && el.shadowRoot && el.shadowRoot.querySelector) {
+      $wrapperEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(el.shadowRoot.querySelector(`.${swiper.params.wrapperClass}`));
+      // Children needs to return slot items
+      $wrapperEl.children = (options) => $el.children(options);
+    } else {
+      $wrapperEl = $el.children(`.${swiper.params.wrapperClass}`);
+    }
     // Extend Swiper
     Utils.extend(swiper, {
       $el,
@@ -83165,17 +84841,16 @@ class Swiper extends SwiperClass {
 
       // Touch Events
       touchEvents: (function touchEvents() {
-        const touch = ['touchstart', 'touchmove', 'touchend'];
+        const touch = ['touchstart', 'touchmove', 'touchend', 'touchcancel'];
         let desktop = ['mousedown', 'mousemove', 'mouseup'];
         if (Support.pointerEvents) {
           desktop = ['pointerdown', 'pointermove', 'pointerup'];
-        } else if (Support.prefixedPointerEvents) {
-          desktop = ['MSPointerDown', 'MSPointerMove', 'MSPointerUp'];
         }
         swiper.touchEventsTouch = {
           start: touch[0],
           move: touch[1],
           end: touch[2],
+          cancel: touch[3],
         };
         swiper.touchEventsDesktop = {
           start: desktop[0],
@@ -83194,7 +84869,7 @@ class Swiper extends SwiperClass {
         startTranslate: undefined,
         allowThresholdMove: undefined,
         // Form elements to match
-        formElements: 'input, select, option, textarea, button, video',
+        formElements: 'input, select, option, textarea, button, video, label',
         // Last click time
         lastClickTime: Utils.now(),
         clickTimeout: undefined,
@@ -83323,24 +84998,9 @@ class Swiper extends SwiperClass {
       return swiper;
     }
 
-    if (currentDirection === 'vertical') {
-      swiper.$el
-        .removeClass(`${swiper.params.containerModifierClass}vertical wp8-vertical`)
-        .addClass(`${swiper.params.containerModifierClass}${newDirection}`);
-
-      if ((Browser.isIE || Browser.isEdge) && (Support.pointerEvents || Support.prefixedPointerEvents)) {
-        swiper.$el.addClass(`${swiper.params.containerModifierClass}wp8-${newDirection}`);
-      }
-    }
-    if (currentDirection === 'horizontal') {
-      swiper.$el
-        .removeClass(`${swiper.params.containerModifierClass}horizontal wp8-horizontal`)
-        .addClass(`${swiper.params.containerModifierClass}${newDirection}`);
-
-      if ((Browser.isIE || Browser.isEdge) && (Support.pointerEvents || Support.prefixedPointerEvents)) {
-        swiper.$el.addClass(`${swiper.params.containerModifierClass}wp8-${newDirection}`);
-      }
-    }
+    swiper.$el
+      .removeClass(`${swiper.params.containerModifierClass}${currentDirection}`)
+      .addClass(`${swiper.params.containerModifierClass}${newDirection}`);
 
     swiper.params.direction = newDirection;
 
@@ -83450,9 +85110,7 @@ class Swiper extends SwiperClass {
             params.slidePrevClass,
           ].join(' '))
           .removeAttr('style')
-          .removeAttr('data-swiper-slide-index')
-          .removeAttr('data-swiper-column')
-          .removeAttr('data-swiper-row');
+          .removeAttr('data-swiper-slide-index');
       }
     }
 
@@ -83513,6 +85171,18 @@ var Support$1 = {
     support: Support,
   },
 };
+
+const Browser = (function Browser() {
+  function isSafari() {
+    const ua = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.toLowerCase();
+    return (ua.indexOf('safari') >= 0 && ua.indexOf('chrome') < 0 && ua.indexOf('android') < 0);
+  }
+  return {
+    isEdge: !!ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.match(/Edge/g),
+    isSafari: isSafari(),
+    isWebView: /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent),
+  };
+}());
 
 var Browser$1 = {
   name: 'browser',
@@ -83791,7 +85461,12 @@ const Virtual = {
       const cache = swiper.virtual.cache;
       const newCache = {};
       Object.keys(cache).forEach((cachedIndex) => {
-        newCache[parseInt(cachedIndex, 10) + numberOfNewSlides] = cache[cachedIndex];
+        const $cachedEl = cache[cachedIndex];
+        const cachedElIndex = $cachedEl.attr('data-swiper-slide-index');
+        if (cachedElIndex) {
+          $cachedEl.attr('data-swiper-slide-index', parseInt(cachedElIndex, 10) + 1);
+        }
+        newCache[parseInt(cachedIndex, 10) + numberOfNewSlides] = $cachedEl;
       });
       swiper.virtual.cache = newCache;
     }
@@ -83891,11 +85566,18 @@ const Keyboard = {
     let e = event;
     if (e.originalEvent) e = e.originalEvent; // jquery fix
     const kc = e.keyCode || e.charCode;
+    const pageUpDown = swiper.params.keyboard.pageUpDown;
+    const isPageUp = pageUpDown && kc === 33;
+    const isPageDown = pageUpDown && kc === 34;
+    const isArrowLeft = kc === 37;
+    const isArrowRight = kc === 39;
+    const isArrowUp = kc === 38;
+    const isArrowDown = kc === 40;
     // Directions locks
-    if (!swiper.allowSlideNext && ((swiper.isHorizontal() && kc === 39) || (swiper.isVertical() && kc === 40))) {
+    if (!swiper.allowSlideNext && ((swiper.isHorizontal() && isArrowRight) || (swiper.isVertical() && isArrowDown) || isPageDown)) {
       return false;
     }
-    if (!swiper.allowSlidePrev && ((swiper.isHorizontal() && kc === 37) || (swiper.isVertical() && kc === 38))) {
+    if (!swiper.allowSlidePrev && ((swiper.isHorizontal() && isArrowLeft) || (swiper.isVertical() && isArrowUp) || isPageUp)) {
       return false;
     }
     if (e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) {
@@ -83904,7 +85586,7 @@ const Keyboard = {
     if (ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement && ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement.nodeName && (ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement.nodeName.toLowerCase() === 'input' || ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].activeElement.nodeName.toLowerCase() === 'textarea')) {
       return undefined;
     }
-    if (swiper.params.keyboard.onlyInViewport && (kc === 37 || kc === 39 || kc === 38 || kc === 40)) {
+    if (swiper.params.keyboard.onlyInViewport && (isPageUp || isPageDown || isArrowLeft || isArrowRight || isArrowUp || isArrowDown)) {
       let inView = false;
       // Check that swiper should be inside of visible area of window
       if (swiper.$el.parents(`.${swiper.params.slideClass}`).length > 0 && swiper.$el.parents(`.${swiper.params.slideActiveClass}`).length === 0) {
@@ -83932,19 +85614,19 @@ const Keyboard = {
       if (!inView) return undefined;
     }
     if (swiper.isHorizontal()) {
-      if (kc === 37 || kc === 39) {
+      if (isPageUp || isPageDown || isArrowLeft || isArrowRight) {
         if (e.preventDefault) e.preventDefault();
         else e.returnValue = false;
       }
-      if ((kc === 39 && !rtl) || (kc === 37 && rtl)) swiper.slideNext();
-      if ((kc === 37 && !rtl) || (kc === 39 && rtl)) swiper.slidePrev();
+      if (((isPageDown || isArrowRight) && !rtl) || ((isPageUp || isArrowLeft) && rtl)) swiper.slideNext();
+      if (((isPageUp || isArrowLeft) && !rtl) || ((isPageDown || isArrowRight) && rtl)) swiper.slidePrev();
     } else {
-      if (kc === 38 || kc === 40) {
+      if (isPageUp || isPageDown || isArrowUp || isArrowDown) {
         if (e.preventDefault) e.preventDefault();
         else e.returnValue = false;
       }
-      if (kc === 40) swiper.slideNext();
-      if (kc === 38) swiper.slidePrev();
+      if (isPageDown || isArrowDown) swiper.slideNext();
+      if (isPageUp || isArrowUp) swiper.slidePrev();
     }
     swiper.emit('keyPress', kc);
     return undefined;
@@ -83969,6 +85651,7 @@ var Keyboard$1 = {
     keyboard: {
       enabled: false,
       onlyInViewport: true,
+      pageUpDown: true,
     },
   },
   create() {
@@ -84023,10 +85706,12 @@ function isEventSupported() {
 }
 const Mousewheel = {
   lastScrollTime: Utils.now(),
-  event: (function getEvent() {
+  lastEventBeforeSnap: undefined,
+  recentWheelEvents: [],
+  event() {
     if (ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].navigator.userAgent.indexOf('firefox') > -1) return 'DOMMouseScroll';
     return isEventSupported() ? 'wheel' : 'mousewheel';
-  }()),
+  },
   normalize(e) {
     // Reasonable defaults
     const PIXEL_STEP = 10;
@@ -84068,6 +85753,11 @@ const Mousewheel = {
       pX = e.deltaX;
     }
 
+    if (e.shiftKey && !pX) { // if user scrolls with shift he wants horizontal scroll
+      pX = pY;
+      pY = 0;
+    }
+
     if ((pX || pY) && e.deltaMode) {
       if (e.deltaMode === 1) { // delta in LINE units
         pX *= LINE_HEIGHT;
@@ -84106,7 +85796,15 @@ const Mousewheel = {
     const swiper = this;
     const params = swiper.params.mousewheel;
 
-    if (!swiper.mouseEntered && !params.releaseOnEdges) return true;
+    if (swiper.params.cssMode) {
+      e.preventDefault();
+    }
+
+    let target = swiper.$el;
+    if (swiper.params.mousewheel.eventsTarged !== 'container') {
+      target = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(swiper.params.mousewheel.eventsTarged);
+    }
+    if (!swiper.mouseEntered && !target[0].contains(e.target) && !params.releaseOnEdges) return true;
 
     if (e.originalEvent) e = e.originalEvent; // jquery fix
     let delta = 0;
@@ -84116,9 +85814,9 @@ const Mousewheel = {
 
     if (params.forceToAxis) {
       if (swiper.isHorizontal()) {
-        if (Math.abs(data.pixelX) > Math.abs(data.pixelY)) delta = data.pixelX * rtlFactor;
+        if (Math.abs(data.pixelX) > Math.abs(data.pixelY)) delta = -data.pixelX * rtlFactor;
         else return true;
-      } else if (Math.abs(data.pixelY) > Math.abs(data.pixelX)) delta = data.pixelY;
+      } else if (Math.abs(data.pixelY) > Math.abs(data.pixelX)) delta = -data.pixelY;
       else return true;
     } else {
       delta = Math.abs(data.pixelX) > Math.abs(data.pixelY) ? -data.pixelX * rtlFactor : -data.pixelY;
@@ -84129,62 +85827,203 @@ const Mousewheel = {
     if (params.invert) delta = -delta;
 
     if (!swiper.params.freeMode) {
-      if (Utils.now() - swiper.mousewheel.lastScrollTime > 60) {
-        if (delta < 0) {
-          if ((!swiper.isEnd || swiper.params.loop) && !swiper.animating) {
-            swiper.slideNext();
-            swiper.emit('scroll', e);
-          } else if (params.releaseOnEdges) return true;
-        } else if ((!swiper.isBeginning || swiper.params.loop) && !swiper.animating) {
-          swiper.slidePrev();
-          swiper.emit('scroll', e);
-        } else if (params.releaseOnEdges) return true;
+      // Register the new event in a variable which stores the relevant data
+      const newEvent = {
+        time: Utils.now(),
+        delta: Math.abs(delta),
+        direction: Math.sign(delta),
+        raw: event,
+      };
+
+      // Keep the most recent events
+      const recentWheelEvents = swiper.mousewheel.recentWheelEvents;
+      if (recentWheelEvents.length >= 2) {
+        recentWheelEvents.shift(); // only store the last N events
       }
-      swiper.mousewheel.lastScrollTime = (new ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Date()).getTime();
+      const prevEvent = recentWheelEvents.length ? recentWheelEvents[recentWheelEvents.length - 1] : undefined;
+      recentWheelEvents.push(newEvent);
+
+      // If there is at least one previous recorded event:
+      //   If direction has changed or
+      //   if the scroll is quicker than the previous one:
+      //     Animate the slider.
+      // Else (this is the first time the wheel is moved):
+      //     Animate the slider.
+      if (prevEvent) {
+        if (newEvent.direction !== prevEvent.direction || newEvent.delta > prevEvent.delta || newEvent.time > prevEvent.time + 150) {
+          swiper.mousewheel.animateSlider(newEvent);
+        }
+      } else {
+        swiper.mousewheel.animateSlider(newEvent);
+      }
+
+      // If it's time to release the scroll:
+      //   Return now so you don't hit the preventDefault.
+      if (swiper.mousewheel.releaseScroll(newEvent)) {
+        return true;
+      }
     } else {
       // Freemode or scrollContainer:
-      if (swiper.params.loop) {
-        swiper.loopFix();
-      }
-      let position = swiper.getTranslate() + (delta * params.sensitivity);
-      const wasBeginning = swiper.isBeginning;
-      const wasEnd = swiper.isEnd;
 
-      if (position >= swiper.minTranslate()) position = swiper.minTranslate();
-      if (position <= swiper.maxTranslate()) position = swiper.maxTranslate();
+      // If we recently snapped after a momentum scroll, then ignore wheel events
+      // to give time for the deceleration to finish. Stop ignoring after 500 msecs
+      // or if it's a new scroll (larger delta or inverse sign as last event before
+      // an end-of-momentum snap).
+      const newEvent = { time: Utils.now(), delta: Math.abs(delta), direction: Math.sign(delta) };
+      const { lastEventBeforeSnap } = swiper.mousewheel;
+      const ignoreWheelEvents = lastEventBeforeSnap
+        && newEvent.time < lastEventBeforeSnap.time + 500
+        && newEvent.delta <= lastEventBeforeSnap.delta
+        && newEvent.direction === lastEventBeforeSnap.direction;
+      if (!ignoreWheelEvents) {
+        swiper.mousewheel.lastEventBeforeSnap = undefined;
 
-      swiper.setTransition(0);
-      swiper.setTranslate(position);
-      swiper.updateProgress();
-      swiper.updateActiveIndex();
-      swiper.updateSlidesClasses();
+        if (swiper.params.loop) {
+          swiper.loopFix();
+        }
+        let position = swiper.getTranslate() + (delta * params.sensitivity);
+        const wasBeginning = swiper.isBeginning;
+        const wasEnd = swiper.isEnd;
 
-      if ((!wasBeginning && swiper.isBeginning) || (!wasEnd && swiper.isEnd)) {
+        if (position >= swiper.minTranslate()) position = swiper.minTranslate();
+        if (position <= swiper.maxTranslate()) position = swiper.maxTranslate();
+
+        swiper.setTransition(0);
+        swiper.setTranslate(position);
+        swiper.updateProgress();
+        swiper.updateActiveIndex();
         swiper.updateSlidesClasses();
-      }
 
-      if (swiper.params.freeModeSticky) {
-        clearTimeout(swiper.mousewheel.timeout);
-        swiper.mousewheel.timeout = Utils.nextTick(() => {
-          swiper.slideToClosest();
-        }, 300);
-      }
-      // Emit event
-      swiper.emit('scroll', e);
+        if ((!wasBeginning && swiper.isBeginning) || (!wasEnd && swiper.isEnd)) {
+          swiper.updateSlidesClasses();
+        }
 
-      // Stop autoplay
-      if (swiper.params.autoplay && swiper.params.autoplayDisableOnInteraction) swiper.autoplay.stop();
-      // Return page scroll on edge positions
-      if (position === swiper.minTranslate() || position === swiper.maxTranslate()) return true;
+        if (swiper.params.freeModeSticky) {
+          // When wheel scrolling starts with sticky (aka snap) enabled, then detect
+          // the end of a momentum scroll by storing recent (N=15?) wheel events.
+          // 1. do all N events have decreasing or same (absolute value) delta?
+          // 2. did all N events arrive in the last M (M=500?) msecs?
+          // 3. does the earliest event have an (absolute value) delta that's
+          //    at least P (P=1?) larger than the most recent event's delta?
+          // 4. does the latest event have a delta that's smaller than Q (Q=6?) pixels?
+          // If 1-4 are "yes" then we're near the end of a momuntum scroll deceleration.
+          // Snap immediately and ignore remaining wheel events in this scroll.
+          // See comment above for "remaining wheel events in this scroll" determination.
+          // If 1-4 aren't satisfied, then wait to snap until 500ms after the last event.
+          clearTimeout(swiper.mousewheel.timeout);
+          swiper.mousewheel.timeout = undefined;
+          const recentWheelEvents = swiper.mousewheel.recentWheelEvents;
+          if (recentWheelEvents.length >= 15) {
+            recentWheelEvents.shift(); // only store the last N events
+          }
+          const prevEvent = recentWheelEvents.length ? recentWheelEvents[recentWheelEvents.length - 1] : undefined;
+          const firstEvent = recentWheelEvents[0];
+          recentWheelEvents.push(newEvent);
+          if (prevEvent && (newEvent.delta > prevEvent.delta || newEvent.direction !== prevEvent.direction)) {
+            // Increasing or reverse-sign delta means the user started scrolling again. Clear the wheel event log.
+            recentWheelEvents.splice(0);
+          } else if (recentWheelEvents.length >= 15
+              && newEvent.time - firstEvent.time < 500
+              && firstEvent.delta - newEvent.delta >= 1
+              && newEvent.delta <= 6
+          ) {
+            // We're at the end of the deceleration of a momentum scroll, so there's no need
+            // to wait for more events. Snap ASAP on the next tick.
+            // Also, because there's some remaining momentum we'll bias the snap in the
+            // direction of the ongoing scroll because it's better UX for the scroll to snap
+            // in the same direction as the scroll instead of reversing to snap.  Therefore,
+            // if it's already scrolled more than 20% in the current direction, keep going.
+            const snapToThreshold = delta > 0 ? 0.8 : 0.2;
+            swiper.mousewheel.lastEventBeforeSnap = newEvent;
+            recentWheelEvents.splice(0);
+            swiper.mousewheel.timeout = Utils.nextTick(() => {
+              swiper.slideToClosest(swiper.params.speed, true, undefined, snapToThreshold);
+            }, 0); // no delay; move on next tick
+          }
+          if (!swiper.mousewheel.timeout) {
+            // if we get here, then we haven't detected the end of a momentum scroll, so
+            // we'll consider a scroll "complete" when there haven't been any wheel events
+            // for 500ms.
+            swiper.mousewheel.timeout = Utils.nextTick(() => {
+              const snapToThreshold = 0.5;
+              swiper.mousewheel.lastEventBeforeSnap = newEvent;
+              recentWheelEvents.splice(0);
+              swiper.slideToClosest(swiper.params.speed, true, undefined, snapToThreshold);
+            }, 500);
+          }
+        }
+
+        // Emit event
+        if (!ignoreWheelEvents) swiper.emit('scroll', e);
+
+        // Stop autoplay
+        if (swiper.params.autoplay && swiper.params.autoplayDisableOnInteraction) swiper.autoplay.stop();
+        // Return page scroll on edge positions
+        if (position === swiper.minTranslate() || position === swiper.maxTranslate()) return true;
+      }
     }
 
     if (e.preventDefault) e.preventDefault();
     else e.returnValue = false;
     return false;
   },
+  animateSlider(newEvent) {
+    const swiper = this;
+    // If the movement is NOT big enough and
+    // if the last time the user scrolled was too close to the current one (avoid continuously triggering the slider):
+    //   Don't go any further (avoid insignificant scroll movement).
+    if (newEvent.delta >= 6 && Utils.now() - swiper.mousewheel.lastScrollTime < 60) {
+      // Return false as a default
+      return true;
+    }
+    // If user is scrolling towards the end:
+    //   If the slider hasn't hit the latest slide or
+    //   if the slider is a loop and
+    //   if the slider isn't moving right now:
+    //     Go to next slide and
+    //     emit a scroll event.
+    // Else (the user is scrolling towards the beginning) and
+    // if the slider hasn't hit the first slide or
+    // if the slider is a loop and
+    // if the slider isn't moving right now:
+    //   Go to prev slide and
+    //   emit a scroll event.
+    if (newEvent.direction < 0) {
+      if ((!swiper.isEnd || swiper.params.loop) && !swiper.animating) {
+        swiper.slideNext();
+        swiper.emit('scroll', newEvent.raw);
+      }
+    } else if ((!swiper.isBeginning || swiper.params.loop) && !swiper.animating) {
+      swiper.slidePrev();
+      swiper.emit('scroll', newEvent.raw);
+    }
+    // If you got here is because an animation has been triggered so store the current time
+    swiper.mousewheel.lastScrollTime = (new ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].Date()).getTime();
+    // Return false as a default
+    return false;
+  },
+  releaseScroll(newEvent) {
+    const swiper = this;
+    const params = swiper.params.mousewheel;
+    if (newEvent.direction < 0) {
+      if (swiper.isEnd && !swiper.params.loop && params.releaseOnEdges) {
+        // Return true to animate scroll on edges
+        return true;
+      }
+    } else if (swiper.isBeginning && !swiper.params.loop && params.releaseOnEdges) {
+      // Return true to animate scroll on edges
+      return true;
+    }
+    return false;
+  },
   enable() {
     const swiper = this;
-    if (!Mousewheel.event) return false;
+    const event = Mousewheel.event();
+    if (swiper.params.cssMode) {
+      swiper.wrapperEl.removeEventListener(event, swiper.mousewheel.handle);
+      return true;
+    }
+    if (!event) return false;
     if (swiper.mousewheel.enabled) return false;
     let target = swiper.$el;
     if (swiper.params.mousewheel.eventsTarged !== 'container') {
@@ -84192,19 +86031,24 @@ const Mousewheel = {
     }
     target.on('mouseenter', swiper.mousewheel.handleMouseEnter);
     target.on('mouseleave', swiper.mousewheel.handleMouseLeave);
-    target.on(Mousewheel.event, swiper.mousewheel.handle);
+    target.on(event, swiper.mousewheel.handle);
     swiper.mousewheel.enabled = true;
     return true;
   },
   disable() {
     const swiper = this;
-    if (!Mousewheel.event) return false;
+    const event = Mousewheel.event();
+    if (swiper.params.cssMode) {
+      swiper.wrapperEl.addEventListener(event, swiper.mousewheel.handle);
+      return true;
+    }
+    if (!event) return false;
     if (!swiper.mousewheel.enabled) return false;
     let target = swiper.$el;
     if (swiper.params.mousewheel.eventsTarged !== 'container') {
       target = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(swiper.params.mousewheel.eventsTarged);
     }
-    target.off(Mousewheel.event, swiper.mousewheel.handle);
+    target.off(event, swiper.mousewheel.handle);
     swiper.mousewheel.enabled = false;
     return true;
   },
@@ -84232,17 +86076,27 @@ var Mousewheel$1 = {
         handle: Mousewheel.handle.bind(swiper),
         handleMouseEnter: Mousewheel.handleMouseEnter.bind(swiper),
         handleMouseLeave: Mousewheel.handleMouseLeave.bind(swiper),
+        animateSlider: Mousewheel.animateSlider.bind(swiper),
+        releaseScroll: Mousewheel.releaseScroll.bind(swiper),
         lastScrollTime: Utils.now(),
+        lastEventBeforeSnap: undefined,
+        recentWheelEvents: [],
       },
     });
   },
   on: {
     init() {
       const swiper = this;
+      if (!swiper.params.mousewheel.enabled && swiper.params.cssMode) {
+        swiper.mousewheel.disable();
+      }
       if (swiper.params.mousewheel.enabled) swiper.mousewheel.enable();
     },
     destroy() {
       const swiper = this;
+      if (swiper.params.cssMode) {
+        swiper.mousewheel.enable();
+      }
       if (swiper.mousewheel.enabled) swiper.mousewheel.disable();
     },
   },
@@ -84492,6 +86346,7 @@ const Pagination = {
         });
       } else {
         const $bullet = bullets.eq(current);
+        const bulletIndex = $bullet.index();
         $bullet.addClass(params.bulletActiveClass);
         if (params.dynamicBullets) {
           const $firstDisplayedBullet = bullets.eq(firstIndex);
@@ -84499,16 +86354,36 @@ const Pagination = {
           for (let i = firstIndex; i <= lastIndex; i += 1) {
             bullets.eq(i).addClass(`${params.bulletActiveClass}-main`);
           }
-          $firstDisplayedBullet
-            .prev()
-            .addClass(`${params.bulletActiveClass}-prev`)
-            .prev()
-            .addClass(`${params.bulletActiveClass}-prev-prev`);
-          $lastDisplayedBullet
-            .next()
-            .addClass(`${params.bulletActiveClass}-next`)
-            .next()
-            .addClass(`${params.bulletActiveClass}-next-next`);
+          if (swiper.params.loop) {
+            if (bulletIndex >= bullets.length - params.dynamicMainBullets) {
+              for (let i = params.dynamicMainBullets; i >= 0; i -= 1) {
+                bullets.eq(bullets.length - i).addClass(`${params.bulletActiveClass}-main`);
+              }
+              bullets.eq(bullets.length - params.dynamicMainBullets - 1).addClass(`${params.bulletActiveClass}-prev`);
+            } else {
+              $firstDisplayedBullet
+                .prev()
+                .addClass(`${params.bulletActiveClass}-prev`)
+                .prev()
+                .addClass(`${params.bulletActiveClass}-prev-prev`);
+              $lastDisplayedBullet
+                .next()
+                .addClass(`${params.bulletActiveClass}-next`)
+                .next()
+                .addClass(`${params.bulletActiveClass}-next-next`);
+            }
+          } else {
+            $firstDisplayedBullet
+              .prev()
+              .addClass(`${params.bulletActiveClass}-prev`)
+              .prev()
+              .addClass(`${params.bulletActiveClass}-prev-prev`);
+            $lastDisplayedBullet
+              .next()
+              .addClass(`${params.bulletActiveClass}-next`)
+              .next()
+              .addClass(`${params.bulletActiveClass}-next-next`);
+          }
         }
       }
       if (params.dynamicBullets) {
@@ -84602,7 +86477,6 @@ const Pagination = {
       swiper.params.uniqueNavElements
       && typeof params.el === 'string'
       && $el.length > 1
-      && swiper.$el.find(params.el).length === 1
     ) {
       $el = swiper.$el.find(params.el);
     }
@@ -84669,8 +86543,8 @@ var Pagination$1 = {
       type: 'bullets', // 'bullets' or 'progressbar' or 'fraction' or 'custom'
       dynamicBullets: false,
       dynamicMainBullets: 1,
-      formatFractionCurrent: number => number,
-      formatFractionTotal: number => number,
+      formatFractionCurrent: (number) => number,
+      formatFractionTotal: (number) => number,
       bulletClass: 'swiper-pagination-bullet',
       bulletActiveClass: 'swiper-pagination-bullet-active',
       modifierClass: 'swiper-pagination-', // NEW
@@ -84781,18 +86655,10 @@ const Scrollbar = {
       newSize = trackSize - newPos;
     }
     if (swiper.isHorizontal()) {
-      if (Support.transforms3d) {
-        $dragEl.transform(`translate3d(${newPos}px, 0, 0)`);
-      } else {
-        $dragEl.transform(`translateX(${newPos}px)`);
-      }
+      $dragEl.transform(`translate3d(${newPos}px, 0, 0)`);
       $dragEl[0].style.width = `${newSize}px`;
     } else {
-      if (Support.transforms3d) {
-        $dragEl.transform(`translate3d(0px, ${newPos}px, 0)`);
-      } else {
-        $dragEl.transform(`translateY(${newPos}px)`);
-      }
+      $dragEl.transform(`translate3d(0px, ${newPos}px, 0)`);
       $dragEl[0].style.height = `${newSize}px`;
     }
     if (params.hide) {
@@ -84851,19 +86717,26 @@ const Scrollbar = {
     });
     scrollbar.$el[swiper.params.watchOverflow && swiper.isLocked ? 'addClass' : 'removeClass'](swiper.params.scrollbar.lockClass);
   },
+  getPointerPosition(e) {
+    const swiper = this;
+    if (swiper.isHorizontal()) {
+      return ((e.type === 'touchstart' || e.type === 'touchmove') ? e.targetTouches[0].clientX : e.clientX);
+    }
+    return ((e.type === 'touchstart' || e.type === 'touchmove') ? e.targetTouches[0].clientY : e.clientY);
+  },
   setDragPosition(e) {
     const swiper = this;
     const { scrollbar, rtlTranslate: rtl } = swiper;
-    const { $el, dragSize, trackSize } = scrollbar;
+    const {
+      $el,
+      dragSize,
+      trackSize,
+      dragStartPos,
+    } = scrollbar;
 
-    let pointerPosition;
-    if (swiper.isHorizontal()) {
-      pointerPosition = ((e.type === 'touchstart' || e.type === 'touchmove') ? e.targetTouches[0].pageX : e.pageX || e.clientX);
-    } else {
-      pointerPosition = ((e.type === 'touchstart' || e.type === 'touchmove') ? e.targetTouches[0].pageY : e.pageY || e.clientY);
-    }
     let positionRatio;
-    positionRatio = ((pointerPosition) - $el.offset()[swiper.isHorizontal() ? 'left' : 'top'] - (dragSize / 2)) / (trackSize - dragSize);
+    positionRatio = ((scrollbar.getPointerPosition(e)) - $el.offset()[swiper.isHorizontal() ? 'left' : 'top']
+      - (dragStartPos !== null ? dragStartPos : dragSize / 2)) / (trackSize - dragSize);
     positionRatio = Math.max(Math.min(positionRatio, 1), 0);
     if (rtl) {
       positionRatio = 1 - positionRatio;
@@ -84882,6 +86755,8 @@ const Scrollbar = {
     const { scrollbar, $wrapperEl } = swiper;
     const { $el, $dragEl } = scrollbar;
     swiper.scrollbar.isTouched = true;
+    swiper.scrollbar.dragStartPos = (e.target === $dragEl[0] || e.target === $dragEl)
+      ? scrollbar.getPointerPosition(e) - e.target.getBoundingClientRect()[swiper.isHorizontal() ? 'left' : 'top'] : null;
     e.preventDefault();
     e.stopPropagation();
 
@@ -84894,6 +86769,9 @@ const Scrollbar = {
     $el.transition(0);
     if (params.hide) {
       $el.css('opacity', 1);
+    }
+    if (swiper.params.cssMode) {
+      swiper.$wrapperEl.css('scroll-snap-type', 'none');
     }
     swiper.emit('scrollbarDragStart', e);
   },
@@ -84915,11 +86793,15 @@ const Scrollbar = {
     const swiper = this;
 
     const params = swiper.params.scrollbar;
-    const { scrollbar } = swiper;
+    const { scrollbar, $wrapperEl } = swiper;
     const { $el } = scrollbar;
 
     if (!swiper.scrollbar.isTouched) return;
     swiper.scrollbar.isTouched = false;
+    if (swiper.params.cssMode) {
+      swiper.$wrapperEl.css('scroll-snap-type', '');
+      $wrapperEl.transition('');
+    }
     if (params.hide) {
       clearTimeout(swiper.scrollbar.dragTimeout);
       swiper.scrollbar.dragTimeout = Utils.nextTick(() => {
@@ -85031,6 +86913,7 @@ var Scrollbar$1 = {
         enableDraggable: Scrollbar.enableDraggable.bind(swiper),
         disableDraggable: Scrollbar.disableDraggable.bind(swiper),
         setDragPosition: Scrollbar.setDragPosition.bind(swiper),
+        getPointerPosition: Scrollbar.getPointerPosition.bind(swiper),
         onDragStart: Scrollbar.onDragStart.bind(swiper),
         onDragMove: Scrollbar.onDragMove.bind(swiper),
         onDragEnd: Scrollbar.onDragEnd.bind(swiper),
@@ -85126,7 +87009,7 @@ const Parallax = {
     const {
       $el, slides, progress, snapGrid,
     } = swiper;
-    $el.children('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y]')
+    $el.children('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y], [data-swiper-parallax-opacity], [data-swiper-parallax-scale]')
       .each((index, el) => {
         swiper.parallax.setTransform(el, progress);
       });
@@ -85136,7 +87019,7 @@ const Parallax = {
         slideProgress += Math.ceil(slideIndex / 2) - (progress * (snapGrid.length - 1));
       }
       slideProgress = Math.min(Math.max(slideProgress, -1), 1);
-      Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(slideEl).find('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y]')
+      Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(slideEl).find('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y], [data-swiper-parallax-opacity], [data-swiper-parallax-scale]')
         .each((index, el) => {
           swiper.parallax.setTransform(el, slideProgress);
         });
@@ -85145,7 +87028,7 @@ const Parallax = {
   setTransition(duration = this.params.speed) {
     const swiper = this;
     const { $el } = swiper;
-    $el.find('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y]')
+    $el.find('[data-swiper-parallax], [data-swiper-parallax-x], [data-swiper-parallax-y], [data-swiper-parallax-opacity], [data-swiper-parallax-scale]')
       .each((index, parallaxEl) => {
         const $parallaxEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(parallaxEl);
         let parallaxDuration = parseInt($parallaxEl.attr('data-swiper-parallax-duration'), 10) || duration;
@@ -85224,9 +87107,9 @@ const Zoom = {
       gesture.scaleStart = Zoom.getDistanceBetweenTouches(e);
     }
     if (!gesture.$slideEl || !gesture.$slideEl.length) {
-      gesture.$slideEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e.target).closest('.swiper-slide');
+      gesture.$slideEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(e.target).closest(`.${swiper.params.slideClass}`);
       if (gesture.$slideEl.length === 0) gesture.$slideEl = swiper.slides.eq(swiper.activeIndex);
-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas');
+      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
       gesture.$imageWrapEl = gesture.$imageEl.parent(`.${params.containerClass}`);
       gesture.maxRatio = gesture.$imageWrapEl.attr('data-swiper-zoom') || params.maxRatio;
       if (gesture.$imageWrapEl.length === 0) {
@@ -85234,7 +87117,9 @@ const Zoom = {
         return;
       }
     }
-    gesture.$imageEl.transition(0);
+    if (gesture.$imageEl) {
+      gesture.$imageEl.transition(0);
+    }
     swiper.zoom.isScaling = true;
   },
   onGestureChange(e) {
@@ -85291,7 +87176,7 @@ const Zoom = {
     const { gesture, image } = zoom;
     if (!gesture.$imageEl || gesture.$imageEl.length === 0) return;
     if (image.isTouched) return;
-    if (Device.android) e.preventDefault();
+    if (Device.android && e.cancelable) e.preventDefault();
     image.isTouched = true;
     image.touchesStart.x = e.type === 'touchstart' ? e.targetTouches[0].pageX : e.pageX;
     image.touchesStart.y = e.type === 'touchstart' ? e.targetTouches[0].pageY : e.pageY;
@@ -85352,7 +87237,9 @@ const Zoom = {
         return;
       }
     }
-    e.preventDefault();
+    if (e.cancelable) {
+      e.preventDefault();
+    }
     e.stopPropagation();
 
     image.isMoved = true;
@@ -85431,8 +87318,12 @@ const Zoom = {
     const zoom = swiper.zoom;
     const { gesture } = zoom;
     if (gesture.$slideEl && swiper.previousIndex !== swiper.activeIndex) {
-      gesture.$imageEl.transform('translate3d(0,0,0) scale(1)');
-      gesture.$imageWrapEl.transform('translate3d(0,0,0)');
+      if (gesture.$imageEl) {
+        gesture.$imageEl.transform('translate3d(0,0,0) scale(1)');
+      }
+      if (gesture.$imageWrapEl) {
+        gesture.$imageWrapEl.transform('translate3d(0,0,0)');
+      }
 
       zoom.scale = 1;
       zoom.currentScale = 1;
@@ -85463,8 +87354,12 @@ const Zoom = {
     const { gesture, image } = zoom;
 
     if (!gesture.$slideEl) {
-      gesture.$slideEl = swiper.clickedSlide ? Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(swiper.clickedSlide) : swiper.slides.eq(swiper.activeIndex);
-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas');
+      if (swiper.params.virtual && swiper.params.virtual.enabled && swiper.virtual) {
+        gesture.$slideEl = swiper.$wrapperEl.children(`.${swiper.params.slideActiveClass}`);
+      } else {
+        gesture.$slideEl = swiper.slides.eq(swiper.activeIndex);
+      }
+      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
       gesture.$imageWrapEl = gesture.$imageEl.parent(`.${params.containerClass}`);
     }
     if (!gesture.$imageEl || gesture.$imageEl.length === 0) return;
@@ -85549,8 +87444,12 @@ const Zoom = {
     const { gesture } = zoom;
 
     if (!gesture.$slideEl) {
-      gesture.$slideEl = swiper.clickedSlide ? Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(swiper.clickedSlide) : swiper.slides.eq(swiper.activeIndex);
-      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas');
+      if (swiper.params.virtual && swiper.params.virtual.enabled && swiper.virtual) {
+        gesture.$slideEl = swiper.$wrapperEl.children(`.${swiper.params.slideActiveClass}`);
+      } else {
+        gesture.$slideEl = swiper.slides.eq(swiper.activeIndex);
+      }
+      gesture.$imageEl = gesture.$slideEl.find('img, svg, canvas, picture, .swiper-zoom-target');
       gesture.$imageWrapEl = gesture.$imageEl.parent(`.${params.containerClass}`);
     }
     if (!gesture.$imageEl || gesture.$imageEl.length === 0) return;
@@ -85570,20 +87469,26 @@ const Zoom = {
     zoom.enabled = true;
 
     const passiveListener = swiper.touchEvents.start === 'touchstart' && Support.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
+    const activeListenerWithCapture = Support.passiveListener ? { passive: false, capture: true } : true;
+
+    const slideSelector = `.${swiper.params.slideClass}`;
 
     // Scale image
     if (Support.gestures) {
-      swiper.$wrapperEl.on('gesturestart', '.swiper-slide', zoom.onGestureStart, passiveListener);
-      swiper.$wrapperEl.on('gesturechange', '.swiper-slide', zoom.onGestureChange, passiveListener);
-      swiper.$wrapperEl.on('gestureend', '.swiper-slide', zoom.onGestureEnd, passiveListener);
+      swiper.$wrapperEl.on('gesturestart', slideSelector, zoom.onGestureStart, passiveListener);
+      swiper.$wrapperEl.on('gesturechange', slideSelector, zoom.onGestureChange, passiveListener);
+      swiper.$wrapperEl.on('gestureend', slideSelector, zoom.onGestureEnd, passiveListener);
     } else if (swiper.touchEvents.start === 'touchstart') {
-      swiper.$wrapperEl.on(swiper.touchEvents.start, '.swiper-slide', zoom.onGestureStart, passiveListener);
-      swiper.$wrapperEl.on(swiper.touchEvents.move, '.swiper-slide', zoom.onGestureChange, passiveListener);
-      swiper.$wrapperEl.on(swiper.touchEvents.end, '.swiper-slide', zoom.onGestureEnd, passiveListener);
+      swiper.$wrapperEl.on(swiper.touchEvents.start, slideSelector, zoom.onGestureStart, passiveListener);
+      swiper.$wrapperEl.on(swiper.touchEvents.move, slideSelector, zoom.onGestureChange, activeListenerWithCapture);
+      swiper.$wrapperEl.on(swiper.touchEvents.end, slideSelector, zoom.onGestureEnd, passiveListener);
+      if (swiper.touchEvents.cancel) {
+        swiper.$wrapperEl.on(swiper.touchEvents.cancel, slideSelector, zoom.onGestureEnd, passiveListener);
+      }
     }
 
     // Move image
-    swiper.$wrapperEl.on(swiper.touchEvents.move, `.${swiper.params.zoom.containerClass}`, zoom.onTouchMove);
+    swiper.$wrapperEl.on(swiper.touchEvents.move, `.${swiper.params.zoom.containerClass}`, zoom.onTouchMove, activeListenerWithCapture);
   },
   disable() {
     const swiper = this;
@@ -85593,20 +87498,26 @@ const Zoom = {
     swiper.zoom.enabled = false;
 
     const passiveListener = swiper.touchEvents.start === 'touchstart' && Support.passiveListener && swiper.params.passiveListeners ? { passive: true, capture: false } : false;
+    const activeListenerWithCapture = Support.passiveListener ? { passive: false, capture: true } : true;
+
+    const slideSelector = `.${swiper.params.slideClass}`;
 
     // Scale image
     if (Support.gestures) {
-      swiper.$wrapperEl.off('gesturestart', '.swiper-slide', zoom.onGestureStart, passiveListener);
-      swiper.$wrapperEl.off('gesturechange', '.swiper-slide', zoom.onGestureChange, passiveListener);
-      swiper.$wrapperEl.off('gestureend', '.swiper-slide', zoom.onGestureEnd, passiveListener);
+      swiper.$wrapperEl.off('gesturestart', slideSelector, zoom.onGestureStart, passiveListener);
+      swiper.$wrapperEl.off('gesturechange', slideSelector, zoom.onGestureChange, passiveListener);
+      swiper.$wrapperEl.off('gestureend', slideSelector, zoom.onGestureEnd, passiveListener);
     } else if (swiper.touchEvents.start === 'touchstart') {
-      swiper.$wrapperEl.off(swiper.touchEvents.start, '.swiper-slide', zoom.onGestureStart, passiveListener);
-      swiper.$wrapperEl.off(swiper.touchEvents.move, '.swiper-slide', zoom.onGestureChange, passiveListener);
-      swiper.$wrapperEl.off(swiper.touchEvents.end, '.swiper-slide', zoom.onGestureEnd, passiveListener);
+      swiper.$wrapperEl.off(swiper.touchEvents.start, slideSelector, zoom.onGestureStart, passiveListener);
+      swiper.$wrapperEl.off(swiper.touchEvents.move, slideSelector, zoom.onGestureChange, activeListenerWithCapture);
+      swiper.$wrapperEl.off(swiper.touchEvents.end, slideSelector, zoom.onGestureEnd, passiveListener);
+      if (swiper.touchEvents.cancel) {
+        swiper.$wrapperEl.off(swiper.touchEvents.cancel, slideSelector, zoom.onGestureEnd, passiveListener);
+      }
     }
 
     // Move image
-    swiper.$wrapperEl.off(swiper.touchEvents.move, `.${swiper.params.zoom.containerClass}`, zoom.onTouchMove);
+    swiper.$wrapperEl.off(swiper.touchEvents.move, `.${swiper.params.zoom.containerClass}`, zoom.onTouchMove, activeListenerWithCapture);
   },
 };
 
@@ -85717,6 +87628,12 @@ var Zoom$1 = {
         swiper.zoom.onTransitionEnd();
       }
     },
+    slideChange() {
+      const swiper = this;
+      if (swiper.zoom.enabled && swiper.params.zoom.enabled && swiper.params.cssMode) {
+        swiper.zoom.onTransitionEnd();
+      }
+    },
   },
 };
 
@@ -85746,6 +87663,7 @@ const Lazy = {
       const src = $imageEl.attr('data-src');
       const srcset = $imageEl.attr('data-srcset');
       const sizes = $imageEl.attr('data-sizes');
+      const $pictureEl = $imageEl.parent('picture');
 
       swiper.loadImage($imageEl[0], (src || background), srcset, sizes, false, () => {
         if (typeof swiper === 'undefined' || swiper === null || !swiper || (swiper && !swiper.params) || swiper.destroyed) return;
@@ -85760,6 +87678,16 @@ const Lazy = {
           if (sizes) {
             $imageEl.attr('sizes', sizes);
             $imageEl.removeAttr('data-sizes');
+          }
+          if ($pictureEl.length) {
+            $pictureEl.children('source').each((sourceIndex, sourceEl) => {
+              const $source = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(sourceEl);
+
+              if ($source.attr('data-srcset')) {
+                $source.attr('srcset', $source.attr('data-srcset'));
+                $source.removeAttr('data-srcset');
+              }
+            });
           }
           if (src) {
             $imageEl.attr('src', src);
@@ -85780,6 +87708,9 @@ const Lazy = {
           }
         }
         swiper.emit('lazyImageReady', $slideEl[0], $imageEl[0]);
+        if (swiper.params.autoHeight) {
+          swiper.updateAutoHeight();
+        }
       });
 
       swiper.emit('lazyImageLoad', $slideEl[0], $imageEl[0]);
@@ -85806,6 +87737,7 @@ const Lazy = {
       } else if (slides[index]) return true;
       return false;
     }
+
     function slideIndex(slideEl) {
       if (isVirtual) {
         return Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(slideEl).attr('data-swiper-slide-index');
@@ -85918,6 +87850,12 @@ var Lazy$1 = {
     transitionEnd() {
       const swiper = this;
       if (swiper.params.lazy.enabled && !swiper.params.lazy.loadOnTransitionStart) {
+        swiper.lazy.load();
+      }
+    },
+    slideChange() {
+      const swiper = this;
+      if (swiper.params.lazy.enabled && swiper.params.cssMode) {
         swiper.lazy.load();
       }
     },
@@ -86114,6 +88052,10 @@ const a11y = {
     $el.attr('tabIndex', '0');
     return $el;
   },
+  makeElNotFocusable($el) {
+    $el.attr('tabIndex', '-1');
+    return $el;
+  },
   addElRole($el, role) {
     $el.attr('role', role);
     return $el;
@@ -86169,21 +88111,25 @@ const a11y = {
   updateNavigation() {
     const swiper = this;
 
-    if (swiper.params.loop) return;
+    if (swiper.params.loop || !swiper.navigation) return;
     const { $nextEl, $prevEl } = swiper.navigation;
 
     if ($prevEl && $prevEl.length > 0) {
       if (swiper.isBeginning) {
         swiper.a11y.disableEl($prevEl);
+        swiper.a11y.makeElNotFocusable($prevEl);
       } else {
         swiper.a11y.enableEl($prevEl);
+        swiper.a11y.makeElFocusable($prevEl);
       }
     }
     if ($nextEl && $nextEl.length > 0) {
       if (swiper.isEnd) {
         swiper.a11y.disableEl($nextEl);
+        swiper.a11y.makeElNotFocusable($nextEl);
       } else {
         swiper.a11y.enableEl($nextEl);
+        swiper.a11y.makeElFocusable($nextEl);
       }
     }
   },
@@ -86195,7 +88141,7 @@ const a11y = {
         const $bulletEl = Object(dom7_dist_dom7_modular__WEBPACK_IMPORTED_MODULE_0__["$"])(bulletEl);
         swiper.a11y.makeElFocusable($bulletEl);
         swiper.a11y.addElRole($bulletEl, 'button');
-        swiper.a11y.addElLabel($bulletEl, params.paginationBulletMessage.replace(/{{index}}/, $bulletEl.index() + 1));
+        swiper.a11y.addElLabel($bulletEl, params.paginationBulletMessage.replace(/\{\{index\}\}/, $bulletEl.index() + 1));
       });
     }
   },
@@ -86341,7 +88287,7 @@ const History = {
     swiper.history.scrollToSlide(swiper.params.speed, swiper.history.paths.value, false);
   },
   getPathValues() {
-    const pathArray = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].location.pathname.slice(1).split('/').filter(part => part !== '');
+    const pathArray = ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].location.pathname.slice(1).split('/').filter((part) => part !== '');
     const total = pathArray.length;
     const key = pathArray[total - 2];
     const value = pathArray[total - 1];
@@ -86430,12 +88376,19 @@ var History$1 = {
         swiper.history.setHistory(swiper.params.history.key, swiper.activeIndex);
       }
     },
+    slideChange() {
+      const swiper = this;
+      if (swiper.history.initialized && swiper.params.cssMode) {
+        swiper.history.setHistory(swiper.params.history.key, swiper.activeIndex);
+      }
+    },
   },
 };
 
 const HashNavigation = {
   onHashCange() {
     const swiper = this;
+    swiper.emit('hashChange');
     const newHash = ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].location.hash.replace('#', '');
     const activeSlideHash = swiper.slides.eq(swiper.activeIndex).attr('data-hash');
     if (newHash !== activeSlideHash) {
@@ -86449,10 +88402,12 @@ const HashNavigation = {
     if (!swiper.hashNavigation.initialized || !swiper.params.hashNavigation.enabled) return;
     if (swiper.params.hashNavigation.replaceState && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].history && ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].history.replaceState) {
       ssr_window__WEBPACK_IMPORTED_MODULE_1__["window"].history.replaceState(null, null, (`#${swiper.slides.eq(swiper.activeIndex).attr('data-hash')}` || ''));
+      swiper.emit('hashSet');
     } else {
       const slide = swiper.slides.eq(swiper.activeIndex);
       const hash = slide.attr('data-hash') || slide.attr('data-history');
       ssr_window__WEBPACK_IMPORTED_MODULE_1__["document"].location.hash = hash || '';
+      swiper.emit('hashSet');
     }
   },
   init() {
@@ -86522,6 +88477,12 @@ var HashNavigation$1 = {
         swiper.hashNavigation.setHash();
       }
     },
+    slideChange() {
+      const swiper = this;
+      if (swiper.hashNavigation.initialized && swiper.params.cssMode) {
+        swiper.hashNavigation.setHash();
+      }
+    },
   },
 };
 
@@ -86535,6 +88496,7 @@ const Autoplay = {
     if ($activeSlideEl.attr('data-swiper-autoplay')) {
       delay = $activeSlideEl.attr('data-swiper-autoplay') || swiper.params.autoplay.delay;
     }
+    clearTimeout(swiper.autoplay.timeout);
     swiper.autoplay.timeout = Utils.nextTick(() => {
       if (swiper.params.autoplay.reverseDirection) {
         if (swiper.params.loop) {
@@ -86563,6 +88525,7 @@ const Autoplay = {
       } else {
         swiper.autoplay.stop();
       }
+      if (swiper.params.cssMode && swiper.autoplay.running) swiper.autoplay.run();
     }, delay);
   },
   start() {
@@ -86625,6 +88588,15 @@ var Autoplay$1 = {
         start: Autoplay.start.bind(swiper),
         stop: Autoplay.stop.bind(swiper),
         pause: Autoplay.pause.bind(swiper),
+        onVisibilityChange() {
+          if (document.visibilityState === 'hidden' && swiper.autoplay.running) {
+            swiper.autoplay.pause();
+          }
+          if (document.visibilityState === 'visible' && swiper.autoplay.paused) {
+            swiper.autoplay.run();
+            swiper.autoplay.paused = false;
+          }
+        },
         onTransitionEnd(e) {
           if (!swiper || swiper.destroyed || !swiper.$wrapperEl) return;
           if (e.target !== this) return;
@@ -86645,6 +88617,7 @@ var Autoplay$1 = {
       const swiper = this;
       if (swiper.params.autoplay.enabled) {
         swiper.autoplay.start();
+        document.addEventListener('visibilitychange', swiper.autoplay.onVisibilityChange);
       }
     },
     beforeTransitionStart(speed, internal) {
@@ -86667,11 +88640,18 @@ var Autoplay$1 = {
         }
       }
     },
+    touchEnd() {
+      const swiper = this;
+      if (swiper.params.cssMode && swiper.autoplay.paused && !swiper.params.autoplay.disableOnInteraction) {
+        swiper.autoplay.run();
+      }
+    },
     destroy() {
       const swiper = this;
       if (swiper.autoplay.running) {
         swiper.autoplay.stop();
       }
+      document.removeEventListener('visibilitychange', swiper.autoplay.onVisibilityChange);
     },
   },
 };
@@ -86874,7 +88854,7 @@ const Cube = {
         $cubeShadowEl.transform(`scale3d(${scale1}, 1, ${scale2}) translate3d(0px, ${(swiperHeight / 2) + offset}px, ${-swiperHeight / 2 / scale2}px) rotateX(-90deg)`);
       }
     }
-    const zFactor = (Browser.isSafari || Browser.isUiWebView) ? (-swiperSize / 2) : 0;
+    const zFactor = (Browser.isSafari || Browser.isWebView) ? (-swiperSize / 2) : 0;
     $wrapperEl
       .transform(`translate3d(0px,0,${zFactor}px) rotateX(${swiper.isHorizontal() ? 0 : wrapperRotate}deg) rotateY(${swiper.isHorizontal() ? -wrapperRotate : 0}deg)`);
   },
@@ -87084,8 +89064,15 @@ const Coverflow = {
       // var rotateZ = 0
       let translateZ = -translate * Math.abs(offsetMultiplier);
 
-      let translateY = isHorizontal ? 0 : params.stretch * (offsetMultiplier);
-      let translateX = isHorizontal ? params.stretch * (offsetMultiplier) : 0;
+      let stretch = params.stretch;
+      // Allow percentage to make a relative stretch for responsive sliders
+      if (typeof stretch === 'string' && stretch.indexOf('%') !== -1) {
+        stretch = ((parseFloat(params.stretch) / 100) * slideSize);
+      }
+      let translateY = isHorizontal ? 0 : stretch * (offsetMultiplier);
+      let translateX = isHorizontal ? stretch * (offsetMultiplier) : 0;
+
+      let scale = 1 - (1 - params.scale) * Math.abs(offsetMultiplier);
 
       // Fix for ultra small values
       if (Math.abs(translateX) < 0.001) translateX = 0;
@@ -87093,8 +89080,9 @@ const Coverflow = {
       if (Math.abs(translateZ) < 0.001) translateZ = 0;
       if (Math.abs(rotateY) < 0.001) rotateY = 0;
       if (Math.abs(rotateX) < 0.001) rotateX = 0;
+      if (Math.abs(scale) < 0.001) scale = 0;
 
-      const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${scale})`;
 
       $slideEl.transform(slideTransform);
       $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
@@ -87137,6 +89125,7 @@ var EffectCoverflow = {
       rotate: 50,
       stretch: 0,
       depth: 100,
+      scale: 1,
       modifier: 1,
       slideShadows: true,
     },
@@ -87240,9 +89229,12 @@ const Thumbs = {
       ? thumbsSwiper.slidesPerViewDynamic()
       : thumbsSwiper.params.slidesPerView;
 
-    if (swiper.realIndex !== thumbsSwiper.realIndex) {
+    const autoScrollOffset = swiper.params.thumbs.autoScrollOffset;
+    const useOffset = autoScrollOffset && !thumbsSwiper.params.loop;
+    if (swiper.realIndex !== thumbsSwiper.realIndex || useOffset) {
       let currentThumbsIndex = thumbsSwiper.activeIndex;
       let newThumbsIndex;
+      let direction;
       if (thumbsSwiper.params.loop) {
         if (thumbsSwiper.slides.eq(currentThumbsIndex).hasClass(thumbsSwiper.params.slideDuplicateClass)) {
           thumbsSwiper.loopFix();
@@ -87251,17 +89243,29 @@ const Thumbs = {
           currentThumbsIndex = thumbsSwiper.activeIndex;
         }
         // Find actual thumbs index to slide to
-        const prevThumbsIndex = thumbsSwiper.slides.eq(currentThumbsIndex).prevAll(`[data-swiper-slide-index="${swiper.realIndex}"]`).eq(0).index();
-        const nextThumbsIndex = thumbsSwiper.slides.eq(currentThumbsIndex).nextAll(`[data-swiper-slide-index="${swiper.realIndex}"]`).eq(0).index();
+        const prevThumbsIndex = thumbsSwiper.slides
+          .eq(currentThumbsIndex)
+          .prevAll(`[data-swiper-slide-index="${swiper.realIndex}"]`).eq(0)
+          .index();
+        const nextThumbsIndex = thumbsSwiper.slides
+          .eq(currentThumbsIndex)
+          .nextAll(`[data-swiper-slide-index="${swiper.realIndex}"]`).eq(0)
+          .index();
         if (typeof prevThumbsIndex === 'undefined') newThumbsIndex = nextThumbsIndex;
         else if (typeof nextThumbsIndex === 'undefined') newThumbsIndex = prevThumbsIndex;
         else if (nextThumbsIndex - currentThumbsIndex === currentThumbsIndex - prevThumbsIndex) newThumbsIndex = currentThumbsIndex;
         else if (nextThumbsIndex - currentThumbsIndex < currentThumbsIndex - prevThumbsIndex) newThumbsIndex = nextThumbsIndex;
         else newThumbsIndex = prevThumbsIndex;
+        direction = swiper.activeIndex > swiper.previousIndex ? 'next' : 'prev';
       } else {
         newThumbsIndex = swiper.realIndex;
+        direction = newThumbsIndex > swiper.previousIndex ? 'next' : 'prev';
       }
-      if (thumbsSwiper.visibleSlidesIndexes.indexOf(newThumbsIndex) < 0) {
+      if (useOffset) {
+        newThumbsIndex += direction === 'next' ? autoScrollOffset : -1 * autoScrollOffset;
+      }
+
+      if (thumbsSwiper.visibleSlidesIndexes && thumbsSwiper.visibleSlidesIndexes.indexOf(newThumbsIndex) < 0) {
         if (thumbsSwiper.params.centeredSlides) {
           if (newThumbsIndex > currentThumbsIndex) {
             newThumbsIndex = newThumbsIndex - Math.floor(slidesPerView / 2) + 1;
@@ -87283,8 +89287,14 @@ const Thumbs = {
       thumbsToActivate = swiper.params.slidesPerView;
     }
 
+    if (!swiper.params.thumbs.multipleActiveThumbs) {
+      thumbsToActivate = 1;
+    }
+
+    thumbsToActivate = Math.floor(thumbsToActivate);
+
     thumbsSwiper.slides.removeClass(thumbActiveClass);
-    if (thumbsSwiper.params.loop) {
+    if (thumbsSwiper.params.loop || (thumbsSwiper.params.virtual && thumbsSwiper.params.virtual.enabled)) {
       for (let i = 0; i < thumbsToActivate; i += 1) {
         thumbsSwiper.$wrapperEl.children(`[data-swiper-slide-index="${swiper.realIndex + i}"]`).addClass(thumbActiveClass);
       }
@@ -87300,6 +89310,8 @@ var Thumbs$1 = {
   params: {
     thumbs: {
       swiper: null,
+      multipleActiveThumbs: true,
+      autoScrollOffset: 0,
       slideThumbActiveClass: 'swiper-slide-thumb-active',
       thumbsContainerClass: 'swiper-container-thumbs',
     },
@@ -87397,6 +89409,7 @@ if (typeof Swiper.use === 'undefined') {
 Swiper.use(components);
 
 /* harmony default export */ __webpack_exports__["default"] = (Swiper);
+//# sourceMappingURL=swiper.esm.bundle.js.map
 
 
 /***/ }),
@@ -98554,6 +100567,1028 @@ VeeValidate$1.withValidation = withValidation;
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "ai-match-card card shadow-sm mb-4" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "ai-match-header d-flex flex-wrap align-items-center justify-content-between p-3 border-bottom"
+      },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "d-flex align-items-center" }, [
+          _c(
+            "div",
+            { class: ["match-confidence-badge", _vm.confidenceClass] },
+            [
+              _c("i", { staticClass: "mr-1", class: _vm.confidenceIcon }),
+              _vm._v(" "),
+              _c("span", { staticClass: "score font-weight-bold" }, [
+                _vm._v(_vm._s(_vm.computedOverallScore) + "%")
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "label ml-1" }, [
+                _vm._v("(" + _vm._s(_vm.confidenceLabel) + ")")
+              ])
+            ]
+          )
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass:
+          "ai-mode-bar px-3 py-2 bg-light border-bottom d-flex justify-content-between align-items-center flex-wrap"
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "btn-group btn-group-toggle btn-group-sm mb-1 mb-sm-0",
+            attrs: { role: "group", "aria-label": "Comparison View Mode" }
+          },
+          [
+            _c(
+              "button",
+              {
+                class: [
+                  "btn",
+                  _vm.viewMode === "side-by-side"
+                    ? "btn-primary"
+                    : "btn-outline-secondary"
+                ],
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.viewMode = "side-by-side"
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "fas fa-columns mr-1" }),
+                _vm._v(" Side-by-Side\n      ")
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                class: [
+                  "btn",
+                  _vm.viewMode === "split-slider"
+                    ? "btn-primary"
+                    : "btn-outline-secondary"
+                ],
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.viewMode = "split-slider"
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "fas fa-sliders-h mr-1" }),
+                _vm._v(" Split Overlay\n      ")
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "d-flex align-items-center" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "custom-control custom-switch custom-control-inline mr-2"
+            },
+            [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.showLandmarks,
+                    expression: "showLandmarks"
+                  }
+                ],
+                staticClass: "custom-control-input",
+                attrs: {
+                  type: "checkbox",
+                  id: "landmarks-toggle-" + _vm.componentId
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.showLandmarks)
+                    ? _vm._i(_vm.showLandmarks, null) > -1
+                    : _vm.showLandmarks
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.showLandmarks,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.showLandmarks = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.showLandmarks = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.showLandmarks = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass: "custom-control-label small cursor-pointer",
+                  attrs: { for: "landmarks-toggle-" + _vm.componentId }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-vector-square text-info mr-1"
+                  }),
+                  _vm._v(" Facial Landmarks\n        ")
+                ]
+              )
+            ]
+          )
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card-body p-3" }, [
+      _vm.viewMode === "side-by-side"
+        ? _c("div", { staticClass: "row match-photo-grid" }, [
+            _c("div", { staticClass: "col-md-6 mb-3 mb-md-0" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "photo-card border rounded p-2 text-center position-relative"
+                },
+                [
+                  _c("span", { staticClass: "photo-tag tag-original" }, [
+                    _vm._v("Original Post")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "img-wrapper position-relative overflow-hidden rounded my-2"
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "img-fluid match-img",
+                        attrs: {
+                          src: _vm.originalImageUrl,
+                          alt: _vm.originalName
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.showLandmarks
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass: "landmark-overlay",
+                              attrs: { viewBox: "0 0 100 100" }
+                            },
+                            [
+                              _c("circle", {
+                                staticClass: "landmark-point eye",
+                                attrs: { cx: "35", cy: "40", r: "3" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point eye",
+                                attrs: { cx: "65", cy: "40", r: "3" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point nose",
+                                attrs: { cx: "50", cy: "55", r: "2.5" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "40", cy: "70", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "50", cy: "72", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "60", cy: "70", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("polygon", {
+                                staticClass: "landmark-line",
+                                attrs: { points: "35,40 65,40 50,55" }
+                              }),
+                              _vm._v(" "),
+                              _c("polygon", {
+                                staticClass: "landmark-line-outer",
+                                attrs: { points: "35,40 50,72 65,40" }
+                              })
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "photo-info text-left px-2" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "font-weight-bold text-dark text-truncate"
+                      },
+                      [_vm._v(_vm._s(_vm.originalName))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "small text-muted d-flex justify-content-between"
+                      },
+                      [
+                        _c("span", [
+                          _vm._v("Age: " + _vm._s(_vm.originalAge || "N/A"))
+                        ]),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v("Type: "),
+                          _c(
+                            "span",
+                            { staticClass: "badge badge-info text-capitalize" },
+                            [_vm._v(_vm._s(_vm.originalType))]
+                          )
+                        ])
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6" }, [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "photo-card border rounded p-2 text-center position-relative accent-border"
+                },
+                [
+                  _c("span", { staticClass: "photo-tag tag-matched" }, [
+                    _vm._v("Matched Candidate")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "img-wrapper position-relative overflow-hidden rounded my-2"
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "img-fluid match-img",
+                        attrs: {
+                          src: _vm.matchedImageUrl,
+                          alt: _vm.matchedName
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.showLandmarks
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass: "landmark-overlay",
+                              attrs: { viewBox: "0 0 100 100" }
+                            },
+                            [
+                              _c("circle", {
+                                staticClass: "landmark-point eye",
+                                attrs: { cx: "36", cy: "41", r: "3" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point eye",
+                                attrs: { cx: "64", cy: "41", r: "3" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point nose",
+                                attrs: { cx: "50", cy: "56", r: "2.5" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "41", cy: "71", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "50", cy: "73", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("circle", {
+                                staticClass: "landmark-point mouth",
+                                attrs: { cx: "59", cy: "71", r: "2" }
+                              }),
+                              _vm._v(" "),
+                              _c("polygon", {
+                                staticClass: "landmark-line",
+                                attrs: { points: "36,41 64,41 50,56" }
+                              }),
+                              _vm._v(" "),
+                              _c("polygon", {
+                                staticClass: "landmark-line-outer",
+                                attrs: { points: "36,41 50,73 64,41" }
+                              })
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "photo-info text-left px-2" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "font-weight-bold text-dark text-truncate"
+                      },
+                      [_vm._v(_vm._s(_vm.matchedName))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "small text-muted d-flex justify-content-between"
+                      },
+                      [
+                        _c("span", [
+                          _vm._v("Age: " + _vm._s(_vm.matchedAge || "N/A"))
+                        ]),
+                        _vm._v(" "),
+                        _c("span", [
+                          _vm._v("Type: "),
+                          _c(
+                            "span",
+                            {
+                              staticClass: "badge badge-warning text-capitalize"
+                            },
+                            [_vm._v(_vm._s(_vm.matchedType))]
+                          )
+                        ])
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          ])
+        : _vm.viewMode === "split-slider"
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "split-slider-container my-2 position-relative overflow-hidden rounded border"
+            },
+            [
+              _c(
+                "div",
+                {
+                  ref: "sliderContainer",
+                  staticClass: "split-slider-wrapper position-relative",
+                  on: {
+                    mousemove: _vm.handleMouseMove,
+                    touchmove: _vm.handleTouchMove
+                  }
+                },
+                [
+                  _c("img", {
+                    staticClass: "img-fluid w-100 split-img-bg",
+                    attrs: { src: _vm.matchedImageUrl, alt: _vm.matchedName }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "split-img-fg-container position-absolute top-0 left-0 bottom-0 overflow-hidden",
+                      style: { width: _vm.sliderPosition + "%" }
+                    },
+                    [
+                      _c("img", {
+                        staticClass: "img-fluid split-img-fg",
+                        style: _vm.fgImageStyle,
+                        attrs: {
+                          src: _vm.originalImageUrl,
+                          alt: _vm.originalName
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "split-slider-handle position-absolute top-0 bottom-0",
+                      style: { left: _vm.sliderPosition + "%" }
+                    },
+                    [
+                      _c("div", { staticClass: "handle-bar" }),
+                      _vm._v(" "),
+                      _vm._m(1)
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass:
+                        "badge badge-dark position-absolute top-0 left-0 m-2 opacity-8"
+                    },
+                    [_vm._v("Original")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    {
+                      staticClass:
+                        "badge badge-primary position-absolute top-0 right-0 m-2 opacity-8"
+                    },
+                    [_vm._v("Matched")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _vm._m(2)
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "confidence-breakdown-section mt-4 pt-3 border-top" },
+        [
+          _c(
+            "div",
+            {
+              staticClass:
+                "d-flex justify-content-between align-items-center mb-3"
+            },
+            [
+              _vm._m(3),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-link p-0 text-muted",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      _vm.showDetailsModal = true
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-question-circle mr-1" }),
+                  _vm._v(" How is this calculated?\n        ")
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c(
+                "div",
+                { staticClass: "metric-card p-2 bg-light rounded border" },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-between align-items-center mb-1"
+                    },
+                    [
+                      _vm._m(4),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticClass: "badge badge-pill badge-primary" },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.computedMetrics.facialGeometry) + "%"
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "progress progress-sm",
+                      staticStyle: { height: "6px" }
+                    },
+                    [
+                      _c("div", {
+                        staticClass: "progress-bar bg-primary",
+                        style: {
+                          width: _vm.computedMetrics.facialGeometry + "%"
+                        },
+                        attrs: {
+                          role: "progressbar",
+                          "aria-valuenow": _vm.computedMetrics.facialGeometry,
+                          "aria-valuemin": "0",
+                          "aria-valuemax": "100"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c(
+                "div",
+                { staticClass: "metric-card p-2 bg-light rounded border" },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-between align-items-center mb-1"
+                    },
+                    [
+                      _vm._m(5),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticClass: "badge badge-pill badge-info" },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.computedMetrics.featureAlignment) + "%"
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "progress progress-sm",
+                      staticStyle: { height: "6px" }
+                    },
+                    [
+                      _c("div", {
+                        staticClass: "progress-bar bg-info",
+                        style: {
+                          width: _vm.computedMetrics.featureAlignment + "%"
+                        },
+                        attrs: {
+                          role: "progressbar",
+                          "aria-valuenow": _vm.computedMetrics.featureAlignment,
+                          "aria-valuemin": "0",
+                          "aria-valuemax": "100"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c(
+                "div",
+                { staticClass: "metric-card p-2 bg-light rounded border" },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-between align-items-center mb-1"
+                    },
+                    [
+                      _vm._m(6),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass:
+                            "badge badge-pill badge-warning text-dark"
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.computedMetrics.ageProgression) + "%"
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "progress progress-sm",
+                      staticStyle: { height: "6px" }
+                    },
+                    [
+                      _c("div", {
+                        staticClass: "progress-bar bg-warning",
+                        style: {
+                          width: _vm.computedMetrics.ageProgression + "%"
+                        },
+                        attrs: {
+                          role: "progressbar",
+                          "aria-valuenow": _vm.computedMetrics.ageProgression,
+                          "aria-valuemin": "0",
+                          "aria-valuemax": "100"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-md-6 mb-3" }, [
+              _c(
+                "div",
+                { staticClass: "metric-card p-2 bg-light rounded border" },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "d-flex justify-content-between align-items-center mb-1"
+                    },
+                    [
+                      _vm._m(7),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        { staticClass: "badge badge-pill badge-success" },
+                        [_vm._v(_vm._s(_vm.computedMetrics.skinTexture) + "%")]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "progress progress-sm",
+                      staticStyle: { height: "6px" }
+                    },
+                    [
+                      _c("div", {
+                        staticClass: "progress-bar bg-success",
+                        style: { width: _vm.computedMetrics.skinTexture + "%" },
+                        attrs: {
+                          role: "progressbar",
+                          "aria-valuenow": _vm.computedMetrics.skinTexture,
+                          "aria-valuemin": "0",
+                          "aria-valuemax": "100"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            ])
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm.showActions
+        ? _c(
+            "div",
+            {
+              staticClass:
+                "match-actions mt-3 pt-3 border-top d-flex flex-wrap justify-content-between align-items-center"
+            },
+            [
+              _c("div", { staticClass: "mb-2 mb-sm-0" }, [
+                _vm.actionState === "verified"
+                  ? _c(
+                      "span",
+                      { staticClass: "text-success font-weight-bold" },
+                      [
+                        _c("i", { staticClass: "fas fa-check-circle mr-1" }),
+                        _vm._v(" Match Verified & Saved\n        ")
+                      ]
+                    )
+                  : _vm.actionState === "rejected"
+                  ? _c(
+                      "span",
+                      { staticClass: "text-danger font-weight-bold" },
+                      [
+                        _c("i", { staticClass: "fas fa-times-circle mr-1" }),
+                        _vm._v(" Match Marked as Incorrect\n        ")
+                      ]
+                    )
+                  : _c("span", { staticClass: "small text-muted" }, [
+                      _vm._v(
+                        "\n          Verify this comparison to notify poster or initiate action.\n        "
+                      )
+                    ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "btn-toolbar", attrs: { role: "toolbar" } },
+                [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-danger btn-sm mr-2",
+                      attrs: {
+                        type: "button",
+                        disabled: _vm.actionState !== null
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.handleAction("reject")
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-times mr-1" }),
+                      _vm._v(" Not a Match\n        ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-outline-primary btn-sm mr-2",
+                      attrs: { type: "button" },
+                      on: { click: _vm.handleChat }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-comments mr-1" }),
+                      _vm._v(" Contact Poster\n        ")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success btn-sm",
+                      attrs: {
+                        type: "button",
+                        disabled: _vm.actionState !== null
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.handleAction("verify")
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-check mr-1" }),
+                      _vm._v(" Confirm Match\n        ")
+                    ]
+                  )
+                ]
+              )
+            ]
+          )
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _vm.showDetailsModal
+      ? _c(
+          "div",
+          {
+            staticClass: "modal fade show d-block",
+            staticStyle: { background: "rgba(0,0,0,0.5)" },
+            attrs: { tabindex: "-1" }
+          },
+          [
+            _c("div", { staticClass: "modal-dialog modal-dialog-centered" }, [
+              _c("div", { staticClass: "modal-content" }, [
+                _c(
+                  "div",
+                  { staticClass: "modal-header bg-primary text-white" },
+                  [
+                    _vm._m(8),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "close text-white",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.showDetailsModal = false
+                          }
+                        }
+                      },
+                      [_c("span", [_vm._v("×")])]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(9),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-secondary btn-sm",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          _vm.showDetailsModal = false
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "d-flex align-items-center mb-2 mb-md-0" },
+      [
+        _c("div", { staticClass: "ai-badge-icon mr-2" }, [
+          _c("i", { staticClass: "fas fa-brain text-primary" })
+        ]),
+        _vm._v(" "),
+        _c("div", [
+          _c("h5", { staticClass: "mb-0 font-weight-bold title-text" }, [
+            _vm._v("AI Facial Match Analysis")
+          ]),
+          _vm._v(" "),
+          _c("small", { staticClass: "text-muted" }, [
+            _vm._v("Biometric comparison engine v2.4 • 68 Facial Landmarks")
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "handle-circle" }, [
+      _c("i", { staticClass: "fas fa-arrows-alt-h" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center mt-2 small text-muted" }, [
+      _c("i", { staticClass: "fas fa-info-circle mr-1" }),
+      _vm._v(
+        " Move cursor or swipe to compare facial alignment across images\n      "
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h6", { staticClass: "font-weight-bold text-secondary mb-0" }, [
+      _c("i", { staticClass: "fas fa-chart-bar mr-1 text-primary" }),
+      _vm._v(" Feature Confidence Breakdown\n        ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "small font-weight-bold text-dark" }, [
+      _c("i", { staticClass: "fas fa-smile text-primary mr-1" }),
+      _vm._v(" Facial Geometry & Structure\n              ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "small font-weight-bold text-dark" }, [
+      _c("i", { staticClass: "fas fa-eye text-info mr-1" }),
+      _vm._v(" Eyes & Nose Alignment Ratio\n              ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "small font-weight-bold text-dark" }, [
+      _c("i", { staticClass: "fas fa-history text-warning mr-1" }),
+      _vm._v(" Age Progression Invariance\n              ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "small font-weight-bold text-dark" }, [
+      _c("i", { staticClass: "fas fa-fingerprint text-success mr-1" }),
+      _vm._v(" Texture & Landmark Distance\n              ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", { staticClass: "modal-title font-weight-bold" }, [
+      _c("i", { staticClass: "fas fa-brain mr-2" }),
+      _vm._v(" AI Biometric Analysis Guide\n          ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body" }, [
+      _c("p", { staticClass: "small text-muted" }, [
+        _vm._v(
+          "\n            Our AI service utilizes deep Convolutional Neural Networks (ResNet / FaceNet embeddings) to compare 512-dimensional facial feature vectors extracted from uploaded photographs.\n          "
+        )
+      ]),
+      _vm._v(" "),
+      _c("ul", { staticClass: "list-group list-group-flush small" }, [
+        _c("li", { staticClass: "list-group-item px-0" }, [
+          _c("strong", [_vm._v("Facial Geometry (90-99%):")]),
+          _vm._v(
+            " Distance ratios between key facial landmarks (interocular distance, jawline curvature).\n            "
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "list-group-item px-0" }, [
+          _c("strong", [_vm._v("Age Progression:")]),
+          _vm._v(
+            " Normalizes differences due to child aging using age-invariant facial embedding models.\n            "
+          )
+        ]),
+        _vm._v(" "),
+        _c("li", { staticClass: "list-group-item px-0" }, [
+          _c("strong", [_vm._v("Thresholds:")]),
+          _vm._v(
+            " Confidence > 85% strongly indicates a match. 60-84% warrants manual verification.\n            "
+          )
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ChatComponent.vue?vue&type=template&id=80d584ac&":
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ChatComponent.vue?vue&type=template&id=80d584ac& ***!
@@ -98983,6 +102018,178 @@ var render = function() {
           { staticClass: "col-lg-12" },
           [
             _c(
+              "div",
+              {
+                staticClass: "card mb-4 p-3 shadow-sm border-0",
+                staticStyle: { "border-radius": "12px", background: "#ffffff" }
+              },
+              [
+                _c(
+                  "form",
+                  {
+                    staticClass: "row g-2 align-items-center",
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.filter_post()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "col-md-5 mb-2 mb-md-0" }, [
+                      _c("div", { staticClass: "input-group" }, [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter.query,
+                              expression: "filter.query"
+                            }
+                          ],
+                          staticClass: "form-control border-left-0",
+                          attrs: {
+                            type: "text",
+                            placeholder: "Search found children reports..."
+                          },
+                          domProps: { value: _vm.filter.query },
+                          on: {
+                            input: [
+                              function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.filter,
+                                  "query",
+                                  $event.target.value
+                                )
+                              },
+                              _vm.debouncedSearch
+                            ]
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3 mb-2 mb-md-0" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter.gender,
+                              expression: "filter.gender"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.filter,
+                                  "gender",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.filter_post()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("All Genders")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "male" } }, [
+                            _vm._v("Male")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "female" } }, [
+                            _vm._v("Female")
+                          ])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-2 mb-2 mb-md-0" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.filter.age,
+                            expression: "filter.age"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number", placeholder: "Age" },
+                        domProps: { value: _vm.filter.age },
+                        on: {
+                          change: function($event) {
+                            return _vm.filter_post()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.filter, "age", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-2 d-flex" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success btn-block mr-1",
+                          staticStyle: {
+                            background:
+                              "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+                            border: "none"
+                          },
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Search")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-secondary",
+                          attrs: { type: "button", title: "Reset Filters" },
+                          on: {
+                            click: function($event) {
+                              return _vm.reset_filter()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-redo" })]
+                      )
+                    ])
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
               "ul",
               { staticClass: "list_ofPosts list-unstyled" },
               _vm._l(_vm.posts, function(post, key) {
@@ -99008,7 +102215,8 @@ var render = function() {
                                     staticClass: "img-responsive",
                                     attrs: {
                                       slot: "image",
-                                      src: post_image.image
+                                      src: post_image.image,
+                                      alt: post.name || "Found person photo"
                                     },
                                     slot: "image"
                                   }),
@@ -99019,7 +102227,8 @@ var render = function() {
                                       slot: "preloader",
                                       src:
                                         _vm.base_url +
-                                        "/front/svg/image-loader.8402b89.gif"
+                                        "/front/svg/image-loader.8402b89.gif",
+                                      alt: "Loading image..."
                                     },
                                     slot: "preloader"
                                   }),
@@ -99038,7 +102247,8 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass:
-                                    "swiper-button-prev lost-people-btn-prev photo-arrows"
+                                    "swiper-button-prev lost-people-btn-prev photo-arrows",
+                                  attrs: { "aria-label": "Previous Image" }
                                 },
                                 [
                                   _c("i", {
@@ -99053,7 +102263,8 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass:
-                                    "swiper-button-next lost-people-btn-next photo-arrows"
+                                    "swiper-button-next lost-people-btn-next photo-arrows",
+                                  attrs: { "aria-label": "Next Image" }
                                 },
                                 [
                                   _c("i", {
@@ -99074,7 +102285,10 @@ var render = function() {
                         _c("div", { staticClass: "img-box" }, [
                           _c("img", {
                             staticClass: "img-fluid",
-                            attrs: { src: post.user.image }
+                            attrs: {
+                              src: post.user.image,
+                              alt: post.user.name || "User profile image"
+                            }
                           })
                         ]),
                         _vm._v(" "),
@@ -99098,7 +102312,7 @@ var render = function() {
                                   "dropdown show setting-dropdown icon-box"
                               },
                               [
-                                _vm._m(0, true),
+                                _vm._m(1, true),
                                 _vm._v(" "),
                                 _c(
                                   "div",
@@ -99162,14 +102376,18 @@ var render = function() {
                               ]),
                               _c("span", { staticClass: "value" }, [
                                 _vm._v(
-                                  _vm._s(post.gender == 1 ? "male" : "female")
+                                  _vm._s(
+                                    post.gender == 1 || post.gender == "male"
+                                      ? "male"
+                                      : "female"
+                                  )
                                 )
                               ])
                             ]),
                             _vm._v(" "),
                             _c("li", [
                               _c("p", { staticClass: "label" }, [
-                                _vm._v("Lost Date:")
+                                _vm._v("Found Date:")
                               ]),
                               _c("span", { staticClass: "value" }, [
                                 _vm._v(
@@ -99224,9 +102442,9 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _vm._m(1, true),
+                          _vm._m(2, true),
                           _vm._v(" "),
-                          _vm._m(2, true)
+                          _vm._m(3, true)
                         ]
                       ),
                       _vm._v(" "),
@@ -99291,7 +102509,7 @@ var render = function() {
                                           "dropdown show setting-dropdown icon-box"
                                       },
                                       [
-                                        _vm._m(3, true),
+                                        _vm._m(4, true),
                                         _vm._v(" "),
                                         _c(
                                           "div",
@@ -99415,7 +102633,7 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
-                            _vm._m(4, true)
+                            _vm._m(5, true)
                           ]
                         )
                       ]),
@@ -99462,6 +102680,18 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text bg-transparent border-right-0" },
+        [_c("i", { staticClass: "fas fa-search text-muted" })]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -99641,7 +102871,7 @@ var render = function() {
                           ],
                           staticClass: "custome-select-city",
                           staticStyle: { position: "relative" },
-                          attrs: { placeholder: "Gander" },
+                          attrs: { "aria-label": "Gender" },
                           on: {
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -99664,7 +102894,7 @@ var render = function() {
                         },
                         [
                           _c("option", { attrs: { value: "" } }, [
-                            _vm._v("Select Your Area")
+                            _vm._v("Select Gender")
                           ]),
                           _vm._v(" "),
                           _c("option", { attrs: { value: "1" } }, [
@@ -99775,7 +103005,7 @@ var render = function() {
                           ],
                           staticClass: "custome-select-city",
                           staticStyle: { position: "relative" },
-                          attrs: { placeholder: "Post Type" },
+                          attrs: { "aria-label": "Post Type" },
                           on: {
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -99798,7 +103028,7 @@ var render = function() {
                         },
                         [
                           _c("option", { attrs: { value: "" } }, [
-                            _vm._v("Select Your Area")
+                            _vm._v("Select Post Type")
                           ]),
                           _vm._v(" "),
                           _c("option", { attrs: { value: "missed" } }, [
@@ -100427,7 +103657,7 @@ var render = function() {
                             ],
                             staticClass: "custome-select-city",
                             staticStyle: { position: "relative" },
-                            attrs: { placeholder: "Gander" },
+                            attrs: { "aria-label": "Gender Filter" },
                             on: {
                               change: function($event) {
                                 var $$selectedVal = Array.prototype.filter
@@ -100450,7 +103680,7 @@ var render = function() {
                           },
                           [
                             _c("option", { attrs: { value: "" } }, [
-                              _vm._v("Select Your Area")
+                              _vm._v("Select Gender")
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "1" } }, [
@@ -101144,552 +104374,59 @@ var render = function() {
           1
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "col-lg-12", staticStyle: { "margin-top": "10px" } },
-          [
-            _c("h4", { staticClass: "text-center" }, [
-              _vm._v("Match Posts Result")
-            ]),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "list_ofPosts list-unstyled" },
-              _vm._l(_vm.result_posts, function(post, key) {
-                return _c("li", { key: key }, [
-                  _c("div", { staticClass: "post" }, [
-                    _c(
-                      "div",
-                      { staticClass: "photo-box-slider swiper-container" },
-                      [
-                        _c(
-                          "carousel",
-                          {
-                            staticClass: "swiper-wrapper",
-                            attrs: { dots: false, nav: false, items: 1 }
-                          },
-                          [
-                            _vm._l(post.images, function(post_image) {
-                              return _c(
-                                "vue-load-image",
-                                { key: post_image.key },
-                                [
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "image",
-                                      src: post_image.image
-                                    },
-                                    slot: "image"
-                                  }),
-                                  _vm._v(" "),
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "preloader",
-                                      src:
-                                        _vm.base_url +
-                                        "/front/svg/image-loader.8402b89.gif"
-                                    },
-                                    slot: "preloader"
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { attrs: { slot: "error" }, slot: "error" },
-                                    [_vm._v("about")]
-                                  )
-                                ]
-                              )
-                            }),
-                            _vm._v(" "),
-                            _c("template", { slot: "prev" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-prev lost-people-btn-prev photo-arrows"
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-left"
-                                  })
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("template", { slot: "next" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-next lost-people-btn-next photo-arrows"
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-right"
-                                  })
-                                ]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "post-data" }, [
-                      _c("div", { staticClass: "post-owner" }, [
-                        _c("div", { staticClass: "img-box" }, [
-                          _c("img", {
-                            staticClass: "img-fluid",
-                            attrs: { src: post.user.image }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "owner_date" }, [
-                          _c("h4", { staticClass: "owner-name" }, [
-                            _vm._v(_vm._s(post.user.name))
-                          ]),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "post-time" }, [
-                            _vm._v(
-                              _vm._s(_vm.moment(post.created_at).format("LL"))
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        post.user.id == _vm.user.id
-                          ? _c(
-                              "div",
-                              {
-                                staticClass:
-                                  "dropdown show setting-dropdown icon-box"
-                              },
-                              [
-                                _vm._m(5, true),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  {
-                                    staticClass: "dropdown-menu",
-                                    staticStyle: { top: "25px !important" },
-                                    attrs: {
-                                      "aria-labelledby":
-                                        "profile-setting-dropdown"
-                                    }
-                                  },
-                                  [
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" }
-                                      },
-                                      [_vm._v("Edit")]
-                                    ),
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.delete_post(post.id, key)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Delete")]
-                                    )
-                                  ]
-                                )
-                              ]
-                            )
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "clearfix" })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "post-data-content" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "lostPerson_data list-unstyled" },
-                          [
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Person Name:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.name))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("gender:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(post.gender == 1 ? "male" : "female")
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Lost Date:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.moment(post.created_at).format("LL")
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Age:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.age))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "loatDetails" }, [
-                                _vm._v(_vm._s(post.description))
-                              ])
-                            ])
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "ul",
-                        {
-                          staticClass:
-                            "post-btn-list list-unstyled d-flex justify-content-between"
-                        },
-                        [
-                          _c("li", [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "post-btn",
-                                attrs: {
-                                  href:
-                                    _vm.base_url +
-                                    "/get_message/" +
-                                    post.user.id
-                                }
-                              },
-                              [
-                                _c("i", { staticClass: "far fa-comment-dots" }),
-                                _c("span", [_vm._v("Send Message")])
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(6, true),
-                          _vm._v(" "),
-                          _vm._m(7, true)
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "comments" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "user-comments-list list-unstyled" },
-                          [
-                            post.count_comment > 2
-                              ? _c("li", [
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "comment-box",
-                                      staticStyle: {
-                                        cursor: "pointer",
-                                        color: "#9E2FB2"
-                                      },
-                                      attrs: { href: "#" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.load_more_comment(
-                                            post.id,
-                                            key
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("load comments")]
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm._l(post.comments, function(
-                              comment,
-                              key_comment
-                            ) {
-                              return _c("li", { key: key_comment }, [
-                                _c("div", { staticClass: "user-photo" }, [
-                                  _c("img", {
-                                    staticClass: "img-fluid",
-                                    attrs: { src: comment.user.image }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "comment-box" }, [
-                                  _c("p", { staticClass: "usern-name" }, [
-                                    _vm._v(_vm._s(comment.user.name))
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("p", { staticClass: "user-comment" }, [
-                                    _vm._v(_vm._s(comment.comment))
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                comment.user.id == _vm.user.id
-                                  ? _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "dropdown show setting-dropdown icon-box"
-                                      },
-                                      [
-                                        _vm._m(8, true),
-                                        _vm._v(" "),
-                                        _c(
-                                          "div",
-                                          {
-                                            staticClass: "dropdown-menu",
-                                            staticStyle: {
-                                              top: "25px !important"
-                                            },
-                                            attrs: {
-                                              "aria-labelledby":
-                                                "profile-setting-dropdown"
-                                            }
-                                          },
-                                          [
-                                            _c(
-                                              "a",
-                                              {
-                                                staticClass: "dropdown-item",
-                                                attrs: {
-                                                  id: "update_com" + comment.id,
-                                                  href: "#"
-                                                },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.update_comment(
-                                                      comment.id,
-                                                      comment.comment,
-                                                      key_comment
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [_vm._v("Edit")]
-                                            ),
-                                            _c(
-                                              "a",
-                                              {
-                                                staticClass: "dropdown-item",
-                                                attrs: { href: "#" },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.delete_comment(
-                                                      comment.id,
-                                                      key_comment,
-                                                      key
-                                                    )
-                                                  }
-                                                }
-                                              },
-                                              [_vm._v("Delete")]
-                                            )
-                                          ]
-                                        )
-                                      ]
-                                    )
-                                  : _vm._e()
-                              ])
-                            }),
-                            _vm._v(" "),
-                            _c("li", [
-                              _vm.show_dot
-                                ? _c(
-                                    "div",
-                                    {
-                                      staticClass: "typing",
-                                      attrs: { id: "loading" }
-                                    },
-                                    [
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span")
-                                    ]
-                                  )
-                                : _vm._e()
-                            ])
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "form",
-                          {
-                            staticClass: "write-comment",
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                return _vm.add_comment(key, post.id)
-                              }
-                            }
-                          },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.comment,
-                                  expression: "comment"
-                                }
-                              ],
-                              staticClass: "input-write",
-                              attrs: {
-                                type: "text",
-                                placeholder: "Write Comment...."
-                              },
-                              domProps: { value: _vm.comment },
-                              on: {
-                                keydown: function($event) {
-                                  return _vm.showtyping()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.comment = $event.target.value
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm._m(9, true)
-                          ]
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          class:
-                            "post_label " +
-                            [
-                              post.type === "missed"
-                                ? "label-missed"
-                                : "label-found"
-                            ]
-                        },
-                        [_c("span", [_vm._v(_vm._s(post.type))])]
-                      )
-                    ])
-                  ])
-                ])
-              }),
-              0
+        _vm.result_posts && _vm.result_posts.length
+          ? _c(
+              "div",
+              {
+                staticClass: "col-lg-12",
+                staticStyle: { "margin-top": "20px" }
+              },
+              [
+                _c(
+                  "h4",
+                  {
+                    staticClass: "text-center mb-4 font-weight-bold",
+                    staticStyle: { color: "#4f46e5" }
+                  },
+                  [
+                    _c("i", { staticClass: "fas fa-microchip mr-2" }),
+                    _vm._v(
+                      " AI Match Comparison Results (" +
+                        _vm._s(_vm.result_posts.length) +
+                        ")\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.result_posts, function(post, key) {
+                  return _c(
+                    "div",
+                    { key: key },
+                    [
+                      _c("ai-match-comparison", {
+                        attrs: {
+                          "original-post": _vm.inner_post,
+                          "matched-post": post,
+                          "match-score": post.match_score || post.score || 92.4,
+                          "match-data": post.match_data,
+                          "base-url": _vm.base_url
+                        }
+                      })
+                    ],
+                    1
+                  )
+                })
+              ],
+              2
             )
-          ]
-        ),
+          : _vm._e(),
         _vm._v(" "),
-        _vm._m(10)
+        _vm._m(5)
       ])
     ])
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
-      },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn active-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "far fa-comment-alt" }),
-        _c("span", [_vm._v("Comment")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-share" }),
-        _c("span", [_vm._v("Share")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
-      },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "submit-comment", attrs: { type: "submit" } },
-      [_c("i", { staticClass: "fas fa-paper-plane" })]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -101822,6 +104559,179 @@ var render = function() {
           { staticClass: "col-lg-12" },
           [
             _c(
+              "div",
+              {
+                staticClass: "card mb-4 p-3 shadow-sm border-0",
+                staticStyle: { "border-radius": "12px", background: "#ffffff" }
+              },
+              [
+                _c(
+                  "form",
+                  {
+                    staticClass: "row g-2 align-items-center",
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.filter_post()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "col-md-5 mb-2 mb-md-0" }, [
+                      _c("div", { staticClass: "input-group" }, [
+                        _vm._m(0),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter.query,
+                              expression: "filter.query"
+                            }
+                          ],
+                          staticClass: "form-control border-left-0",
+                          attrs: {
+                            type: "text",
+                            placeholder:
+                              "Search missing children by name or description..."
+                          },
+                          domProps: { value: _vm.filter.query },
+                          on: {
+                            input: [
+                              function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.filter,
+                                  "query",
+                                  $event.target.value
+                                )
+                              },
+                              _vm.debouncedSearch
+                            ]
+                          }
+                        })
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-3 mb-2 mb-md-0" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.filter.gender,
+                              expression: "filter.gender"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          on: {
+                            change: [
+                              function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.filter,
+                                  "gender",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function($event) {
+                                return _vm.filter_post()
+                              }
+                            ]
+                          }
+                        },
+                        [
+                          _c("option", { attrs: { value: "" } }, [
+                            _vm._v("All Genders")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "male" } }, [
+                            _vm._v("Male")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "female" } }, [
+                            _vm._v("Female")
+                          ])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-2 mb-2 mb-md-0" }, [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.filter.age,
+                            expression: "filter.age"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "number", placeholder: "Age" },
+                        domProps: { value: _vm.filter.age },
+                        on: {
+                          change: function($event) {
+                            return _vm.filter_post()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.filter, "age", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-2 d-flex" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary btn-block mr-1",
+                          staticStyle: {
+                            background:
+                              "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                            border: "none"
+                          },
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Search")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-outline-secondary",
+                          attrs: { type: "button", title: "Reset Filters" },
+                          on: {
+                            click: function($event) {
+                              return _vm.reset_filter()
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-redo" })]
+                      )
+                    ])
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c(
               "ul",
               { staticClass: "list_ofPosts list-unstyled" },
               _vm._l(_vm.posts, function(post, key) {
@@ -101847,7 +104757,8 @@ var render = function() {
                                     staticClass: "img-responsive",
                                     attrs: {
                                       slot: "image",
-                                      src: post_image.image
+                                      src: post_image.image,
+                                      alt: post.name || "Missing person photo"
                                     },
                                     slot: "image"
                                   }),
@@ -101858,7 +104769,8 @@ var render = function() {
                                       slot: "preloader",
                                       src:
                                         _vm.base_url +
-                                        "/front/svg/image-loader.8402b89.gif"
+                                        "/front/svg/image-loader.8402b89.gif",
+                                      alt: "Loading image..."
                                     },
                                     slot: "preloader"
                                   }),
@@ -101877,7 +104789,8 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass:
-                                    "swiper-button-prev lost-people-btn-prev photo-arrows"
+                                    "swiper-button-prev lost-people-btn-prev photo-arrows",
+                                  attrs: { "aria-label": "Previous Image" }
                                 },
                                 [
                                   _c("i", {
@@ -101892,7 +104805,8 @@ var render = function() {
                                 "div",
                                 {
                                   staticClass:
-                                    "swiper-button-next lost-people-btn-next photo-arrows"
+                                    "swiper-button-next lost-people-btn-next photo-arrows",
+                                  attrs: { "aria-label": "Next Image" }
                                 },
                                 [
                                   _c("i", {
@@ -101913,7 +104827,10 @@ var render = function() {
                         _c("div", { staticClass: "img-box" }, [
                           _c("img", {
                             staticClass: "img-fluid",
-                            attrs: { src: post.user.image }
+                            attrs: {
+                              src: post.user.image,
+                              alt: post.user.name || "User profile image"
+                            }
                           })
                         ]),
                         _vm._v(" "),
@@ -101937,7 +104854,7 @@ var render = function() {
                                   "dropdown show setting-dropdown icon-box"
                               },
                               [
-                                _vm._m(0, true),
+                                _vm._m(1, true),
                                 _vm._v(" "),
                                 _c(
                                   "div",
@@ -102001,7 +104918,11 @@ var render = function() {
                               ]),
                               _c("span", { staticClass: "value" }, [
                                 _vm._v(
-                                  _vm._s(post.gender == 1 ? "male" : "female")
+                                  _vm._s(
+                                    post.gender == 1 || post.gender == "male"
+                                      ? "male"
+                                      : "female"
+                                  )
                                 )
                               ])
                             ]),
@@ -102063,9 +104984,9 @@ var render = function() {
                             )
                           ]),
                           _vm._v(" "),
-                          _vm._m(1, true),
+                          _vm._m(2, true),
                           _vm._v(" "),
-                          _vm._m(2, true)
+                          _vm._m(3, true)
                         ]
                       ),
                       _vm._v(" "),
@@ -102130,7 +105051,7 @@ var render = function() {
                                           "dropdown show setting-dropdown icon-box"
                                       },
                                       [
-                                        _vm._m(3, true),
+                                        _vm._m(4, true),
                                         _vm._v(" "),
                                         _c(
                                           "div",
@@ -102254,7 +105175,7 @@ var render = function() {
                               }
                             }),
                             _vm._v(" "),
-                            _vm._m(4, true)
+                            _vm._m(5, true)
                           ]
                         )
                       ]),
@@ -102301,6 +105222,18 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c(
+        "span",
+        { staticClass: "input-group-text bg-transparent border-right-0" },
+        [_c("i", { staticClass: "fas fa-search text-muted" })]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -102450,14 +105383,22 @@ var render = function() {
               _c("div", { attrs: { id: "about-profile" } }, [
                 _c("div", { staticClass: "about-me-tab" }, [
                   _c("div", { staticClass: "bg-fff shadow-15 round-10" }, [
-                    _vm._m(2),
+                    _c("h1", { staticClass: "fz-16 fw-b heading" }, [
+                      _vm._v("About"),
+                      _c("span", { staticClass: "edit float-right" }, [
+                        _c("a", { attrs: { href: _vm.base_url + "/user" } }, [
+                          _c("i", { staticClass: "fas fa-edit" }),
+                          _vm._v("Edit")
+                        ])
+                      ])
+                    ]),
                     _vm._v(" "),
                     _c("hr", { staticClass: "grey" }),
                     _vm._v(" "),
                     _c("div", { staticClass: "row fields" }, [
                       _c("div", { staticClass: "col-sm-6 col-xs-12" }, [
                         _c("div", { staticClass: "field email-field" }, [
-                          _vm._m(3),
+                          _vm._m(2),
                           _vm._v(" "),
                           _c("div", { staticClass: "label" }, [
                             _vm._v(_vm._s(_vm.user.email))
@@ -102467,7 +105408,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "col-sm-6 col-xs-12" }, [
                         _c("div", { staticClass: "field phone-field" }, [
-                          _vm._m(4),
+                          _vm._m(3),
                           _vm._v(" "),
                           _c("div", { staticClass: "label" }, [
                             _vm._v(_vm._s(_vm.user.phone))
@@ -102499,7 +105440,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "col-sm-6 col-xs-12" }, [
                         _c("div", { staticClass: "field birthday-field" }, [
-                          _vm._m(5),
+                          _vm._m(4),
                           _vm._v(" "),
                           _c("div", { staticClass: "label" }, [
                             _vm._v(
@@ -102512,7 +105453,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(6)
+                    _vm._m(5)
                   ])
                 ])
               ])
@@ -102537,7 +105478,69 @@ var render = function() {
                   _vm._v(_vm._s(_vm.user.name))
                 ]),
                 _vm._v(" "),
-                _vm._m(7)
+                _c("ul", { staticClass: "profile-setting list-unstyled" }, [
+                  _vm._m(6),
+                  _vm._v(" "),
+                  _vm._m(7),
+                  _vm._v(" "),
+                  _c("li", [
+                    _c(
+                      "div",
+                      { staticClass: "dropdown show setting-dropdown" },
+                      [
+                        _vm._m(8),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "dropdown-menu",
+                            attrs: {
+                              "aria-labelledby": "profile-setting-dropdown"
+                            }
+                          },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: {
+                                  href: "#",
+                                  "data-toggle": "modal",
+                                  "data-target": "#add-to-group"
+                                }
+                              },
+                              [_vm._v("Add to group")]
+                            ),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" }
+                              },
+                              [_vm._v("Unfriend")]
+                            ),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: "#" }
+                              },
+                              [_vm._v("Block")]
+                            ),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: { href: _vm.base_url + "/user" }
+                              },
+                              [_vm._v("Edit Profile")]
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ])
               ])
             ]),
             _vm._v(" "),
@@ -102549,7 +105552,7 @@ var render = function() {
                   attrs: { id: "profile-tab" }
                 },
                 [
-                  _vm._m(8),
+                  _vm._m(9),
                   _vm._v(" "),
                   _c("li", { staticClass: "nav-item" }, [
                     _c(
@@ -102578,7 +105581,7 @@ var render = function() {
                 _c("div", { attrs: { id: "about-profile" } }),
                 _vm._v(" "),
                 _c("div", { staticClass: "create-post-box" }, [
-                  _vm._m(9),
+                  _vm._m(10),
                   _vm._v(" "),
                   _c(
                     "form",
@@ -102659,7 +105662,7 @@ var render = function() {
                               ],
                               staticClass: "custome-select-city",
                               staticStyle: { position: "relative" },
-                              attrs: { placeholder: "Gander" },
+                              attrs: { "aria-label": "Gender" },
                               on: {
                                 change: function($event) {
                                   var $$selectedVal = Array.prototype.filter
@@ -102683,7 +105686,7 @@ var render = function() {
                             },
                             [
                               _c("option", { attrs: { value: "" } }, [
-                                _vm._v("Select Your Area")
+                                _vm._v("Select Gender")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "1" } }, [
@@ -102794,7 +105797,7 @@ var render = function() {
                               ],
                               staticClass: "custome-select-city",
                               staticStyle: { position: "relative" },
-                              attrs: { placeholder: "Post Type" },
+                              attrs: { "aria-label": "Post Type" },
                               on: {
                                 change: function($event) {
                                   var $$selectedVal = Array.prototype.filter
@@ -102818,7 +105821,7 @@ var render = function() {
                             },
                             [
                               _c("option", { attrs: { value: "" } }, [
-                                _vm._v("Select Your Area")
+                                _vm._v("Select Post Type")
                               ]),
                               _vm._v(" "),
                               _c("option", { attrs: { value: "missed" } }, [
@@ -102885,7 +105888,7 @@ var render = function() {
                         _c("div", [
                           _c("label", { staticClass: "file-field" }, [
                             _c("div", { staticClass: "file-button" }, [
-                              _vm._m(10),
+                              _vm._m(11),
                               _vm._v(" "),
                               _c("input", {
                                 directives: [
@@ -103054,7 +106057,7 @@ var render = function() {
                                       "dropdown show setting-dropdown icon-box"
                                   },
                                   [
-                                    _vm._m(11, true),
+                                    _vm._m(12, true),
                                     _vm._v(" "),
                                     _c(
                                       "div",
@@ -103187,9 +106190,9 @@ var render = function() {
                                 )
                               ]),
                               _vm._v(" "),
-                              _vm._m(12, true),
+                              _vm._m(13, true),
                               _vm._v(" "),
-                              _vm._m(13, true)
+                              _vm._m(14, true)
                             ]
                           ),
                           _vm._v(" "),
@@ -103256,7 +106259,7 @@ var render = function() {
                                               "dropdown show setting-dropdown icon-box"
                                           },
                                           [
-                                            _vm._m(14, true),
+                                            _vm._m(15, true),
                                             _vm._v(" "),
                                             _c(
                                               "div",
@@ -103384,7 +106387,7 @@ var render = function() {
                                   }
                                 }),
                                 _vm._v(" "),
-                                _vm._m(15, true)
+                                _vm._m(16, true)
                               ]
                             )
                           ]),
@@ -103525,20 +106528,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("h1", { staticClass: "fz-16 fw-b heading" }, [
-      _vm._v("About"),
-      _c("span", { staticClass: "edit float-right" }, [
-        _c("a", { attrs: { href: "#" } }, [
-          _c("i", { staticClass: "fas fa-edit" }),
-          _vm._v("Edit")
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "icon" }, [
       _c("i", { staticClass: "far fa-envelope" })
     ])
@@ -103626,75 +106615,41 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("ul", { staticClass: "profile-setting list-unstyled" }, [
-      _c("li", [
-        _c("a", { staticClass: "setting-item", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "fas fa-user-plus" })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("a", { staticClass: "setting-item", attrs: { href: "#" } }, [
-          _c("i", { staticClass: "fas fa-comments" })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("li", [
-        _c("div", { staticClass: "dropdown show setting-dropdown" }, [
-          _c(
-            "a",
-            {
-              staticClass: "setting-item",
-              attrs: {
-                href: "#",
-                role: "button",
-                id: "profile-setting-dropdown",
-                "data-toggle": "dropdown",
-                "aria-haspopup": "true",
-                "aria-expanded": "false"
-              }
-            },
-            [_c("i", { staticClass: "fas fa-ellipsis-h" })]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "dropdown-menu",
-              attrs: { "aria-labelledby": "profile-setting-dropdown" }
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass: "dropdown-item",
-                  attrs: {
-                    href: "#",
-                    "data-toggle": "modal",
-                    "data-target": "#add-to-group"
-                  }
-                },
-                [_vm._v("Add to group")]
-              ),
-              _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-                _vm._v("Unfriend")
-              ]),
-              _c("a", { staticClass: "dropdown-item", attrs: { href: "#" } }, [
-                _vm._v("Block")
-              ]),
-              _c(
-                "a",
-                {
-                  staticClass: "dropdown-item",
-                  attrs: { href: "customer-profile__editProfile.html" }
-                },
-                [_vm._v("Edit Profile")]
-              )
-            ]
-          )
-        ])
+    return _c("li", [
+      _c("a", { staticClass: "setting-item", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-user-plus" })
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { staticClass: "setting-item", attrs: { href: "#" } }, [
+        _c("i", { staticClass: "fas fa-comments" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "setting-item",
+        attrs: {
+          href: "#",
+          role: "button",
+          id: "profile-setting-dropdown",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
+    )
   },
   function() {
     var _vm = this
@@ -116037,10 +118992,10 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
 Vue.component('vue-home', __webpack_require__(/*! ./components/HomeComponent.vue */ "./resources/js/components/HomeComponent.vue")["default"]);
 Vue.component('vue-profile', __webpack_require__(/*! ./components/ProfileComponent.vue */ "./resources/js/components/ProfileComponent.vue")["default"]);
 Vue.component('inner-post-vue', __webpack_require__(/*! ./components/InnerPostComponent */ "./resources/js/components/InnerPostComponent.vue")["default"]);
-Vue.component('inner-post-vue', __webpack_require__(/*! ./components/InnerPostComponent */ "./resources/js/components/InnerPostComponent.vue")["default"]);
 Vue.component('found-person-vue', __webpack_require__(/*! ./components/FoundPersonComponent */ "./resources/js/components/FoundPersonComponent.vue")["default"]);
 Vue.component('missed-person-vue', __webpack_require__(/*! ./components/MissedPersonComponent */ "./resources/js/components/MissedPersonComponent.vue")["default"]);
 Vue.component('chat-vue', __webpack_require__(/*! ./components/ChatComponent */ "./resources/js/components/ChatComponent.vue")["default"]);
+Vue.component('ai-match-comparison', __webpack_require__(/*! ./components/AiMatchComparison.vue */ "./resources/js/components/AiMatchComparison.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -116076,7 +119031,7 @@ try {
 
   __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.js");
 
-  window.Swiper = __webpack_require__(/*! swiper */ "./node_modules/swiper/dist/js/swiper.esm.bundle.js")["default"];
+  window.Swiper = __webpack_require__(/*! swiper */ "./node_modules/swiper/js/swiper.esm.bundle.js")["default"];
   window.PerfectScrollbar = __webpack_require__(/*! perfect-scrollbar */ "./node_modules/perfect-scrollbar/dist/perfect-scrollbar.esm.js")["default"];
   var burl = document.head.querySelector('meta[name="base_url"]');
   window.base_url = burl.content;
@@ -116121,6 +119076,93 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   authEndpoint: "broadcasting/auth" //encrypted: true
 
 });
+
+/***/ }),
+
+/***/ "./resources/js/components/AiMatchComparison.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/AiMatchComparison.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true& */ "./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true&");
+/* harmony import */ var _AiMatchComparison_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AiMatchComparison.vue?vue&type=script&lang=js& */ "./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& */ "./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _AiMatchComparison_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "11b01eea",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AiMatchComparison.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AiMatchComparison.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& ***!
+  \****************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/style-loader!../../../node_modules/css-loader??ref--6-1!../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../node_modules/postcss-loader/src??ref--6-2!../../../node_modules/vue-loader/lib??vue-loader-options!./AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=style&index=0&id=11b01eea&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_style_index_0_id_11b01eea_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AiMatchComparison.vue?vue&type=template&id=11b01eea&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AiMatchComparison_vue_vue_type_template_id_11b01eea_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
@@ -116614,15 +119656,15 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/html/GB/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/slick.min.js */"./front/js/slick.min.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/selectize.js */"./front/js/selectize.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/progressbar.min.js */"./front/js/progressbar.min.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/sweetalert2.min.js */"./front/js/sweetalert2.min.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/rangeslider.js */"./front/js/rangeslider.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/jquery-ui.js */"./front/js/jquery-ui.js");
-__webpack_require__(/*! /var/www/html/GB/front/js/plugin.js */"./front/js/plugin.js");
-module.exports = __webpack_require__(/*! /var/www/html/GB/front/scss/style.scss */"./front/scss/style.scss");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/slick.min.js */"./front/js/slick.min.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/selectize.js */"./front/js/selectize.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/progressbar.min.js */"./front/js/progressbar.min.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/sweetalert2.min.js */"./front/js/sweetalert2.min.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/rangeslider.js */"./front/js/rangeslider.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/jquery-ui.js */"./front/js/jquery-ui.js");
+__webpack_require__(/*! /var/www/html/old/Kidnap-children/front/js/plugin.js */"./front/js/plugin.js");
+module.exports = __webpack_require__(/*! /var/www/html/old/Kidnap-children/front/scss/style.scss */"./front/scss/style.scss");
 
 
 /***/ })

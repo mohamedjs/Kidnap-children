@@ -3,46 +3,53 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Post extends Model
 {
-
     protected $fillable = [
+        "user_id",
         "name",
-        "birth_date",
-        "description",
-        "type",
         "gender",
         "age",
+        "birth_date",
+        "description",
         "lat",
         "lng",
-        "user_id"
+        "type"
     ];
-    public function images()
-    {
-        return $this->hasMany(PostImage::class);
-    }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', "id");
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(PostImage::class, 'post_id', 'id');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
-    public function posts()
+    public function likes()
     {
-      return $this->belongsToMany('App\Models\Post','post_results','result_id','post_id')
-      ->withPivot('id')->withTimestamps();
-     }
+        return $this->hasMany(Like::class, 'post_id', 'id');
+    }
 
     public function results()
     {
-      return $this->belongsToMany('App\Models\Post','post_results','post_id','result_id')
-      ->withPivot('id')->withTimestamps();
+        return $this->belongsToMany(Post::class, 'post_results', 'post_id', 'result_id')->withTimestamps();
+    }
+
+    public function aiMatches()
+    {
+        return $this->hasMany(AiMatch::class, 'source_post_id', 'id');
+    }
+
+    public function matchedIn()
+    {
+        return $this->hasMany(AiMatch::class, 'matched_post_id', 'id');
     }
 }

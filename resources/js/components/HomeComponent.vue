@@ -15,8 +15,8 @@
                   </div>
                   <div class="col-6">
                       <label class="icon-box" for="select_area"></label>
-                      <select class="custome-select-city" style="position: relative;" v-model="post.gender" placeholder="Gander">
-                        <option value="">Select Your Area</option>
+                      <select class="custome-select-city" style="position: relative;" v-model="post.gender" aria-label="Gender">
+                        <option value="">Select Gender</option>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
                       </select>
@@ -34,8 +34,8 @@
                 <div class="form-group">
                   <div class="col-6">
                       <label class="icon-box" for="select_area"></label>
-                      <select class="custome-select-city" style="position: relative;" v-model="post.type" placeholder="Post Type">
-                        <option value="">Select Your Area</option>
+                      <select class="custome-select-city" style="position: relative;" v-model="post.type" aria-label="Post Type">
+                        <option value="">Select Post Type</option>
                         <option value="missed">Missed</option>
                         <option value="founded">Found</option>
                       </select>
@@ -166,8 +166,8 @@
                   <li>
                     <div class="select-city-group">
                       <label class="icon-box" for="select_area"></label>
-                      <select class="custome-select-city" style="position: relative;" v-model="filter.gender" placeholder="Gander">
-                        <option value="">Select Your Area</option>
+                      <select class="custome-select-city" style="position: relative;" v-model="filter.gender" aria-label="Gender Filter">
+                        <option value="">Select Gender</option>
                         <option value="1">Male</option>
                         <option value="2">Female</option>
                       </select>

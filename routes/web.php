@@ -15,6 +15,10 @@ Route::get('/test', function () {
     return view('welcome');
 });
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok', 'service' => 'laravel']);
+});
+
 Auth::routes();
 
 Route::prefix('/')->attribute('namespace', 'Frontend')->middleware('auth')->group(function () {

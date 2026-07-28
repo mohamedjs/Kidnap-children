@@ -3,27 +3,54 @@
       <div class="dashboard-profile-content">
         <div class="row">
           <div class="col-lg-12">
+            <!-- REST API Search & Filter Bar -->
+            <div class="card mb-4 p-3 shadow-sm border-0" style="border-radius: 12px; background: #ffffff;">
+              <form @submit.prevent="filter_post()" class="row g-2 align-items-center">
+                <div class="col-md-5 mb-2 mb-md-0">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-transparent border-right-0"><i class="fas fa-search text-muted"></i></span>
+                    </div>
+                    <input type="text" class="form-control border-left-0" v-model="filter.query" @input="debouncedSearch" placeholder="Search found children reports...">
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2 mb-md-0">
+                  <select class="form-control" v-model="filter.gender" @change="filter_post()">
+                    <option value="">All Genders</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                  <input type="number" class="form-control" v-model="filter.age" @change="filter_post()" placeholder="Age">
+                </div>
+                <div class="col-md-2 d-flex">
+                  <button type="submit" class="btn btn-success btn-block mr-1" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border: none;">Search</button>
+                  <button type="button" class="btn btn-outline-secondary" @click="reset_filter()" title="Reset Filters"><i class="fas fa-redo"></i></button>
+                </div>
+              </form>
+            </div>
             <ul class="list_ofPosts list-unstyled">
               <li v-for="(post,key) in posts" :key="key">
                   <div class="post">
                     <div class="photo-box-slider swiper-container">
                       <carousel :dots="false"  :nav="false" :items="1" class="swiper-wrapper">
                         <vue-load-image v-for="post_image in post.images" :key="post_image.key">
-                           <img slot="image" :src="post_image.image" class="img-responsive"/>
-                           <img slot="preloader" :src="base_url+'/front/svg/image-loader.8402b89.gif'" class="img-responsive"/>
+                           <img slot="image" :src="post_image.image" :alt="post.name || 'Found person photo'" class="img-responsive"/>
+                           <img slot="preloader" :src="base_url+'/front/svg/image-loader.8402b89.gif'" alt="Loading image..." class="img-responsive"/>
                            <div slot="error">about</div>
                          </vue-load-image>
                         <template  slot="prev">
-                          <div class="swiper-button-prev lost-people-btn-prev photo-arrows"><i class="fas fa-chevron-left"></i></div>
+                          <div class="swiper-button-prev lost-people-btn-prev photo-arrows" aria-label="Previous Image"><i class="fas fa-chevron-left"></i></div>
                         </template>
                         <template  slot="next">
-                          <div class="swiper-button-next lost-people-btn-next photo-arrows"><i class="fas fa-chevron-right"></i></div>
+                          <div class="swiper-button-next lost-people-btn-next photo-arrows" aria-label="Next Image"><i class="fas fa-chevron-right"></i></div>
                         </template>
                       </carousel>
                     </div>
                     <div class="post-data">
                       <div class="post-owner">
-                        <div class="img-box"><img class="img-fluid" :src="post.user.image"></div>
+                        <div class="img-box"><img class="img-fluid" :src="post.user.image" :alt="post.user.name || 'User profile image'"></div>
                         <div class="owner_date">
                           <h4 class="owner-name">{{post.user.name}}</h4>
                           <p class="post-time">{{moment(post.created_at).format('LL')}}</p>
@@ -39,10 +66,10 @@
                             <p class="label">Person Name:</p><span class="value">{{post.name}}</span>
                           </li>
                           <li>
-                            <p class="label">gender:</p><span class="value">{{post.gender == 1 ? 'male':'female'}}</span>
+                            <p class="label">gender:</p><span class="value">{{post.gender == 1 || post.gender == 'male' ? 'male':'female'}}</span>
                           </li>
                           <li>
-                            <p class="label">Lost Date:</p><span class="value">{{moment(post.created_at).format('LL')}}</span>
+                            <p class="label">Found Date:</p><span class="value">{{moment(post.created_at).format('LL')}}</span>
                           </li>
                           <li>
                             <p class="label">Age:</p><span class="value">{{post.age}}</span>
@@ -113,10 +140,10 @@ import VueLoadImage from 'vue-load-image'
           posts:[],
           post:{'name':'' , 'gender':'' , 'birth_date' : moment(new Date()).format('YYYY-MM-DD') , 'description' : '' , 'age' : ''},
           next_url:'',
-          filter:{'gender':'' , 'from' : '' , 'to' : '' , 'city' : '' },
+          filter:{'gender':'' , 'from' : '' , 'to' : '' , 'city' : '' , 'query' : '' , 'age' : ''},
           comment:'',
           comment_id : '',
-          uri:base_url+'/posts',
+          uri:base_url+'/api/posts',
           validationErrors:[],
           base_url:base_url,
           next_comment_url:'',
@@ -125,7 +152,8 @@ import VueLoadImage from 'vue-load-image'
           loading:false,
           show_dot:false,
           loading_data:false,
-          show_end_message:false
+          show_end_message:false,
+          searchTimer: null
         }
       },
        props:['user'],
@@ -141,10 +169,7 @@ import VueLoadImage from 'vue-load-image'
              this.data.append('_method' , 'patch')
                axios.post(base_url+'/comments/'+this.comment_id , this.data)
                  .then(function (response){
-                     // let obj = _this.posts[key].comments.find(x => x.id === _this.comment_id);
-                     // let index = array.indexOf(obj)
-                     // _this.posts[key].comments.splice(index,1)
-                     console.log(response.data.comment.data);
+                    console.log(response.data.comment.data);
                     _this.posts[key].comments.splice(_this.remove_comment_key,1)
                     _this.posts[key].comments.push(response.data.comment)
                     _this.data = new FormData()
@@ -214,45 +239,72 @@ import VueLoadImage from 'vue-load-image'
                 typing: true
               })
          },
+         debouncedSearch() {
+           clearTimeout(this.searchTimer);
+           this.searchTimer = setTimeout(() => {
+             this.filter_post();
+           }, 400);
+         },
+         reset_filter() {
+           this.filter = {'gender':'' , 'from' : '' , 'to' : '' , 'city' : '' , 'query' : '' , 'age' : ''};
+           this.get_posts();
+         },
          get_posts(){
            var _this = this;
-           axios.get(this.uri+'?type='+"founded").then(function (response) {
-             _this.posts = response.data.posts.data;
-             _this.next_url = response.data.posts.next_page_url;
-           }).catch(
-             error => console.log(error)
-           );
+           this.loading_data = true;
+           axios.get(this.uri, { params: { type: 'founded' } }).then(function (response) {
+             let postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+             let nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+             _this.posts = postsData;
+             _this.next_url = nextUrl;
+             _this.loading_data = false;
+             _this.show_end_message = !nextUrl;
+           }).catch(function (error) {
+             console.log(error);
+             _this.loading_data = false;
+           });
          },
          filter_post(){
            var _this=this;
-           this.loading = true
-           this.posts = []
-           axios.get(base_url+'/posts?type='+"founded", {params:_this.filter} )
+           this.loading = true;
+           this.loading_data = true;
+           this.posts = [];
+           let params = Object.assign({ type: 'founded' }, this.filter);
+           axios.get(base_url + '/api/search', { params: params })
              .then(function (response){
-                    _this.posts = response.data.posts.data
-                   _this.next_url = response.data.posts.next_page_url
-                   _this.data = new FormData()
-                   _this.loading=false
-               }).catch(
-                   error => console.log(error)
-               )
+                let postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+                let nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+                _this.posts = postsData;
+                _this.next_url = nextUrl;
+                _this.data = new FormData();
+                _this.loading = false;
+                _this.loading_data = false;
+                _this.show_end_message = !nextUrl;
+             }).catch(function (error){
+                console.log(error);
+                _this.loading = false;
+                _this.loading_data = false;
+             });
          },
          load_posts(){
            var _this = this;
-           if(this.next_url){
-             this.loading_data = true
+           if(this.next_url && !this.loading_data){
+             this.loading_data = true;
              axios.get(_this.next_url).then(function (response) {
-               if(response.data.posts.data.length > 0){
-                 _this.posts = _this.posts.concat(response.data.posts.data);
-                 _this.next_url = response.data.posts.next_page_url;
-                  _this.loading_data = false
-                 }
-                 else{
-                   _this.show_end_message = true
-                 }
-             }).catch(
-               error => console.log(error)
-             );
+               let postsData = response.data.data || (response.data.posts ? response.data.posts.data : []);
+               let nextUrl = response.data.next_page_url || (response.data.posts ? response.data.posts.next_page_url : null);
+               if(postsData.length > 0){
+                 _this.posts = _this.posts.concat(postsData);
+                 _this.next_url = nextUrl;
+                 _this.loading_data = false;
+               } else {
+                 _this.loading_data = false;
+                 _this.show_end_message = true;
+               }
+             }).catch(function (error) {
+               console.log(error);
+               _this.loading_data = false;
+             });
           }
          },
          delete_post(post_id,post_key){
