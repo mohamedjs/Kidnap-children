@@ -13500,6 +13500,254 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -13507,30 +13755,32 @@ __webpack_require__.r(__webpack_exports__);
     carousel: vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default.a,
     'vue-load-image': vue_load_image__WEBPACK_IMPORTED_MODULE_1___default.a
   },
+  props: ['user'],
   data: function data() {
     return {
       data: new FormData(),
       posts: [],
       post: {
-        'name': '',
-        'gender': '',
-        'birth_date': moment(new Date()).format('YYYY-MM-DD'),
-        'description': '',
-        'age': '',
-        'type': ''
+        name: '',
+        gender: '',
+        birth_date: moment(new Date()).format('YYYY-MM-DD'),
+        description: '',
+        age: '',
+        type: ''
       },
-      next_url: '',
       filter: {
-        'gender': '',
-        'from': '',
-        'to': '',
-        'city': ''
+        gender: '',
+        from: '',
+        to: '',
+        city: '',
+        type: ''
       },
       comment: '',
       comment_id: '',
       uri: base_url + '/posts',
       validationErrors: [],
       base_url: base_url,
+      next_url: '',
       next_comment_url: '',
       page_num: 1,
       remove_comment_key: '',
@@ -13538,33 +13788,35 @@ __webpack_require__.r(__webpack_exports__);
       show_dot: false,
       loading_data: false,
       show_end_message: false,
-      loading_posts_result: false
+      loading_posts_result: false,
+      form_open: false
     };
   },
-  props: ['user'],
   methods: {
+    toggleForm: function toggleForm() {
+      this.form_open = !this.form_open;
+    },
+    setFilter: function setFilter(type) {
+      this.filter.type = type; // Update UI button states
+
+      document.querySelectorAll('.feed-filter-btn').forEach(function (btn) {
+        return btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      this.posts = [];
+      this.next_url = this.uri;
+      this.get_posts();
+    },
     get_posts: function get_posts() {
       var _this = this;
 
-      axios.get(this.uri).then(function (response) {
-        _this.posts = response.data.posts.data;
-        _this.next_url = response.data.posts.next_page_url;
-      })["catch"](function (error) {
-        return console.log(error);
-      });
-    },
-    filter_post: function filter_post() {
-      var _this = this;
-
-      this.loading = true;
-      this.posts = [];
-      axios.get(base_url + '/posts', {
-        params: _this.filter
+      var params = {};
+      if (this.filter.type) params.type = this.filter.type;
+      axios.get(this.uri, {
+        params: params
       }).then(function (response) {
         _this.posts = response.data.posts.data;
         _this.next_url = response.data.posts.next_page_url;
-        _this.data = new FormData();
-        _this.loading = false;
       })["catch"](function (error) {
         return console.log(error);
       });
@@ -13581,6 +13833,7 @@ __webpack_require__.r(__webpack_exports__);
             _this.loading_data = false;
           } else {
             _this.show_end_message = true;
+            _this.loading_data = false;
           }
         })["catch"](function (error) {
           return console.log(error);
@@ -13594,23 +13847,18 @@ __webpack_require__.r(__webpack_exports__);
       this.data.append('post_id', id);
       this.data.append('key', key);
 
-      if (this.comment_id != '') {
-        this.data.append('comment', this.comment);
+      if (this.comment_id !== '') {
         this.data.append('_method', 'patch');
         axios.post(base_url + '/comments/' + this.comment_id, this.data).then(function (response) {
-          // let obj = _this.posts[key].comments.find(x => x.id === _this.comment_id);
-          // let index = array.indexOf(obj)
-          // _this.posts[key].comments.splice(index,1)
-          console.log(response.data.comment.data);
-
           _this.posts[key].comments.splice(_this.remove_comment_key, 1);
 
           _this.posts[key].comments.push(response.data.comment);
 
           _this.data = new FormData();
           _this.comment = '';
+          _this.comment_id = '';
         })["catch"](function (error) {
-          if (error.response.status == 422) {
+          if (error.response && error.response.status === 422) {
             _this.validationErrors = error.response.data.errors;
           }
         });
@@ -13621,30 +13869,26 @@ __webpack_require__.r(__webpack_exports__);
           _this.data = new FormData();
           _this.comment = '';
         })["catch"](function (error) {
-          if (error.response.status == 422) {
+          if (error.response && error.response.status === 422) {
             _this.validationErrors = error.response.data.errors;
           }
         });
       }
     },
     delete_comment: function delete_comment(comment_id, comment_key, post_key) {
+      if (!confirm('Are you sure you want to delete this comment?')) return;
+
       var _this = this;
 
-      var result = confirm("Are You Sure?");
+      axios["delete"](base_url + '/comments/' + comment_id).then(function (response) {
+        _this.posts[post_key].comments.splice(comment_key, 1);
 
-      if (result) {
-        axios["delete"](base_url + '/comments/' + comment_id).then(function (response) {
-          _this.posts[post_key].comments.splice(comment_key, 1);
-
-          _this.data = new FormData();
-        })["catch"](function (error) {
-          return console.log(error);
-        });
-      }
+        _this.data = new FormData();
+      })["catch"](function (error) {
+        return console.log(error);
+      });
     },
     update_comment: function update_comment(comment_id, comment, comment_key) {
-      var _this = this;
-
       this.comment = comment;
       this.comment_id = comment_id;
       this.remove_comment_key = comment_key;
@@ -13670,40 +13914,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     showtyping: function showtyping() {
       Echo["private"]('comment-post').whisper('typing', {
-        message: 'some one write comment',
+        message: 'someone is writing a comment',
         typing: true
       });
     },
     loadFile: function loadFile(event) {
       for (var i = 0; i < event.target.files.length; i++) {
-        var img = '<li>\
-                            <div class="img-box"><img class="img-fluid" src="' + URL.createObjectURL(event.target.files[i]) + '"></div>\
-                          </li>';
+        var img = '<li><div class="img-box"><img class="img-fluid" src="' + URL.createObjectURL(event.target.files[i]) + '" alt="Uploaded photo preview"></div></li>';
         $('.uploaded-photos').append(img);
         this.data.append('images[]', event.target.files[i]);
-      } // var formData = new FormData();
-      // formData.append('file',event.target.files[0]);
-      // var _this = this;
-      // $.ajax({
-      //   type: 'post',
-      //   url: 'http://localhost:5000/api/get_age',
-      //   data : formData,
-      //   processData: false,  // tell jQuery not to process the data
-      //   contentType: false, // tell jQuery not to set contentType
-      //   xhrFields: {
-      //       withCredentials: false
-      //   },
-      //   success : function(data) {
-      //     $('.circ').css('display','none')
-      //     $('.modal-backdrop').remove()
-      //       _this.user.age    = data[0][0]
-      //       _this.user.gender = data[0][1].charAt(0) == 'M' ? 'male' : 'female'
-      //       $('#myModal').modal('show');
-      //       $('#type_person').html(_this.user.gender)
-      //       $('#age_person').html(_this.user.age)
-      //   }
-      // });
-
+      }
     },
     create_post: function create_post() {
       this.posts = [];
@@ -13725,77 +13945,72 @@ __webpack_require__.r(__webpack_exports__);
         }
       };
       axios.post(base_url + '/posts', this.data, config).then(function (response) {
-        console.log(response);
-
-        if (response.data.results.length > 0) {
+        if (response.data.results && response.data.results.length > 0) {
           _this.posts = response.data.results;
           _this.loading_posts_result = false;
           _this.next_url = null;
-          alert('we found ' + response.data.results.length + ' posts match your posts');
+          alert('✅ AI found ' + response.data.results.length + ' matching case(s) for your report!');
         } else {
           _this.loading_posts_result = false;
 
           _this.get_posts();
 
-          _this.data = new FormData(); //_this.post = ''
-
-          alert('there are no match result and we get all posts');
+          _this.data = new FormData();
+          alert('Report submitted. No immediate AI matches found — your report is now live in the community feed.');
         }
-      })["catch"](function (error) {// if (error.response.status == 422){
-        //   _this.validationErrors = error.response.data.errors;
-        //  }
+
+        _this.form_open = false;
+      })["catch"](function (error) {
+        _this.loading_posts_result = false;
+        console.log(error);
       });
     },
     delete_post: function delete_post(post_id, post_key) {
+      if (!confirm('Are you sure you want to delete this report?')) return;
+
       var _this = this;
 
-      var result = confirm("Are You Sure?");
+      axios["delete"](base_url + '/posts/' + post_id).then(function (response) {
+        _this.posts.splice(post_key, 1);
 
-      if (result) {
-        axios["delete"](base_url + '/posts/' + post_id).then(function (response) {
-          _this.posts.splice(post_key, 1);
-
-          _this.data = new FormData(); //_this.post = ''
-        })["catch"](function (error) {
-          return console.log(error);
-        });
-      }
+        _this.data = new FormData();
+      })["catch"](function (error) {
+        return console.log(error);
+      });
     }
   },
   created: function created() {
     var _this2 = this;
 
-    //do something after creating vue instance
-    var _this = this;
+    var _this = this; // Real-time comment listener
+
 
     Echo["private"]('comment-post').listen('.comment.created', function (e) {
       _this.posts[e.key].comments.push(e.comment);
     }).listenForWhisper('typing', function (e) {
       if (e.typing) {
         _this.show_dot = true;
-      } else {
-        _this.show_dot = false;
       }
 
       setTimeout(function () {
         _this.show_dot = false;
-      }, 9000);
-    });
+      }, 4000);
+    }); // Real-time post listener
+
     Echo["private"]('post-event').listen('.post.created', function (e) {
       _this.get_posts();
-    }); // Detect when scrolled to bottom.
+    }); // Infinite scroll
 
     window.addEventListener('scroll', function (e) {
       var scrollY = window.scrollY;
       var visible = document.documentElement.clientHeight;
       var pageHeight = document.documentElement.scrollHeight;
-      var bottomOfPage = visible + scrollY >= pageHeight;
+      var nearBottom = visible + scrollY >= pageHeight - 200;
 
-      if ((bottomOfPage || pageHeight < visible) && _this2.next_url && !_this2.loading_posts_result) {
+      if (nearBottom && _this2.next_url && !_this2.loading_data && !_this2.loading_posts_result) {
         _this2.load_posts();
       }
     });
-    this.load_posts();
   },
   mounted: function mounted() {
     this.get_posts();
@@ -14292,6 +14507,207 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -14299,25 +14715,19 @@ __webpack_require__.r(__webpack_exports__);
     carousel: vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default.a,
     'vue-load-image': vue_load_image__WEBPACK_IMPORTED_MODULE_1___default.a
   },
+  props: ['user'],
   data: function data() {
     return {
       data: new FormData(),
       posts: [],
-      post: {
-        'name': '',
-        'gender': '',
-        'birth_date': moment(new Date()).format('YYYY-MM-DD'),
-        'description': '',
-        'age': ''
-      },
       next_url: '',
       filter: {
-        'gender': '',
-        'from': '',
-        'to': '',
-        'city': '',
-        'query': '',
-        'age': ''
+        gender: '',
+        from: '',
+        to: '',
+        city: '',
+        query: '',
+        age: ''
       },
       comment: '',
       comment_id: '',
@@ -14334,7 +14744,6 @@ __webpack_require__.r(__webpack_exports__);
       searchTimer: null
     };
   },
-  props: ['user'],
   methods: {
     add_comment: function add_comment(key, id) {
       var _this = this;
@@ -14343,20 +14752,18 @@ __webpack_require__.r(__webpack_exports__);
       this.data.append('post_id', id);
       this.data.append('key', key);
 
-      if (this.comment_id != '') {
-        this.data.append('comment', this.comment);
+      if (this.comment_id !== '') {
         this.data.append('_method', 'patch');
         axios.post(base_url + '/comments/' + this.comment_id, this.data).then(function (response) {
-          console.log(response.data.comment.data);
-
           _this.posts[key].comments.splice(_this.remove_comment_key, 1);
 
           _this.posts[key].comments.push(response.data.comment);
 
           _this.data = new FormData();
           _this.comment = '';
+          _this.comment_id = '';
         })["catch"](function (error) {
-          if (error.response.status == 422) {
+          if (error.response && error.response.status === 422) {
             _this.validationErrors = error.response.data.errors;
           }
         });
@@ -14367,30 +14774,26 @@ __webpack_require__.r(__webpack_exports__);
           _this.data = new FormData();
           _this.comment = '';
         })["catch"](function (error) {
-          if (error.response.status == 422) {
+          if (error.response && error.response.status === 422) {
             _this.validationErrors = error.response.data.errors;
           }
         });
       }
     },
     delete_comment: function delete_comment(comment_id, comment_key, post_key) {
+      if (!confirm('Are you sure?')) return;
+
       var _this = this;
 
-      var result = confirm("Are You Sure?");
+      axios["delete"](base_url + '/comments/' + comment_id).then(function () {
+        _this.posts[post_key].comments.splice(comment_key, 1);
 
-      if (result) {
-        axios["delete"](base_url + '/comments/' + comment_id).then(function (response) {
-          _this.posts[post_key].comments.splice(comment_key, 1);
-
-          _this.data = new FormData();
-        })["catch"](function (error) {
-          return console.log(error);
-        });
-      }
+        _this.data = new FormData();
+      })["catch"](function (error) {
+        return console.log(error);
+      });
     },
     update_comment: function update_comment(comment_id, comment, comment_key) {
-      var _this = this;
-
       this.comment = comment;
       this.comment_id = comment_id;
       this.remove_comment_key = comment_key;
@@ -14405,10 +14808,7 @@ __webpack_require__.r(__webpack_exports__);
           }
 
           _this.next_comment_url = response.data.comments.next_page_url;
-
-          if (_this.next_comment_url) {
-            _this.page_num = _this.page_num + 1;
-          }
+          if (_this.next_comment_url) _this.page_num++;
         })["catch"](function (error) {
           return console.log(error);
         });
@@ -14416,7 +14816,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     showtyping: function showtyping() {
       Echo["private"]('comment-post').whisper('typing', {
-        message: 'some one write comment',
+        message: 'typing',
         typing: true
       });
     },
@@ -14425,17 +14825,17 @@ __webpack_require__.r(__webpack_exports__);
 
       clearTimeout(this.searchTimer);
       this.searchTimer = setTimeout(function () {
-        _this2.filter_post();
+        return _this2.filter_post();
       }, 400);
     },
     reset_filter: function reset_filter() {
       this.filter = {
-        'gender': '',
-        'from': '',
-        'to': '',
-        'city': '',
-        'query': '',
-        'age': ''
+        gender: '',
+        from: '',
+        to: '',
+        city: '',
+        query: '',
+        age: ''
       };
       this.get_posts();
     },
@@ -14462,7 +14862,6 @@ __webpack_require__.r(__webpack_exports__);
     filter_post: function filter_post() {
       var _this = this;
 
-      this.loading = true;
       this.loading_data = true;
       this.posts = [];
       var params = Object.assign({
@@ -14481,7 +14880,6 @@ __webpack_require__.r(__webpack_exports__);
         _this.show_end_message = !nextUrl;
       })["catch"](function (error) {
         console.log(error);
-        _this.loading = false;
         _this.loading_data = false;
       });
     },
@@ -14509,55 +14907,44 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     delete_post: function delete_post(post_id, post_key) {
+      if (!confirm('Are you sure you want to delete this report?')) return;
+
       var _this = this;
 
-      var result = confirm("Are You Sure?");
+      axios["delete"](base_url + '/posts/' + post_id).then(function () {
+        _this.posts.splice(post_key, 1);
 
-      if (result) {
-        axios["delete"](base_url + '/posts/' + post_id).then(function (response) {
-          _this.posts.splice(post_key, 1);
-
-          _this.data = new FormData(); //_this.post = ''
-        })["catch"](function (error) {
-          return console.log(error);
-        });
-      }
+        _this.data = new FormData();
+      })["catch"](function (error) {
+        return console.log(error);
+      });
     }
   },
   created: function created() {
     var _this3 = this;
 
-    //do something after creating vue instance
     var _this = this;
 
     Echo["private"]('comment-post').listen('.comment.created', function (e) {
-      _this.posts[e.key].comments.push(e.comment);
+      if (_this.posts[e.key]) _this.posts[e.key].comments.push(e.comment);
     }).listenForWhisper('typing', function (e) {
-      if (e.typing) {
-        _this.show_dot = true;
-      } else {
-        _this.show_dot = false;
-      }
-
+      if (e.typing) _this.show_dot = true;
       setTimeout(function () {
         _this.show_dot = false;
-      }, 9000);
+      }, 4000);
     });
-    Echo["private"]('post-event').listen('.post.created', function (e) {
+    Echo["private"]('post-event').listen('.post.created', function () {
       _this.get_posts();
-    }); // Detect when scrolled to bottom.
-
-    window.addEventListener('scroll', function (e) {
+    });
+    window.addEventListener('scroll', function () {
       var scrollY = window.scrollY;
       var visible = document.documentElement.clientHeight;
       var pageHeight = document.documentElement.scrollHeight;
-      var bottomOfPage = visible + scrollY >= pageHeight;
 
-      if ((bottomOfPage || pageHeight < visible) && _this3.next_url) {
+      if (visible + scrollY >= pageHeight - 200 && _this3.next_url) {
         _this3.load_posts();
       }
     });
-    this.load_posts();
   },
   mounted: function mounted() {
     this.get_posts();
@@ -102787,210 +103174,436 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "dashboard-profile" }, [
-    _c("div", { staticClass: "dashboard-profile-content" }, [
-      _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      { staticClass: "feed-area" },
+      [
         _c(
           "div",
-          { staticClass: "col-lg-8" },
+          {
+            staticClass: "feed-filters",
+            attrs: { role: "tablist", "aria-label": "Filter posts by type" }
+          },
           [
-            _c("div", { staticClass: "create-post-box" }, [
-              _vm._m(0),
+            _c(
+              "button",
+              {
+                staticClass: "feed-filter-btn active",
+                attrs: {
+                  "data-type": "",
+                  role: "tab",
+                  "aria-selected": _vm.filter.type === ""
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.setFilter("")
+                  }
+                }
+              },
+              [
+                _c("i", {
+                  staticClass: "fas fa-layer-group",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" All Posts\n      ")
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "feed-filter-btn",
+                attrs: {
+                  "data-type": "missed",
+                  role: "tab",
+                  "aria-selected": _vm.filter.type === "missed"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.setFilter("missed")
+                  }
+                }
+              },
+              [
+                _c("i", {
+                  staticClass: "fas fa-search",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" Missing\n      ")
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "feed-filter-btn",
+                attrs: {
+                  "data-type": "founded",
+                  role: "tab",
+                  "aria-selected": _vm.filter.type === "founded"
+                },
+                on: {
+                  click: function($event) {
+                    return _vm.setFilter("founded")
+                  }
+                }
+              },
+              [
+                _c("i", {
+                  staticClass: "fas fa-check-circle",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(" Found\n      ")
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "create-post-card",
+            attrs: { role: "region", "aria-label": "Create a new report" }
+          },
+          [
+            _c("div", { staticClass: "create-post-trigger" }, [
+              _c("img", {
+                staticClass: "create-post-avatar",
+                attrs: { src: _vm.user.image, alt: _vm.user.name + " avatar" }
+              }),
               _vm._v(" "),
               _c(
-                "form",
+                "button",
                 {
-                  staticClass: "create-post-body collapse",
-                  attrs: { id: "create-post-body" },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.create_post()
-                    }
-                  }
+                  staticClass: "create-post-placeholder",
+                  attrs: {
+                    "data-toggle": "collapse",
+                    "data-target": "#create-post-body",
+                    "aria-expanded": "false",
+                    "aria-controls": "create-post-body"
+                  },
+                  on: { click: _vm.toggleForm }
                 },
                 [
-                  _c("div", { staticClass: "row form-group" }, [
-                    _c("div", { staticClass: "col-6" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "validate",
-                            rawName: "v-validate",
-                            value: { required: true, alpha: true },
-                            expression: "{ required: true, alpha: true }"
-                          },
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.post.name,
-                            expression: "post.name"
-                          }
-                        ],
-                        class:
-                          "create-post-input form-control" +
-                          [_vm.errors.has("person_name") ? " is-invalid" : ""],
-                        attrs: {
-                          name: "person_name",
-                          type: "text",
-                          placeholder: "Person Name"
-                        },
-                        domProps: { value: _vm.post.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                  _vm._v(
+                    "\n          What happened? Report a missing or found child...\n        "
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "create-post-actions" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "create-action-btn",
+                  attrs: {
+                    "data-toggle": "collapse",
+                    "data-target": "#create-post-body",
+                    "aria-label": "Upload photo for report"
+                  },
+                  on: { click: _vm.toggleForm }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-camera",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(" Photo\n        ")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "create-action-btn",
+                  attrs: {
+                    "data-toggle": "collapse",
+                    "data-target": "#create-post-body",
+                    "aria-label": "Report missing child"
+                  },
+                  on: { click: _vm.toggleForm }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-search",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(" Missing Report\n        ")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "create-action-btn",
+                  attrs: {
+                    "data-toggle": "collapse",
+                    "data-target": "#create-post-body",
+                    "aria-label": "Report found child"
+                  },
+                  on: { click: _vm.toggleForm }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-check-circle",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(" Found Report\n        ")
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "create-post-form collapse",
+                class: { "is-open": _vm.form_open },
+                attrs: { id: "create-post-body" }
+              },
+              [
+                _c(
+                  "form",
+                  {
+                    attrs: { novalidate: "" },
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.create_post()
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "person_name" } }, [
+                          _vm._v("Child's Name *")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: { required: true, alpha_spaces: true },
+                              expression:
+                                "{ required: true, alpha_spaces: true }"
+                            },
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.post.name,
+                              expression: "post.name"
                             }
-                            _vm.$set(_vm.post, "name", $event.target.value)
+                          ],
+                          class:
+                            "form-control" +
+                            (_vm.errors.has("person_name")
+                              ? " is-invalid"
+                              : ""),
+                          attrs: {
+                            id: "person_name",
+                            name: "person_name",
+                            type: "text",
+                            placeholder: "Full name",
+                            autocomplete: "off"
+                          },
+                          domProps: { value: _vm.post.name },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.post, "name", $event.target.value)
+                            }
                           }
-                        }
-                      }),
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("person_name")
+                          ? _c(
+                              "span",
+                              {
+                                staticClass: "invalid-feedback",
+                                attrs: { role: "alert" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(_vm.errors.first("person_name")) +
+                                    "\n              "
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ]),
                       _vm._v(" "),
-                      _vm.errors.has("person_name")
-                        ? _c("small", { staticClass: "text-danger" }, [
-                            _vm._v(_vm._s(_vm.errors.first("person_name")))
-                          ])
-                        : _vm._e()
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "gender_select" } }, [
+                          _vm._v("Gender")
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.post.gender,
+                                expression: "post.gender"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: {
+                              id: "gender_select",
+                              "aria-label": "Select gender"
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.post,
+                                  "gender",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Select gender")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "1" } }, [
+                              _vm._v("Male")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "2" } }, [
+                              _vm._v("Female")
+                            ])
+                          ]
+                        )
+                      ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-6" }, [
-                      _c("label", {
-                        staticClass: "icon-box",
-                        attrs: { for: "select_area" }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
+                    _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "birth_date" } }, [
+                          _vm._v("Date of Birth")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.post.gender,
-                              expression: "post.gender"
+                              value: _vm.post.birth_date,
+                              expression: "post.birth_date"
                             }
                           ],
-                          staticClass: "custome-select-city",
-                          staticStyle: { position: "relative" },
-                          attrs: { "aria-label": "Gender" },
+                          staticClass: "form-control date",
+                          attrs: {
+                            id: "birth_date",
+                            name: "birth_date",
+                            placeholder: "YYYY-MM-DD",
+                            type: "text"
+                          },
+                          domProps: { value: _vm.post.birth_date },
                           on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
                               _vm.$set(
                                 _vm.post,
-                                "gender",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
+                                "birth_date",
+                                $event.target.value
                               )
                             }
                           }
-                        },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("Select Gender")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "1" } }, [
-                            _vm._v("Male")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "2" } }, [
-                            _vm._v("Female")
-                          ])
-                        ]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "row form-group" }, [
-                    _c("div", { staticClass: "col-6" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.post.birth_date,
-                            expression: "post.birth_date"
-                          }
-                        ],
-                        staticClass: "create-post-input form-control date",
-                        attrs: {
-                          name: "birth_date",
-                          placeholder: "Birth Date",
-                          type: "text"
-                        },
-                        domProps: { value: _vm.post.birth_date },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("label", { attrs: { for: "age_input" } }, [
+                          _vm._v("Age *")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.post.age,
+                              expression: "post.age"
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: {
+                                required: true,
+                                numeric: true,
+                                min_value: 0,
+                                max_value: 18
+                              },
+                              expression:
+                                "{ required: true, numeric: true, min_value: 0, max_value: 18 }"
                             }
-                            _vm.$set(
-                              _vm.post,
-                              "birth_date",
-                              $event.target.value
-                            )
+                          ],
+                          class:
+                            "form-control" +
+                            (_vm.errors.has("age") ? " is-invalid" : ""),
+                          attrs: {
+                            id: "age_input",
+                            name: "age",
+                            placeholder: "Age in years",
+                            type: "number",
+                            min: "0",
+                            max: "18"
+                          },
+                          domProps: { value: _vm.post.age },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.post, "age", $event.target.value)
+                            }
                           }
-                        }
-                      })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("age")
+                          ? _c(
+                              "span",
+                              {
+                                staticClass: "invalid-feedback",
+                                attrs: { role: "alert" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                " +
+                                    _vm._s(_vm.errors.first("age")) +
+                                    "\n              "
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ])
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-6" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.post.age,
-                            expression: "post.age"
-                          },
-                          {
-                            name: "validate",
-                            rawName: "v-validate",
-                            value: { required: true, numeric: true },
-                            expression: "{ required: true, numeric: true }"
-                          }
-                        ],
-                        class:
-                          "create-post-input form-control" +
-                          [_vm.errors.has("age") ? " is-invalid" : ""],
-                        attrs: {
-                          name: "age",
-                          placeholder: "Age",
-                          type: "text"
-                        },
-                        domProps: { value: _vm.post.age },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.post, "age", $event.target.value)
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _vm.errors.has("age")
-                        ? _c("small", { staticClass: "text-danger" }, [
-                            _vm._v(_vm._s(_vm.errors.first("age")))
-                          ])
-                        : _vm._e()
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("div", { staticClass: "col-6" }, [
-                      _c("label", {
-                        staticClass: "icon-box",
-                        attrs: { for: "select_area" }
-                      }),
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "post_type" } }, [
+                        _vm._v("Report Type *")
+                      ]),
                       _vm._v(" "),
                       _c(
                         "select",
@@ -103003,9 +103616,11 @@ var render = function() {
                               expression: "post.type"
                             }
                           ],
-                          staticClass: "custome-select-city",
-                          staticStyle: { position: "relative" },
-                          attrs: { "aria-label": "Post Type" },
+                          staticClass: "form-control",
+                          attrs: {
+                            id: "post_type",
+                            "aria-label": "Select report type"
+                          },
                           on: {
                             change: function($event) {
                               var $$selectedVal = Array.prototype.filter
@@ -103028,408 +103643,761 @@ var render = function() {
                         },
                         [
                           _c("option", { attrs: { value: "" } }, [
-                            _vm._v("Select Post Type")
+                            _vm._v("Select type")
                           ]),
                           _vm._v(" "),
                           _c("option", { attrs: { value: "missed" } }, [
-                            _vm._v("Missed")
+                            _vm._v("Missing Child")
                           ]),
                           _vm._v(" "),
                           _c("option", { attrs: { value: "founded" } }, [
-                            _vm._v("Found")
+                            _vm._v("Found Child")
                           ])
                         ]
                       )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "validate",
-                          rawName: "v-validate",
-                          value: { required: true },
-                          expression: "{ required: true }"
-                        },
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.post.description,
-                          expression: "post.description"
-                        }
-                      ],
-                      class:
-                        "create-post-input form-control" +
-                        [_vm.errors.has("description") ? " is-invalid" : ""],
-                      attrs: {
-                        name: "description",
-                        placeholder: "description",
-                        rows: "4"
-                      },
-                      domProps: { value: _vm.post.description },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.post, "description", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.errors.has("description")
-                      ? _c("small", { staticClass: "text-danger" }, [
-                          _vm._v(_vm._s(_vm.errors.first("description")))
-                        ])
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "upload-photo-post" }, [
-                    _c("div", [
-                      _c("label", { staticClass: "file-field" }, [
-                        _c("div", { staticClass: "file-button" }, [
-                          _vm._m(1),
-                          _vm._v(" "),
-                          _c("input", {
-                            directives: [
-                              { name: "validate", rawName: "v-validate" }
-                            ],
-                            ref: "file",
-                            staticClass: "input-file",
-                            attrs: {
-                              id: "input-file",
-                              type: "file",
-                              "data-vv-rules":
-                                "image|size:2000|ext:jpeg,jpg,png",
-                              accept: "image/*",
-                              name: "post_image",
-                              multiple: ""
-                            },
-                            on: {
-                              change: function($event) {
-                                return _vm.loadFile($event)
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _vm.errors.has("post_image")
-                            ? _c("small", { staticClass: "text-danger" }, [
-                                _vm._v(_vm._s(_vm.errors.first("post_image")))
-                              ])
-                            : _vm._e()
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("ul", { staticClass: "uploaded-photos list-unstyled" })
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      staticClass: "submit-post",
-                      attrs: { type: "submit", value: "Post" }
-                    })
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "list_ofPosts list-unstyled" },
-              _vm._l(_vm.posts, function(post, key) {
-                return _c("li", { key: key }, [
-                  _c("div", { staticClass: "post" }, [
-                    _c(
-                      "div",
-                      { staticClass: "photo-box-slider swiper-container" },
-                      [
-                        _c(
-                          "carousel",
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", { attrs: { for: "description" } }, [
+                        _vm._v("Description & Last Known Location *")
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
                           {
-                            staticClass: "swiper-wrapper",
-                            attrs: { dots: false, nav: false, items: 1 }
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: { required: true },
+                            expression: "{ required: true }"
                           },
-                          [
-                            _vm._l(post.images, function(post_image) {
-                              return _c(
-                                "vue-load-image",
-                                { key: post_image.key },
-                                [
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "image",
-                                      src: post_image.image
-                                    },
-                                    slot: "image"
-                                  }),
-                                  _vm._v(" "),
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "preloader",
-                                      src:
-                                        _vm.base_url +
-                                        "/front/svg/image-loader.8402b89.gif"
-                                    },
-                                    slot: "preloader"
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { attrs: { slot: "error" }, slot: "error" },
-                                    [_vm._v("about")]
-                                  )
-                                ]
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.post.description,
+                            expression: "post.description"
+                          }
+                        ],
+                        class:
+                          "form-control" +
+                          (_vm.errors.has("description") ? " is-invalid" : ""),
+                        attrs: {
+                          id: "description",
+                          name: "description",
+                          placeholder:
+                            "Describe the child, clothing, last known location, any identifying features...",
+                          rows: "4"
+                        },
+                        domProps: { value: _vm.post.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.post,
+                              "description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("description")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(_vm.errors.first("description")) +
+                                  "\n            "
                               )
-                            }),
-                            _vm._v(" "),
-                            _c("template", { slot: "prev" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-prev lost-people-btn-prev photo-arrows"
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-left"
-                                  })
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("template", { slot: "next" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-next lost-people-btn-next photo-arrows"
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-right"
-                                  })
-                                ]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ],
-                      1
-                    ),
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "post-data" }, [
-                      _c("div", { staticClass: "post-owner" }, [
-                        _c("div", { staticClass: "img-box" }, [
-                          _c("img", {
-                            staticClass: "img-fluid",
-                            attrs: { src: post.user.image }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "owner_date" }, [
-                          _c("h4", { staticClass: "owner-name" }, [
-                            _vm._v(_vm._s(post.user.name))
+                    _c("div", { staticClass: "form-group" }, [
+                      _c("label", [_vm._v("Child's Photo(s)")]),
+                      _vm._v(" "),
+                      _c(
+                        "label",
+                        {
+                          staticClass: "upload-area",
+                          attrs: {
+                            for: "photo-upload-input",
+                            tabindex: "0",
+                            "aria-label":
+                              "Click or press Enter to upload photos"
+                          },
+                          on: {
+                            keydown: function($event) {
+                              if (
+                                !$event.type.indexOf("key") &&
+                                _vm._k(
+                                  $event.keyCode,
+                                  "enter",
+                                  13,
+                                  $event.key,
+                                  "Enter"
+                                )
+                              ) {
+                                return null
+                              }
+                              return _vm.$refs.file.click()
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "fas fa-cloud-upload-alt",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("Click to upload photos of the child")
                           ]),
                           _vm._v(" "),
-                          _c("p", { staticClass: "post-time" }, [
-                            _vm._v(
-                              _vm._s(_vm.moment(post.created_at).format("LL"))
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        post.user.id == _vm.user.id
-                          ? _c(
+                          _c(
+                            "p",
+                            {
+                              staticStyle: {
+                                "font-size": ".75rem",
+                                color: "#94A3B8",
+                                "margin-top": "4px"
+                              }
+                            },
+                            [_vm._v("PNG, JPG up to 2MB each")]
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          { name: "validate", rawName: "v-validate" }
+                        ],
+                        ref: "file",
+                        staticClass: "sr-only",
+                        attrs: {
+                          id: "photo-upload-input",
+                          type: "file",
+                          "data-vv-rules": "image|size:2000|ext:jpeg,jpg,png",
+                          accept: "image/*",
+                          name: "post_image",
+                          multiple: "",
+                          "aria-hidden": "true",
+                          tabindex: "-1"
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.loadFile($event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.has("post_image")
+                        ? _c(
+                            "span",
+                            {
+                              staticClass: "invalid-feedback",
+                              attrs: { role: "alert" }
+                            },
+                            [
+                              _vm._v(
+                                "\n              " +
+                                  _vm._s(_vm.errors.first("post_image")) +
+                                  "\n            "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("ul", {
+                      staticClass: "uploaded-photos",
+                      attrs: { "aria-label": "Uploaded photos preview" }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "submit-post-btn",
+                        attrs: {
+                          type: "submit",
+                          disabled: _vm.loading_posts_result
+                        }
+                      },
+                      [
+                        !_vm.loading_posts_result
+                          ? _c("span", [
+                              _c("i", {
+                                staticClass: "fas fa-paper-plane",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\n              Submit Report & Search AI Matches\n            "
+                              )
+                            ])
+                          : _c("span", [
+                              _c("i", {
+                                staticClass: "fas fa-spinner fa-spin",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\n              Searching AI Matches...\n            "
+                              )
+                            ])
+                      ]
+                    )
+                  ]
+                )
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("transition", { attrs: { name: "fade" } }, [
+          _vm.loading_posts_result
+            ? _c(
+                "div",
+                {
+                  staticClass: "feed-loading",
+                  attrs: { role: "status", "aria-live": "polite" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-spinner fa-spin",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(
+                    "\n        AI is searching for matching cases across the database...\n      "
+                  )
+                ]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            staticClass: "list_ofPosts list-unstyled",
+            attrs: { "aria-label": "Posts feed" }
+          },
+          _vm._l(_vm.posts, function(post, key) {
+            return _c("li", { key: post.id }, [
+              _c(
+                "article",
+                {
+                  staticClass: "post-card",
+                  attrs: { "aria-label": "Report for " + post.name }
+                },
+                [
+                  _c("div", { staticClass: "post-card-header" }, [
+                    _c("div", { staticClass: "post-avatar-wrap" }, [
+                      _c("img", {
+                        staticClass: "post-avatar",
+                        attrs: {
+                          src: post.user.image,
+                          alt: post.user.name + " avatar"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm._m(0, true)
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "post-meta" }, [
+                      _c("p", { staticClass: "post-author" }, [
+                        _vm._v(_vm._s(post.user.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "post-time" }, [
+                        _c("i", {
+                          staticClass: "fas fa-clock",
+                          staticStyle: {
+                            "font-size": "10px",
+                            "margin-right": "3px"
+                          },
+                          attrs: { "aria-hidden": "true" }
+                        }),
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.moment(post.created_at).fromNow()) +
+                            "\n              "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "post-header-right" }, [
+                      _c(
+                        "span",
+                        {
+                          class:
+                            "post-status-badge " +
+                            (post.type === "missed"
+                              ? "status-missing"
+                              : "status-found"),
+                          attrs: {
+                            role: "status",
+                            "aria-label":
+                              "Status: " +
+                              (post.type === "missed"
+                                ? "Missing"
+                                : "Found Safe")
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                " +
+                              _vm._s(
+                                post.type === "missed"
+                                  ? "Missing"
+                                  : "Found Safe"
+                              ) +
+                              "\n              "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      post.user.id == _vm.user.id
+                        ? _c("div", { staticClass: "dropdown show" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "post-more-btn",
+                                attrs: {
+                                  "data-toggle": "dropdown",
+                                  "aria-haspopup": "true",
+                                  "aria-expanded": "false",
+                                  "aria-label":
+                                    "Options for " + post.name + " post"
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-ellipsis-h",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "div",
                               {
                                 staticClass:
-                                  "dropdown show setting-dropdown icon-box"
+                                  "dropdown-menu dropdown-menu-right",
+                                staticStyle: {
+                                  "border-radius": "12px",
+                                  border: "1px solid #E2E8F0",
+                                  "box-shadow":
+                                    "0 10px 32px rgba(15,23,42,.12)",
+                                  padding: "4px"
+                                }
                               },
                               [
-                                _vm._m(2, true),
+                                _vm._m(1, true),
                                 _vm._v(" "),
                                 _c(
-                                  "div",
+                                  "a",
                                   {
-                                    staticClass: "dropdown-menu",
-                                    staticStyle: { top: "25px !important" },
-                                    attrs: {
-                                      "aria-labelledby":
-                                        "profile-setting-dropdown"
+                                    staticClass: "dropdown-item",
+                                    staticStyle: {
+                                      "border-radius": "8px",
+                                      "font-size": ".875rem",
+                                      color: "#DC2626"
+                                    },
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.delete_post(post.id, key)
+                                      }
                                     }
                                   },
                                   [
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" }
-                                      },
-                                      [_vm._v("Edit")]
-                                    ),
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.delete_post(post.id, key)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Delete")]
-                                    )
+                                    _c("i", {
+                                      staticClass: "fas fa-trash-alt",
+                                      staticStyle: { "margin-right": "8px" },
+                                      attrs: { "aria-hidden": "true" }
+                                    }),
+                                    _vm._v("Delete\n                  ")
                                   ]
                                 )
                               ]
                             )
-                          : _vm._e(),
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "post-card-info" }, [
+                    _c("div", { staticClass: "child-info-grid" }, [
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Name")
+                        ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "clearfix" })
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(_vm._s(post.name))
+                        ])
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "post-data-content" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "lostPerson_data list-unstyled" },
-                          [
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Person Name:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.name))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("gender:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(post.gender == 1 ? "male" : "female")
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Lost Date:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.moment(post.created_at).format("LL")
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Age:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.age))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "loatDetails" }, [
-                                _vm._v(_vm._s(post.description))
-                              ])
-                            ])
-                          ]
-                        )
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [_vm._v("Age")]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(_vm._s(post.age) + " years old")
+                        ])
                       ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Gender")
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(_vm._s(post.gender == 1 ? "Male" : "Female"))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Reported")
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.moment(post.created_at).format("MMM D, YYYY")
+                            )
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "post-location" }, [
+                      _c("i", {
+                        staticClass: "fas fa-map-marker-alt",
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", [
+                        _vm._v(
+                          _vm._s(
+                            post.description
+                              ? post.description.substring(0, 80) + "..."
+                              : "Location not specified"
+                          )
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    post.description
+                      ? _c("p", { staticClass: "post-description" }, [
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(post.description) +
+                              "\n            "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.ai_match_score
+                      ? _c("div", { staticClass: "ai-badge" }, [
+                          _c("i", {
+                            staticClass: "fas fa-brain",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(
+                            "\n              AI Similarity Match:\n              "
+                          ),
+                          _c("span", { staticClass: "ai-badge-pct" }, [
+                            _vm._v(_vm._s(post.ai_match_score) + "%")
+                          ]),
+                          _vm._v("\n              confidence\n            ")
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  post.images && post.images.length
+                    ? _c(
+                        "div",
+                        { staticClass: "post-card-photo" },
+                        [
+                          _c(
+                            "carousel",
+                            {
+                              staticClass: "swiper-wrapper",
+                              attrs: { dots: false, nav: true, items: 1 }
+                            },
+                            [
+                              _vm._l(post.images, function(post_image) {
+                                return _c(
+                                  "vue-load-image",
+                                  { key: post_image.id },
+                                  [
+                                    _c("img", {
+                                      staticClass: "post-child-img",
+                                      attrs: {
+                                        slot: "image",
+                                        src: post_image.image,
+                                        alt: post.name + " – child photo"
+                                      },
+                                      slot: "image"
+                                    }),
+                                    _vm._v(" "),
+                                    _c("img", {
+                                      staticClass: "post-child-img",
+                                      staticStyle: { "object-fit": "contain" },
+                                      attrs: {
+                                        slot: "preloader",
+                                        src:
+                                          _vm.base_url +
+                                          "/front/svg/image-loader.8402b89.gif",
+                                        alt: "Loading photo..."
+                                      },
+                                      slot: "preloader"
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticStyle: {
+                                          height: "200px",
+                                          display: "flex",
+                                          "align-items": "center",
+                                          "justify-content": "center",
+                                          color: "#94A3B8",
+                                          "flex-direction": "column",
+                                          gap: "8px"
+                                        },
+                                        attrs: { slot: "error" },
+                                        slot: "error"
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-image",
+                                          staticStyle: { "font-size": "32px" },
+                                          attrs: { "aria-hidden": "true" }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticStyle: {
+                                              "font-size": ".875rem"
+                                            }
+                                          },
+                                          [_vm._v("Photo unavailable")]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c("template", { slot: "prev" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "photo-arrows swiper-button-prev",
+                                    attrs: {
+                                      role: "button",
+                                      "aria-label": "Previous photo"
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-chevron-left",
+                                      attrs: { "aria-hidden": "true" }
+                                    })
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("template", { slot: "next" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "photo-arrows swiper-button-next",
+                                    attrs: {
+                                      role: "button",
+                                      "aria-label": "Next photo"
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-chevron-right",
+                                      attrs: { "aria-hidden": "true" }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-stats",
+                      attrs: { "aria-label": "Post engagement statistics" }
+                    },
+                    [
+                      _c("div", { staticClass: "stats-left" }, [
+                        _c("div", { staticClass: "stat-item" }, [
+                          _c("i", {
+                            staticClass: "fas fa-heart",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(_vm._s(post.likes_count || 0) + " Likes")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "stat-item" }, [
+                          _c("i", {
+                            staticClass: "fas fa-comment",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(
+                              _vm._s(post.count_comment || 0) + " Comments"
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "stats-right" }, [
+                        _vm._v(
+                          "\n              " +
+                            _vm._s(post.shares_count || 0) +
+                            " Shares\n            "
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-actions",
+                      attrs: {
+                        role: "group",
+                        "aria-label": "Actions for " + post.name + " report"
+                      }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "post-action-btn",
+                          attrs: { "aria-label": "Like this report" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                            }
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "far fa-heart",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Like")])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(2, true),
+                      _vm._v(" "),
+                      _vm._m(3, true),
+                      _vm._v(" "),
+                      _vm._m(4, true),
+                      _vm._v(" "),
+                      _vm._m(5, true)
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-comments",
+                      attrs: { "aria-label": "Comments section" }
+                    },
+                    [
+                      post.count_comment > 2
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "load-comments-btn",
+                              attrs: {
+                                "aria-label":
+                                  "Load more comments for " + post.name
+                              },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.load_more_comment(post.id, key)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fas fa-chevron-down",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\n              View " +
+                                  _vm._s(
+                                    post.count_comment - post.comments.length
+                                  ) +
+                                  " more comment(s)\n            "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "ul",
                         {
-                          staticClass:
-                            "post-btn-list list-unstyled d-flex justify-content-between"
+                          staticClass: "comment-list",
+                          attrs: {
+                            "aria-label": "Comments on " + post.name + " report"
+                          }
                         },
                         [
-                          _c("li", [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "post-btn",
-                                attrs: {
-                                  href:
-                                    _vm.base_url +
-                                    "/get_message/" +
-                                    post.user.id
-                                }
-                              },
+                          _vm.show_dot ? _c("li", [_vm._m(6, true)]) : _vm._e(),
+                          _vm._v(" "),
+                          _vm._l(post.comments, function(comment, key_comment) {
+                            return _c(
+                              "li",
+                              { key: comment.id, staticClass: "comment-item" },
                               [
-                                _c("i", { staticClass: "far fa-comment-dots" }),
-                                _c("span", [_vm._v("Send Message")])
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(3, true),
-                          _vm._v(" "),
-                          _vm._m(4, true)
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "comments" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "user-comments-list list-unstyled" },
-                          [
-                            post.count_comment > 2
-                              ? _c("li", [
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "comment-box",
-                                      staticStyle: {
-                                        cursor: "pointer",
-                                        color: "#9E2FB2"
-                                      },
-                                      attrs: { href: "#" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.load_more_comment(
-                                            post.id,
-                                            key
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("load comments")]
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm._l(post.comments, function(
-                              comment,
-                              key_comment
-                            ) {
-                              return _c("li", { key: key_comment }, [
-                                _c("div", { staticClass: "user-photo" }, [
-                                  _c("img", {
-                                    staticClass: "img-fluid",
-                                    attrs: { src: comment.user.image }
-                                  })
-                                ]),
+                                _c("img", {
+                                  staticClass: "comment-avatar",
+                                  attrs: {
+                                    src: comment.user.image,
+                                    alt: comment.user.name + " avatar"
+                                  }
+                                }),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "comment-box" }, [
-                                  _c("p", { staticClass: "usern-name" }, [
+                                _c("div", { staticClass: "comment-bubble" }, [
+                                  _c("p", { staticClass: "comment-author" }, [
                                     _vm._v(_vm._s(comment.user.name))
                                   ]),
                                   _vm._v(" "),
-                                  _c("p", { staticClass: "user-comment" }, [
+                                  _c("p", { staticClass: "comment-text" }, [
                                     _vm._v(_vm._s(comment.comment))
                                   ])
                                 ]),
@@ -103437,336 +104405,253 @@ var render = function() {
                                 comment.user.id == _vm.user.id
                                   ? _c(
                                       "div",
-                                      {
-                                        staticClass:
-                                          "dropdown show setting-dropdown icon-box"
-                                      },
+                                      { staticClass: "comment-actions" },
                                       [
-                                        _vm._m(5, true),
-                                        _vm._v(" "),
                                         _c(
                                           "div",
-                                          {
-                                            staticClass: "dropdown-menu",
-                                            staticStyle: {
-                                              top: "25px !important"
-                                            },
-                                            attrs: {
-                                              "aria-labelledby":
-                                                "profile-setting-dropdown"
-                                            }
-                                          },
+                                          { staticClass: "dropdown show" },
                                           [
                                             _c(
-                                              "a",
+                                              "button",
                                               {
-                                                staticClass: "dropdown-item",
-                                                attrs: {
-                                                  id: "update_com" + comment.id,
-                                                  href: "#"
+                                                staticClass: "post-more-btn",
+                                                staticStyle: {
+                                                  width: "28px",
+                                                  height: "28px"
                                                 },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.update_comment(
-                                                      comment.id,
-                                                      comment.comment,
-                                                      key_comment
-                                                    )
-                                                  }
+                                                attrs: {
+                                                  "data-toggle": "dropdown",
+                                                  "aria-haspopup": "true",
+                                                  "aria-expanded": "false",
+                                                  "aria-label":
+                                                    "Options for comment by " +
+                                                    comment.user.name
                                                 }
                                               },
-                                              [_vm._v("Edit")]
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-ellipsis-h",
+                                                  staticStyle: {
+                                                    "font-size": "12px"
+                                                  },
+                                                  attrs: {
+                                                    "aria-hidden": "true"
+                                                  }
+                                                })
+                                              ]
                                             ),
+                                            _vm._v(" "),
                                             _c(
-                                              "a",
+                                              "div",
                                               {
-                                                staticClass: "dropdown-item",
-                                                attrs: { href: "#" },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.delete_comment(
-                                                      comment.id,
-                                                      key_comment,
-                                                      key
-                                                    )
-                                                  }
+                                                staticClass:
+                                                  "dropdown-menu dropdown-menu-right",
+                                                staticStyle: {
+                                                  "border-radius": "10px",
+                                                  "min-width": "120px",
+                                                  border: "1px solid #E2E8F0",
+                                                  "box-shadow":
+                                                    "0 8px 24px rgba(15,23,42,.1)",
+                                                  padding: "4px"
                                                 }
                                               },
-                                              [_vm._v("Delete")]
+                                              [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "dropdown-item",
+                                                    staticStyle: {
+                                                      "border-radius": "6px",
+                                                      "font-size": ".8125rem"
+                                                    },
+                                                    attrs: {
+                                                      href: "#",
+                                                      id:
+                                                        "update_com" +
+                                                        comment.id
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        $event.preventDefault()
+                                                        return _vm.update_comment(
+                                                          comment.id,
+                                                          comment.comment,
+                                                          key_comment
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-edit",
+                                                      staticStyle: {
+                                                        "margin-right": "6px",
+                                                        color: "#2563EB"
+                                                      },
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    }),
+                                                    _vm._v(
+                                                      "Edit\n                      "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "dropdown-item",
+                                                    staticStyle: {
+                                                      "border-radius": "6px",
+                                                      "font-size": ".8125rem",
+                                                      color: "#DC2626"
+                                                    },
+                                                    attrs: { href: "#" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        $event.preventDefault()
+                                                        return _vm.delete_comment(
+                                                          comment.id,
+                                                          key_comment,
+                                                          key
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-trash-alt",
+                                                      staticStyle: {
+                                                        "margin-right": "6px"
+                                                      },
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    }),
+                                                    _vm._v(
+                                                      "Delete\n                      "
+                                                    )
+                                                  ]
+                                                )
+                                              ]
                                             )
                                           ]
                                         )
                                       ]
                                     )
                                   : _vm._e()
-                              ])
-                            }),
-                            _vm._v(" "),
-                            _c("li", [
-                              _vm.show_dot
-                                ? _c(
-                                    "div",
-                                    {
-                                      staticClass: "typing",
-                                      attrs: { id: "loading" }
-                                    },
-                                    [
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span")
-                                    ]
-                                  )
-                                : _vm._e()
-                            ])
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "form",
-                          {
-                            staticClass: "write-comment",
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                return _vm.add_comment(key, post.id)
-                              }
-                            }
-                          },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.comment,
-                                  expression: "comment"
-                                }
-                              ],
-                              staticClass: "input-write",
-                              attrs: {
-                                type: "text",
-                                placeholder: "Write Comment...."
-                              },
-                              domProps: { value: _vm.comment },
-                              on: {
-                                keydown: function($event) {
-                                  return _vm.showtyping()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.comment = $event.target.value
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm._m(6, true)
-                          ]
-                        )
-                      ]),
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      ),
                       _vm._v(" "),
                       _c(
-                        "div",
+                        "form",
                         {
-                          class:
-                            "post_label " +
-                            [
-                              post.type === "missed"
-                                ? "label-missed"
-                                : "label-found"
-                            ]
-                        },
-                        [_c("span", [_vm._v(_vm._s(post.type))])]
-                      )
-                    ])
-                  ])
-                ])
-              }),
-              0
-            ),
-            _vm._v(" "),
-            _c("transition", { attrs: { name: "fade" } }, [
-              _vm.loading_data
-                ? _c("div", { staticClass: "loading_data" }, [
-                    _c("span", { staticClass: "fa fa-spinner fa-spin" }),
-                    _vm._v(" Loading\n          ")
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _vm.loading_posts_result
-              ? _c("div", { staticClass: "loading_data" }, [
-                  _c("span", { staticClass: "fa fa-spinner fa-spin" }),
-                  _vm._v(
-                    " Search About Posts Match Your added post\n          "
-                  )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.show_end_message
-              ? _c("div", { staticClass: "loading_data" }, [
-                  _vm._v("\n             No More Posts :)\n          ")
-                ])
-              : _vm._e()
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-lg-4" }, [
-          _c(
-            "div",
-            { staticClass: "search-result-side-menu-block filter-by" },
-            [
-              _c("p", [_vm._v("Filter By")]),
-              _vm._v(" "),
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.filter_post()
-                    }
-                  }
-                },
-                [
-                  _c("ul", { staticClass: "filter-search list-unstyled" }, [
-                    _c("li", [
-                      _c("div", { staticClass: "select-city-group" }, [
-                        _c("label", {
-                          staticClass: "icon-box",
-                          attrs: { for: "select_area" }
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "select",
-                          {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter.gender,
-                                expression: "filter.gender"
-                              }
-                            ],
-                            staticClass: "custome-select-city",
-                            staticStyle: { position: "relative" },
-                            attrs: { "aria-label": "Gender Filter" },
-                            on: {
-                              change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.filter,
-                                  "gender",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              }
-                            }
+                          staticClass: "write-comment-form",
+                          attrs: {
+                            "aria-label":
+                              "Write a comment on " + post.name + " report"
                           },
-                          [
-                            _c("option", { attrs: { value: "" } }, [
-                              _vm._v("Select Gender")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "1" } }, [
-                              _vm._v("Male")
-                            ]),
-                            _vm._v(" "),
-                            _c("option", { attrs: { value: "2" } }, [
-                              _vm._v("Female")
-                            ])
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("label", { staticClass: "age-label" }, [
-                        _vm._v("Range of Age")
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "row" }, [
-                        _c("div", { staticClass: "col-6" }, [
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.add_comment(key, post.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("img", {
+                            staticClass: "write-comment-avatar",
+                            attrs: {
+                              src: _vm.user.image,
+                              alt: _vm.user.name + " avatar"
+                            }
+                          }),
+                          _vm._v(" "),
                           _c("input", {
                             directives: [
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.filter.from,
-                                expression: "filter.from"
+                                value: _vm.comment,
+                                expression: "comment"
                               }
                             ],
-                            staticClass: "age-range",
-                            attrs: { type: "text", placeholder: "From" },
-                            domProps: { value: _vm.filter.from },
+                            staticClass: "write-comment-input",
+                            attrs: {
+                              type: "text",
+                              placeholder: "Write a comment...",
+                              "aria-label":
+                                "Comment on " + post.name + " report"
+                            },
+                            domProps: { value: _vm.comment },
                             on: {
+                              keydown: function($event) {
+                                return _vm.showtyping()
+                              },
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.$set(
-                                  _vm.filter,
-                                  "from",
-                                  $event.target.value
-                                )
+                                _vm.comment = $event.target.value
                               }
                             }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "col-6" }, [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.filter.to,
-                                expression: "filter.to"
-                              }
-                            ],
-                            staticClass: "age-range",
-                            attrs: { type: "text", placeholder: "To" },
-                            domProps: { value: _vm.filter.to },
-                            on: {
-                              input: function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(_vm.filter, "to", $event.target.value)
-                              }
-                            }
-                          })
-                        ])
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "apply-filter",
-                    attrs: { type: "submit", value: "Apply" }
-                  })
+                          }),
+                          _vm._v(" "),
+                          _vm._m(7, true)
+                        ]
+                      )
+                    ]
+                  )
                 ]
               )
-            ]
-          )
-        ])
-      ])
-    ])
+            ])
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("transition", { attrs: { name: "fade" } }, [
+          _vm.loading_data
+            ? _c(
+                "div",
+                {
+                  staticClass: "feed-loading",
+                  attrs: { role: "status", "aria-live": "polite" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-spinner fa-spin",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v("\n        Loading more reports...\n      ")
+                ]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        _vm.show_end_message
+          ? _c(
+              "div",
+              { staticClass: "feed-end-msg", attrs: { role: "status" } },
+              [
+                _vm._v(
+                  "\n      🎉 You've seen all the reports. Help share to reach more people.\n    "
+                )
+              ]
+            )
+          : _vm._e()
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -103777,25 +104662,16 @@ var staticRenderFns = [
     return _c(
       "div",
       {
-        staticClass: "create-post-header",
-        attrs: {
-          "data-toggle": "collapse",
-          href: "#create-post-body",
-          "aria-expanded": "false",
-          "aria-controls": "create-post-body"
-        }
+        staticClass: "verified-badge",
+        attrs: { "aria-label": "Verified member" }
       },
-      [_c("p", [_vm._v("Create Post")])]
+      [
+        _c("i", {
+          staticClass: "fas fa-check",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "custome-input-file" }, [
-      _c("i", { staticClass: "fas fa-image" }),
-      _c("span", [_vm._v("upload photo")])
-    ])
   },
   function() {
     var _vm = this
@@ -103804,59 +104680,18 @@ var staticRenderFns = [
     return _c(
       "a",
       {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
+        staticClass: "dropdown-item",
+        staticStyle: { "border-radius": "8px", "font-size": ".875rem" },
+        attrs: { href: "#" }
       },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn active-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "far fa-comment-alt" }),
-        _c("span", [_vm._v("Comment")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-share" }),
-        _c("span", [_vm._v("Share")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
-      },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
+      [
+        _c("i", {
+          staticClass: "fas fa-edit",
+          staticStyle: { "margin-right": "8px", color: "#2563EB" },
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v("Edit\n                  ")
+      ]
     )
   },
   function() {
@@ -103865,8 +104700,152 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "submit-comment", attrs: { type: "submit" } },
-      [_c("i", { staticClass: "fas fa-paper-plane" })]
+      {
+        staticClass: "post-action-btn active",
+        attrs: { "aria-label": "Comment on this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "far fa-comment-alt",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Comment")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn",
+        attrs: { "aria-label": "Share this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-share",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Share")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn",
+        attrs: { "aria-label": "Save this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "far fa-bookmark",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Save")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn action-report",
+        attrs: { "aria-label": "Report this post as inappropriate" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-flag",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Report")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticStyle: {
+          display: "flex",
+          "align-items": "center",
+          gap: "8px",
+          padding: "4px 0"
+        },
+        attrs: { "aria-live": "polite", "aria-label": "Someone is typing" }
+      },
+      [
+        _c("div", { staticStyle: { display: "flex", gap: "3px" } }, [
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease infinite"
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease .2s infinite"
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease .4s infinite"
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticStyle: { "font-size": ".75rem", color: "#94A3B8" } },
+          [_vm._v("Someone is typing...")]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "submit-comment-btn",
+        attrs: { type: "submit", "aria-label": "Submit comment" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-paper-plane",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
     )
   }
 ]
@@ -104552,493 +105531,798 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "dashboard-profile" }, [
-    _c("div", { staticClass: "dashboard-profile-content" }, [
-      _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      { staticClass: "feed-area" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
         _c(
           "div",
-          { staticClass: "col-lg-12" },
+          {
+            staticStyle: {
+              background: "#fff",
+              border: "1px solid #E2E8F0",
+              "border-radius": "16px",
+              padding: "16px",
+              "margin-bottom": "1.5rem",
+              "box-shadow": "0 1px 3px rgba(15,23,42,.06)"
+            }
+          },
           [
             _c(
-              "div",
+              "form",
               {
-                staticClass: "card mb-4 p-3 shadow-sm border-0",
-                staticStyle: { "border-radius": "12px", background: "#ffffff" }
+                attrs: {
+                  role: "search",
+                  "aria-label": "Search missing children"
+                },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.filter_post()
+                  }
+                }
               },
               [
                 _c(
-                  "form",
+                  "div",
                   {
-                    staticClass: "row g-2 align-items-center",
-                    on: {
-                      submit: function($event) {
-                        $event.preventDefault()
-                        return _vm.filter_post()
-                      }
+                    staticStyle: {
+                      display: "grid",
+                      "grid-template-columns": "1fr auto auto auto",
+                      gap: "10px",
+                      "align-items": "center",
+                      "flex-wrap": "wrap"
                     }
                   },
                   [
-                    _c("div", { staticClass: "col-md-5 mb-2 mb-md-0" }, [
-                      _c("div", { staticClass: "input-group" }, [
-                        _vm._m(0),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.filter.query,
-                              expression: "filter.query"
-                            }
-                          ],
-                          staticClass: "form-control border-left-0",
-                          attrs: {
-                            type: "text",
-                            placeholder:
-                              "Search missing children by name or description..."
-                          },
-                          domProps: { value: _vm.filter.query },
-                          on: {
-                            input: [
-                              function($event) {
-                                if ($event.target.composing) {
-                                  return
-                                }
-                                _vm.$set(
-                                  _vm.filter,
-                                  "query",
-                                  $event.target.value
-                                )
-                              },
-                              _vm.debouncedSearch
-                            ]
-                          }
-                        })
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-3 mb-2 mb-md-0" }, [
-                      _c(
-                        "select",
-                        {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.filter.gender,
-                              expression: "filter.gender"
-                            }
-                          ],
-                          staticClass: "form-control",
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.filter,
-                                  "gender",
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
-                              },
-                              function($event) {
-                                return _vm.filter_post()
-                              }
-                            ]
-                          }
+                    _c("div", { staticStyle: { position: "relative" } }, [
+                      _c("i", {
+                        staticClass: "fas fa-search",
+                        staticStyle: {
+                          position: "absolute",
+                          left: "14px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          color: "#94A3B8",
+                          "font-size": "13px"
                         },
-                        [
-                          _c("option", { attrs: { value: "" } }, [
-                            _vm._v("All Genders")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "male" } }, [
-                            _vm._v("Male")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "female" } }, [
-                            _vm._v("Female")
-                          ])
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2 mb-2 mb-md-0" }, [
+                        attrs: { "aria-hidden": "true" }
+                      }),
+                      _vm._v(" "),
                       _c("input", {
                         directives: [
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.filter.age,
-                            expression: "filter.age"
+                            value: _vm.filter.query,
+                            expression: "filter.query"
                           }
                         ],
-                        staticClass: "form-control",
-                        attrs: { type: "number", placeholder: "Age" },
-                        domProps: { value: _vm.filter.age },
+                        staticStyle: {
+                          width: "100%",
+                          height: "42px",
+                          border: "1px solid #E2E8F0",
+                          "border-radius": "999px",
+                          padding: "0 16px 0 38px",
+                          "font-size": ".875rem",
+                          color: "#0F172A",
+                          background: "#F8FAFC",
+                          transition: "all .15s"
+                        },
+                        attrs: {
+                          type: "search",
+                          placeholder:
+                            "Search by name, description, location...",
+                          "aria-label": "Search missing children cases"
+                        },
+                        domProps: { value: _vm.filter.query },
                         on: {
-                          change: function($event) {
-                            return _vm.filter_post()
-                          },
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.filter, "age", $event.target.value)
-                          }
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.filter, "query", $event.target.value)
+                            },
+                            _vm.debouncedSearch
+                          ]
                         }
                       })
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-2 d-flex" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary btn-block mr-1",
-                          staticStyle: {
-                            background:
-                              "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                            border: "none"
-                          },
-                          attrs: { type: "submit" }
-                        },
-                        [_vm._v("Search")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-outline-secondary",
-                          attrs: { type: "button", title: "Reset Filters" },
-                          on: {
-                            click: function($event) {
-                              return _vm.reset_filter()
-                            }
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.filter.gender,
+                            expression: "filter.gender"
                           }
+                        ],
+                        staticStyle: {
+                          height: "42px",
+                          border: "1px solid #E2E8F0",
+                          "border-radius": "10px",
+                          padding: "0 12px",
+                          "font-size": ".875rem",
+                          color: "#334155",
+                          background: "#F8FAFC",
+                          cursor: "pointer"
                         },
-                        [_c("i", { staticClass: "fas fa-redo" })]
-                      )
-                    ])
+                        attrs: { "aria-label": "Filter by gender" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.filter,
+                                "gender",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              return _vm.filter_post()
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "" } }, [
+                          _vm._v("All Genders")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "male" } }, [
+                          _vm._v("Male")
+                        ]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "female" } }, [
+                          _vm._v("Female")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.age,
+                          expression: "filter.age"
+                        }
+                      ],
+                      staticStyle: {
+                        height: "42px",
+                        width: "80px",
+                        border: "1px solid #E2E8F0",
+                        "border-radius": "10px",
+                        padding: "0 12px",
+                        "font-size": ".875rem",
+                        color: "#334155",
+                        background: "#F8FAFC"
+                      },
+                      attrs: {
+                        type: "number",
+                        placeholder: "Age",
+                        min: "0",
+                        max: "18",
+                        "aria-label": "Filter by age"
+                      },
+                      domProps: { value: _vm.filter.age },
+                      on: {
+                        change: function($event) {
+                          return _vm.filter_post()
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "age", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticStyle: { display: "flex", gap: "8px" } },
+                      [
+                        _vm._m(1),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticStyle: {
+                              height: "42px",
+                              width: "42px",
+                              background: "#F1F5F9",
+                              color: "#64748B",
+                              border: "none",
+                              "border-radius": "10px",
+                              cursor: "pointer",
+                              transition: "all .15s",
+                              "font-size": "14px"
+                            },
+                            attrs: {
+                              type: "button",
+                              title: "Reset filters",
+                              "aria-label": "Reset search filters"
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.reset_filter()
+                              }
+                            }
+                          },
+                          [
+                            _c("i", {
+                              staticClass: "fas fa-redo",
+                              attrs: { "aria-hidden": "true" }
+                            })
+                          ]
+                        )
+                      ]
+                    )
                   ]
                 )
               ]
-            ),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "list_ofPosts list-unstyled" },
-              _vm._l(_vm.posts, function(post, key) {
-                return _c("li", { key: key }, [
-                  _c("div", { staticClass: "post" }, [
+            )
+          ]
+        ),
+        _vm._v(" "),
+        !_vm.loading_data
+          ? _c(
+              "div",
+              {
+                staticStyle: {
+                  display: "flex",
+                  "align-items": "center",
+                  "justify-content": "space-between",
+                  "margin-bottom": "1rem"
+                }
+              },
+              [
+                _c(
+                  "p",
+                  {
+                    staticStyle: {
+                      "font-size": ".875rem",
+                      "font-weight": "600",
+                      color: "#334155",
+                      margin: "0"
+                    }
+                  },
+                  [
                     _c(
-                      "div",
-                      { staticClass: "photo-box-slider swiper-container" },
-                      [
-                        _c(
-                          "carousel",
-                          {
-                            staticClass: "swiper-wrapper",
-                            attrs: { dots: false, nav: false, items: 1 }
-                          },
-                          [
-                            _vm._l(post.images, function(post_image) {
-                              return _c(
-                                "vue-load-image",
-                                { key: post_image.key },
-                                [
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "image",
-                                      src: post_image.image,
-                                      alt: post.name || "Missing person photo"
-                                    },
-                                    slot: "image"
-                                  }),
-                                  _vm._v(" "),
-                                  _c("img", {
-                                    staticClass: "img-responsive",
-                                    attrs: {
-                                      slot: "preloader",
-                                      src:
-                                        _vm.base_url +
-                                        "/front/svg/image-loader.8402b89.gif",
-                                      alt: "Loading image..."
-                                    },
-                                    slot: "preloader"
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    { attrs: { slot: "error" }, slot: "error" },
-                                    [_vm._v("about")]
-                                  )
-                                ]
-                              )
-                            }),
-                            _vm._v(" "),
-                            _c("template", { slot: "prev" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-prev lost-people-btn-prev photo-arrows",
-                                  attrs: { "aria-label": "Previous Image" }
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-left"
-                                  })
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("template", { slot: "next" }, [
-                              _c(
-                                "div",
-                                {
-                                  staticClass:
-                                    "swiper-button-next lost-people-btn-next photo-arrows",
-                                  attrs: { "aria-label": "Next Image" }
-                                },
-                                [
-                                  _c("i", {
-                                    staticClass: "fas fa-chevron-right"
-                                  })
-                                ]
-                              )
-                            ])
-                          ],
-                          2
-                        )
-                      ],
-                      1
+                      "span",
+                      {
+                        staticStyle: { color: "#DC2626", "font-weight": "800" }
+                      },
+                      [_vm._v(_vm._s(_vm.posts.length))]
                     ),
+                    _vm._v(" active missing cases\n      ")
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    staticStyle: {
+                      "font-size": ".75rem",
+                      color: "#94A3B8",
+                      margin: "0"
+                    }
+                  },
+                  [_vm._v("Updated in real-time")]
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            staticClass: "list_ofPosts list-unstyled",
+            attrs: { "aria-label": "Missing children reports" }
+          },
+          _vm._l(_vm.posts, function(post, key) {
+            return _c("li", { key: post.id }, [
+              _c(
+                "article",
+                {
+                  staticClass: "post-card",
+                  attrs: { "aria-label": "Missing child report: " + post.name }
+                },
+                [
+                  _c("div", { staticClass: "post-card-header" }, [
+                    _c("div", { staticClass: "post-avatar-wrap" }, [
+                      _c("img", {
+                        staticClass: "post-avatar",
+                        attrs: {
+                          src: post.user.image,
+                          alt: post.user.name + " profile picture"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm._m(2, true)
+                    ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "post-data" }, [
-                      _c("div", { staticClass: "post-owner" }, [
-                        _c("div", { staticClass: "img-box" }, [
-                          _c("img", {
-                            staticClass: "img-fluid",
-                            attrs: {
-                              src: post.user.image,
-                              alt: post.user.name || "User profile image"
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "owner_date" }, [
-                          _c("h4", { staticClass: "owner-name" }, [
-                            _vm._v(_vm._s(post.user.name))
-                          ]),
-                          _vm._v(" "),
-                          _c("p", { staticClass: "post-time" }, [
-                            _vm._v(
-                              _vm._s(_vm.moment(post.created_at).format("LL"))
-                            )
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        post.user.id == _vm.user.id
-                          ? _c(
+                    _c("div", { staticClass: "post-meta" }, [
+                      _c("p", { staticClass: "post-author" }, [
+                        _vm._v(_vm._s(post.user.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("p", { staticClass: "post-time" }, [
+                        _c("i", {
+                          staticClass: "fas fa-clock",
+                          staticStyle: {
+                            "font-size": "10px",
+                            "margin-right": "3px"
+                          },
+                          attrs: { "aria-hidden": "true" }
+                        }),
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(_vm.moment(post.created_at).fromNow()) +
+                            "\n              "
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "post-header-right" }, [
+                      _c(
+                        "span",
+                        {
+                          staticClass: "post-status-badge status-missing",
+                          attrs: {
+                            role: "status",
+                            "aria-label": "Status: Missing"
+                          }
+                        },
+                        [_vm._v("\n                Missing\n              ")]
+                      ),
+                      _vm._v(" "),
+                      post.user.id == _vm.user.id
+                        ? _c("div", { staticClass: "dropdown show" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "post-more-btn",
+                                attrs: {
+                                  "data-toggle": "dropdown",
+                                  "aria-haspopup": "true",
+                                  "aria-expanded": "false",
+                                  "aria-label":
+                                    "Options for " + post.name + " report"
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fas fa-ellipsis-h",
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "div",
                               {
                                 staticClass:
-                                  "dropdown show setting-dropdown icon-box"
+                                  "dropdown-menu dropdown-menu-right",
+                                staticStyle: {
+                                  "border-radius": "12px",
+                                  border: "1px solid #E2E8F0",
+                                  "box-shadow":
+                                    "0 10px 32px rgba(15,23,42,.12)",
+                                  padding: "4px"
+                                }
                               },
                               [
-                                _vm._m(1, true),
+                                _vm._m(3, true),
                                 _vm._v(" "),
                                 _c(
-                                  "div",
+                                  "a",
                                   {
-                                    staticClass: "dropdown-menu",
-                                    staticStyle: { top: "25px !important" },
-                                    attrs: {
-                                      "aria-labelledby":
-                                        "profile-setting-dropdown"
+                                    staticClass: "dropdown-item",
+                                    staticStyle: {
+                                      "border-radius": "8px",
+                                      "font-size": ".875rem",
+                                      color: "#DC2626"
+                                    },
+                                    attrs: { href: "#" },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.delete_post(post.id, key)
+                                      }
                                     }
                                   },
                                   [
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" }
-                                      },
-                                      [_vm._v("Edit")]
-                                    ),
-                                    _c(
-                                      "a",
-                                      {
-                                        staticClass: "dropdown-item",
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            return _vm.delete_post(post.id, key)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Delete")]
-                                    )
+                                    _c("i", {
+                                      staticClass: "fas fa-trash-alt",
+                                      staticStyle: { "margin-right": "8px" },
+                                      attrs: { "aria-hidden": "true" }
+                                    }),
+                                    _vm._v("Delete\n                  ")
                                   ]
                                 )
                               ]
                             )
-                          : _vm._e(),
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "post-card-info" }, [
+                    _c("div", { staticClass: "child-info-grid" }, [
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Name")
+                        ]),
                         _vm._v(" "),
-                        _c("div", { staticClass: "clearfix" })
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(_vm._s(post.name))
+                        ])
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "post-data-content" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "lostPerson_data list-unstyled" },
-                          [
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Person Name:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.name))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("gender:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    post.gender == 1 || post.gender == "male"
-                                      ? "male"
-                                      : "female"
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Lost Date:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.moment(post.created_at).format("LL")
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "label" }, [
-                                _vm._v("Age:")
-                              ]),
-                              _c("span", { staticClass: "value" }, [
-                                _vm._v(_vm._s(post.age))
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", [
-                              _c("p", { staticClass: "loatDetails" }, [
-                                _vm._v(_vm._s(post.description))
-                              ])
-                            ])
-                          ]
-                        )
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [_vm._v("Age")]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(_vm._s(post.age) + " years old")
+                        ])
                       ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Gender")
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(
+                            _vm._s(
+                              post.gender == 1 || post.gender === "male"
+                                ? "Male"
+                                : "Female"
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "info-item" }, [
+                        _c("p", { staticClass: "info-label" }, [
+                          _vm._v("Last Seen")
+                        ]),
+                        _vm._v(" "),
+                        _c("p", { staticClass: "info-value" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.moment(post.created_at).format("MMM D, YYYY")
+                            )
+                          )
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    post.description
+                      ? _c("div", { staticClass: "post-location" }, [
+                          _c("i", {
+                            staticClass: "fas fa-map-marker-alt",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(
+                              _vm._s(
+                                post.description.substring(0, 100) +
+                                  (post.description.length > 100 ? "..." : "")
+                              )
+                            )
+                          ])
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.description
+                      ? _c("p", { staticClass: "post-description" }, [
+                          _vm._v(_vm._s(post.description))
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    post.ai_match_score
+                      ? _c("div", { staticClass: "ai-badge" }, [
+                          _c("i", {
+                            staticClass: "fas fa-brain",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(
+                            "\n              AI Similarity:\n              "
+                          ),
+                          _c("span", { staticClass: "ai-badge-pct" }, [
+                            _vm._v(_vm._s(post.ai_match_score) + "%")
+                          ]),
+                          _vm._v("\n              confidence\n            ")
+                        ])
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  post.images && post.images.length
+                    ? _c(
+                        "div",
+                        { staticClass: "post-card-photo" },
+                        [
+                          _c(
+                            "carousel",
+                            { attrs: { dots: false, nav: true, items: 1 } },
+                            [
+                              _vm._l(post.images, function(post_image) {
+                                return _c(
+                                  "vue-load-image",
+                                  { key: post_image.id },
+                                  [
+                                    _c("img", {
+                                      staticClass: "post-child-img",
+                                      attrs: {
+                                        slot: "image",
+                                        src: post_image.image,
+                                        alt:
+                                          post.name + " – missing child photo"
+                                      },
+                                      slot: "image"
+                                    }),
+                                    _vm._v(" "),
+                                    _c("img", {
+                                      staticClass: "post-child-img",
+                                      staticStyle: { "object-fit": "contain" },
+                                      attrs: {
+                                        slot: "preloader",
+                                        src:
+                                          _vm.base_url +
+                                          "/front/svg/image-loader.8402b89.gif",
+                                        alt: "Loading..."
+                                      },
+                                      slot: "preloader"
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticStyle: {
+                                          height: "180px",
+                                          display: "flex",
+                                          "align-items": "center",
+                                          "justify-content": "center",
+                                          "flex-direction": "column",
+                                          gap: "8px",
+                                          color: "#94A3B8"
+                                        },
+                                        attrs: { slot: "error" },
+                                        slot: "error"
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-image",
+                                          staticStyle: { "font-size": "28px" },
+                                          attrs: { "aria-hidden": "true" }
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticStyle: {
+                                              "font-size": ".8125rem"
+                                            }
+                                          },
+                                          [_vm._v("Photo unavailable")]
+                                        )
+                                      ]
+                                    )
+                                  ]
+                                )
+                              }),
+                              _vm._v(" "),
+                              _c("template", { slot: "prev" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "photo-arrows swiper-button-prev",
+                                    attrs: {
+                                      role: "button",
+                                      "aria-label": "Previous photo"
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-chevron-left",
+                                      attrs: { "aria-hidden": "true" }
+                                    })
+                                  ]
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("template", { slot: "next" }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "photo-arrows swiper-button-next",
+                                    attrs: {
+                                      role: "button",
+                                      "aria-label": "Next photo"
+                                    }
+                                  },
+                                  [
+                                    _c("i", {
+                                      staticClass: "fas fa-chevron-right",
+                                      attrs: { "aria-hidden": "true" }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ],
+                            2
+                          )
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-stats",
+                      attrs: { "aria-label": "Post engagement statistics" }
+                    },
+                    [
+                      _c("div", { staticClass: "stats-left" }, [
+                        _c("div", { staticClass: "stat-item" }, [
+                          _c("i", {
+                            staticClass: "fas fa-heart",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(_vm._s(post.likes_count || 0) + " Likes")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "stat-item" }, [
+                          _c("i", {
+                            staticClass: "fas fa-comment",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [
+                            _vm._v(
+                              _vm._s(post.count_comment || 0) + " Comments"
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "stats-right" }, [
+                        _vm._v(_vm._s(post.shares_count || 0) + " Shares")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-actions",
+                      attrs: {
+                        role: "group",
+                        "aria-label": "Actions for " + post.name + " report"
+                      }
+                    },
+                    [
+                      _vm._m(4, true),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "post-action-btn",
+                          attrs: {
+                            href: _vm.base_url + "/get_message/" + post.user.id,
+                            "aria-label": "Send message to reporter"
+                          }
+                        },
+                        [
+                          _c("i", {
+                            staticClass: "far fa-comment-dots",
+                            attrs: { "aria-hidden": "true" }
+                          }),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("Message")])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._m(5, true),
+                      _vm._v(" "),
+                      _vm._m(6, true),
+                      _vm._v(" "),
+                      _vm._m(7, true)
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "post-card-comments",
+                      attrs: { "aria-label": "Comments section" }
+                    },
+                    [
+                      post.count_comment > 2
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "load-comments-btn",
+                              attrs: {
+                                "aria-label":
+                                  "Load more comments for " + post.name
+                              },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.load_more_comment(post.id, key)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fas fa-chevron-down",
+                                attrs: { "aria-hidden": "true" }
+                              }),
+                              _vm._v(
+                                "\n              View " +
+                                  _vm._s(
+                                    post.count_comment - post.comments.length
+                                  ) +
+                                  " more comment(s)\n            "
+                              )
+                            ]
+                          )
+                        : _vm._e(),
                       _vm._v(" "),
                       _c(
                         "ul",
                         {
-                          staticClass:
-                            "post-btn-list list-unstyled d-flex justify-content-between"
+                          staticClass: "comment-list",
+                          attrs: { "aria-label": "Comments on " + post.name }
                         },
                         [
-                          _c("li", [
-                            _c(
-                              "a",
-                              {
-                                staticClass: "post-btn",
-                                attrs: {
-                                  href:
-                                    _vm.base_url +
-                                    "/get_message/" +
-                                    post.user.id
-                                }
-                              },
+                          _vm.show_dot ? _c("li", [_vm._m(8, true)]) : _vm._e(),
+                          _vm._v(" "),
+                          _vm._l(post.comments, function(comment, key_comment) {
+                            return _c(
+                              "li",
+                              { key: comment.id, staticClass: "comment-item" },
                               [
-                                _c("i", { staticClass: "far fa-comment-dots" }),
-                                _c("span", [_vm._v("Send Message")])
-                              ]
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _vm._m(2, true),
-                          _vm._v(" "),
-                          _vm._m(3, true)
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "comments" }, [
-                        _c(
-                          "ul",
-                          { staticClass: "user-comments-list list-unstyled" },
-                          [
-                            post.count_comment > 2
-                              ? _c("li", [
-                                  _c(
-                                    "a",
-                                    {
-                                      staticClass: "comment-box",
-                                      staticStyle: {
-                                        cursor: "pointer",
-                                        color: "#9E2FB2"
-                                      },
-                                      attrs: { href: "#" },
-                                      on: {
-                                        click: function($event) {
-                                          $event.preventDefault()
-                                          return _vm.load_more_comment(
-                                            post.id,
-                                            key
-                                          )
-                                        }
-                                      }
-                                    },
-                                    [_vm._v("load comments")]
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm._l(post.comments, function(
-                              comment,
-                              key_comment
-                            ) {
-                              return _c("li", { key: key_comment }, [
-                                _c("div", { staticClass: "user-photo" }, [
-                                  _c("img", {
-                                    staticClass: "img-fluid",
-                                    attrs: { src: comment.user.image }
-                                  })
-                                ]),
+                                _c("img", {
+                                  staticClass: "comment-avatar",
+                                  attrs: {
+                                    src: comment.user.image,
+                                    alt: comment.user.name + " avatar"
+                                  }
+                                }),
                                 _vm._v(" "),
-                                _c("div", { staticClass: "comment-box" }, [
-                                  _c("p", { staticClass: "usern-name" }, [
+                                _c("div", { staticClass: "comment-bubble" }, [
+                                  _c("p", { staticClass: "comment-author" }, [
                                     _vm._v(_vm._s(comment.user.name))
                                   ]),
                                   _vm._v(" "),
-                                  _c("p", { staticClass: "user-comment" }, [
+                                  _c("p", { staticClass: "comment-text" }, [
                                     _vm._v(_vm._s(comment.comment))
                                   ])
                                 ]),
@@ -105046,179 +106330,319 @@ var render = function() {
                                 comment.user.id == _vm.user.id
                                   ? _c(
                                       "div",
-                                      {
-                                        staticClass:
-                                          "dropdown show setting-dropdown icon-box"
-                                      },
+                                      { staticClass: "comment-actions" },
                                       [
-                                        _vm._m(4, true),
-                                        _vm._v(" "),
                                         _c(
                                           "div",
-                                          {
-                                            staticClass: "dropdown-menu",
-                                            staticStyle: {
-                                              top: "25px !important"
-                                            },
-                                            attrs: {
-                                              "aria-labelledby":
-                                                "profile-setting-dropdown"
-                                            }
-                                          },
+                                          { staticClass: "dropdown show" },
                                           [
                                             _c(
-                                              "a",
+                                              "button",
                                               {
-                                                staticClass: "dropdown-item",
-                                                attrs: {
-                                                  id: "update_com" + comment.id,
-                                                  href: "#"
+                                                staticClass: "post-more-btn",
+                                                staticStyle: {
+                                                  width: "28px",
+                                                  height: "28px"
                                                 },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.update_comment(
-                                                      comment.id,
-                                                      comment.comment,
-                                                      key_comment
-                                                    )
-                                                  }
+                                                attrs: {
+                                                  "data-toggle": "dropdown",
+                                                  "aria-haspopup": "true",
+                                                  "aria-expanded": "false",
+                                                  "aria-label":
+                                                    "Options for comment"
                                                 }
                                               },
-                                              [_vm._v("Edit")]
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-ellipsis-h",
+                                                  staticStyle: {
+                                                    "font-size": "12px"
+                                                  },
+                                                  attrs: {
+                                                    "aria-hidden": "true"
+                                                  }
+                                                })
+                                              ]
                                             ),
+                                            _vm._v(" "),
                                             _c(
-                                              "a",
+                                              "div",
                                               {
-                                                staticClass: "dropdown-item",
-                                                attrs: { href: "#" },
-                                                on: {
-                                                  click: function($event) {
-                                                    $event.preventDefault()
-                                                    return _vm.delete_comment(
-                                                      comment.id,
-                                                      key_comment,
-                                                      key
-                                                    )
-                                                  }
+                                                staticClass:
+                                                  "dropdown-menu dropdown-menu-right",
+                                                staticStyle: {
+                                                  "border-radius": "10px",
+                                                  "min-width": "120px",
+                                                  border: "1px solid #E2E8F0",
+                                                  "box-shadow":
+                                                    "0 8px 24px rgba(15,23,42,.1)",
+                                                  padding: "4px"
                                                 }
                                               },
-                                              [_vm._v("Delete")]
+                                              [
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "dropdown-item",
+                                                    staticStyle: {
+                                                      "border-radius": "6px",
+                                                      "font-size": ".8125rem"
+                                                    },
+                                                    attrs: {
+                                                      href: "#",
+                                                      id:
+                                                        "update_com" +
+                                                        comment.id
+                                                    },
+                                                    on: {
+                                                      click: function($event) {
+                                                        $event.preventDefault()
+                                                        return _vm.update_comment(
+                                                          comment.id,
+                                                          comment.comment,
+                                                          key_comment
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-edit",
+                                                      staticStyle: {
+                                                        "margin-right": "6px",
+                                                        color: "#2563EB"
+                                                      },
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    }),
+                                                    _vm._v(
+                                                      "Edit\n                      "
+                                                    )
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "a",
+                                                  {
+                                                    staticClass:
+                                                      "dropdown-item",
+                                                    staticStyle: {
+                                                      "border-radius": "6px",
+                                                      "font-size": ".8125rem",
+                                                      color: "#DC2626"
+                                                    },
+                                                    attrs: { href: "#" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        $event.preventDefault()
+                                                        return _vm.delete_comment(
+                                                          comment.id,
+                                                          key_comment,
+                                                          key
+                                                        )
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-trash-alt",
+                                                      staticStyle: {
+                                                        "margin-right": "6px"
+                                                      },
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    }),
+                                                    _vm._v(
+                                                      "Delete\n                      "
+                                                    )
+                                                  ]
+                                                )
+                                              ]
                                             )
                                           ]
                                         )
                                       ]
                                     )
                                   : _vm._e()
-                              ])
-                            }),
-                            _vm._v(" "),
-                            _c("li", [
-                              _vm.show_dot
-                                ? _c(
-                                    "div",
-                                    {
-                                      staticClass: "typing",
-                                      attrs: { id: "loading" }
-                                    },
-                                    [
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span"),
-                                      _vm._v(" "),
-                                      _c("span")
-                                    ]
-                                  )
-                                : _vm._e()
-                            ])
-                          ],
-                          2
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "form",
-                          {
-                            staticClass: "write-comment",
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                return _vm.add_comment(key, post.id)
-                              }
-                            }
-                          },
-                          [
-                            _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.comment,
-                                  expression: "comment"
-                                }
-                              ],
-                              staticClass: "input-write",
-                              attrs: {
-                                type: "text",
-                                placeholder: "Write Comment...."
-                              },
-                              domProps: { value: _vm.comment },
-                              on: {
-                                keydown: function($event) {
-                                  return _vm.showtyping()
-                                },
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.comment = $event.target.value
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm._m(5, true)
-                          ]
-                        )
-                      ]),
+                              ]
+                            )
+                          })
+                        ],
+                        2
+                      ),
                       _vm._v(" "),
                       _c(
-                        "div",
+                        "form",
                         {
-                          class:
-                            "post_label " +
-                            [
-                              post.type === "missed"
-                                ? "label-missed"
-                                : "label-found"
-                            ]
+                          staticClass: "write-comment-form",
+                          attrs: { "aria-label": "Comment on " + post.name },
+                          on: {
+                            submit: function($event) {
+                              $event.preventDefault()
+                              return _vm.add_comment(key, post.id)
+                            }
+                          }
                         },
-                        [_c("span", [_vm._v(_vm._s(post.type))])]
+                        [
+                          _c("img", {
+                            staticClass: "write-comment-avatar",
+                            attrs: { src: _vm.user.image, alt: _vm.user.name }
+                          }),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.comment,
+                                expression: "comment"
+                              }
+                            ],
+                            staticClass: "write-comment-input",
+                            attrs: {
+                              type: "text",
+                              placeholder: "Share a tip or comment...",
+                              "aria-label": "Write comment for " + post.name
+                            },
+                            domProps: { value: _vm.comment },
+                            on: {
+                              keydown: function($event) {
+                                return _vm.showtyping()
+                              },
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.comment = $event.target.value
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm._m(9, true)
+                        ]
                       )
-                    ])
-                  ])
-                ])
-              }),
-              0
-            ),
-            _vm._v(" "),
-            _c("transition", { attrs: { name: "fade" } }, [
-              _vm.loading_data
-                ? _c("div", { staticClass: "loading_data" }, [
-                    _c("span", { staticClass: "fa fa-spinner fa-spin" }),
-                    _vm._v(" Loading\n          ")
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _vm.show_end_message
-              ? _c("div", { staticClass: "loading_data" }, [
-                  _vm._v("\n             No More Posts :)\n          ")
-                ])
-              : _vm._e()
-          ],
-          1
-        )
-      ])
-    ])
+                    ]
+                  )
+                ]
+              )
+            ])
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c("transition", { attrs: { name: "fade" } }, [
+          _vm.loading_data
+            ? _c(
+                "div",
+                {
+                  staticClass: "feed-loading",
+                  attrs: { role: "status", "aria-live": "polite" }
+                },
+                [
+                  _c("i", {
+                    staticClass: "fas fa-spinner fa-spin",
+                    attrs: { "aria-hidden": "true" }
+                  }),
+                  _vm._v(
+                    "\n        Loading missing children reports...\n      "
+                  )
+                ]
+              )
+            : _vm._e()
+        ]),
+        _vm._v(" "),
+        !_vm.loading_data && _vm.posts.length === 0
+          ? _c(
+              "div",
+              {
+                staticStyle: {
+                  "text-align": "center",
+                  padding: "3rem",
+                  background: "#fff",
+                  border: "1px solid #E2E8F0",
+                  "border-radius": "16px",
+                  "box-shadow": "0 1px 3px rgba(15,23,42,.06)"
+                }
+              },
+              [
+                _vm._m(10),
+                _vm._v(" "),
+                _c(
+                  "h3",
+                  {
+                    staticStyle: {
+                      "font-size": "1.125rem",
+                      "font-weight": "700",
+                      color: "#0F172A",
+                      margin: "0 0 8px"
+                    }
+                  },
+                  [_vm._v("No cases found")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  {
+                    staticStyle: {
+                      "font-size": ".875rem",
+                      color: "#64748B",
+                      margin: "0 0 16px"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "Try adjusting your search filters or browse all cases."
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticStyle: {
+                      background: "#2563EB",
+                      color: "#fff",
+                      border: "none",
+                      "border-radius": "10px",
+                      padding: "10px 20px",
+                      "font-size": ".875rem",
+                      "font-weight": "600",
+                      cursor: "pointer"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.reset_filter()
+                      }
+                    }
+                  },
+                  [_vm._v("\n        Clear Filters\n      ")]
+                )
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.show_end_message && _vm.posts.length > 0
+          ? _c(
+              "div",
+              { staticClass: "feed-end-msg", attrs: { role: "status" } },
+              [
+                _vm._v(
+                  "\n      You've seen all " +
+                    _vm._s(_vm.posts.length) +
+                    " active missing cases. Please help by sharing.\n    "
+                )
+              ]
+            )
+          : _vm._e()
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -105226,11 +106650,57 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-prepend" }, [
+    return _c("div", { staticStyle: { "margin-bottom": "1.5rem" } }, [
       _c(
-        "span",
-        { staticClass: "input-group-text bg-transparent border-right-0" },
-        [_c("i", { staticClass: "fas fa-search text-muted" })]
+        "h1",
+        {
+          staticStyle: {
+            "font-size": "1.5rem",
+            "font-weight": "800",
+            color: "#0F172A",
+            margin: "0 0 4px",
+            display: "flex",
+            "align-items": "center",
+            gap: "10px"
+          }
+        },
+        [
+          _c(
+            "span",
+            {
+              staticStyle: {
+                background: "linear-gradient(135deg,#FEF2F2,#FEE2E2)",
+                border: "1px solid rgba(220,38,38,.2)",
+                "border-radius": "10px",
+                width: "40px",
+                height: "40px",
+                display: "inline-flex",
+                "align-items": "center",
+                "justify-content": "center"
+              }
+            },
+            [
+              _c("i", {
+                staticClass: "fas fa-search",
+                staticStyle: { color: "#DC2626", "font-size": "16px" },
+                attrs: { "aria-hidden": "true" }
+              })
+            ]
+          ),
+          _vm._v("\n        Missing Children\n      ")
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "p",
+        {
+          staticStyle: { "font-size": ".875rem", color: "#64748B", margin: "0" }
+        },
+        [
+          _vm._v(
+            "Active cases in the community — help by sharing and providing tips."
+          )
+        ]
       )
     ])
   },
@@ -105239,42 +106709,51 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c(
-      "a",
+      "button",
       {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
+        staticStyle: {
+          height: "42px",
+          padding: "0 20px",
+          background: "#2563EB",
+          color: "#fff",
+          border: "none",
+          "border-radius": "10px",
+          "font-size": ".875rem",
+          "font-weight": "600",
+          cursor: "pointer",
+          transition: "background .15s",
+          display: "flex",
+          "align-items": "center",
+          gap: "6px"
+        },
+        attrs: { type: "submit", "aria-label": "Apply search filters" }
       },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
+      [
+        _c("i", {
+          staticClass: "fas fa-filter",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v("\n              Search\n            ")
+      ]
     )
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn active-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "far fa-comment-alt" }),
-        _c("span", [_vm._v("Comment")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [
-      _c("a", { staticClass: "post-btn", attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fas fa-share" }),
-        _c("span", [_vm._v("Share")])
-      ])
-    ])
+    return _c(
+      "div",
+      {
+        staticClass: "verified-badge",
+        attrs: { "aria-label": "Verified member" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-check",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
   },
   function() {
     var _vm = this
@@ -105283,17 +106762,18 @@ var staticRenderFns = [
     return _c(
       "a",
       {
-        staticClass: "chat-menu",
-        attrs: {
-          href: "#",
-          role: "button",
-          id: "profile-setting-dropdown",
-          "data-toggle": "dropdown",
-          "aria-haspopup": "true",
-          "aria-expanded": "false"
-        }
+        staticClass: "dropdown-item",
+        staticStyle: { "border-radius": "8px", "font-size": ".875rem" },
+        attrs: { href: "#" }
       },
-      [_c("i", { staticClass: "fas fa-ellipsis-h" })]
+      [
+        _c("i", {
+          staticClass: "fas fa-edit",
+          staticStyle: { "margin-right": "8px", color: "#2563EB" },
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v("Edit\n                  ")
+      ]
     )
   },
   function() {
@@ -105302,8 +106782,179 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "button",
-      { staticClass: "submit-comment", attrs: { type: "submit" } },
-      [_c("i", { staticClass: "fas fa-paper-plane" })]
+      {
+        staticClass: "post-action-btn",
+        attrs: { "aria-label": "Like this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "far fa-heart",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Like")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn active",
+        attrs: { "aria-label": "Comment on this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "far fa-comment-alt",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Comment")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn",
+        attrs: { "aria-label": "Share this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-share",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Share")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "post-action-btn action-report",
+        attrs: { "aria-label": "Flag this report" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-flag",
+          attrs: { "aria-hidden": "true" }
+        }),
+        _vm._v(" "),
+        _c("span", [_vm._v("Tip/Info")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticStyle: {
+          display: "flex",
+          "align-items": "center",
+          gap: "8px",
+          padding: "4px 0"
+        },
+        attrs: { "aria-live": "polite" }
+      },
+      [
+        _c("div", { staticStyle: { display: "flex", gap: "3px" } }, [
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease infinite"
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease .2s infinite"
+            }
+          }),
+          _vm._v(" "),
+          _c("span", {
+            staticStyle: {
+              width: "6px",
+              height: "6px",
+              "border-radius": "50%",
+              background: "#94A3B8",
+              animation: "wave 1.4s ease .4s infinite"
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c(
+          "span",
+          { staticStyle: { "font-size": ".75rem", color: "#94A3B8" } },
+          [_vm._v("Someone is typing...")]
+        )
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "submit-comment-btn",
+        attrs: { type: "submit", "aria-label": "Post comment" }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-paper-plane",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticStyle: {
+          width: "64px",
+          height: "64px",
+          background: "#FEF2F2",
+          "border-radius": "50%",
+          display: "flex",
+          "align-items": "center",
+          "justify-content": "center",
+          margin: "0 auto 16px"
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fas fa-search",
+          staticStyle: { "font-size": "24px", color: "#DC2626" },
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
     )
   }
 ]
