@@ -1,0 +1,16 @@
+{
+  "project_id": "9fade2a5-9c7e-4b30-b2cd-f4a94e102bfa",
+  "project_title": "Kidnap-children – Social Platform for Finding Missing Children",
+  "project_description": "Kidnap-children is a Laravel-based web application and social platform designed to help find and report missing children. The system uses artificial intelligence to analyze and compare images, recognizing faces and finding similarities even across different ages. Users can create posts about missing or found children, upload and share images, comment, chat privately, and receive real-time notifications. By combining AI-powered image recognition with social media features, the platform enables easy communication, community engagement, and maximizes the chances of reuniting families.",
+  "resources": [
+    {
+      "id": "378bee6f-d68f-4b76-bbd0-57bfa0167a1a",
+      "resource_type": "local_directory",
+      "resource_ref": {
+        "label": "Kidnap-children",
+        "daemon_id": "019e96ba-4e6d-76de-9b79-fffe6b3c357a",
+        "local_path": "/var/www/html/old/Kidnap-children"
+      }
+    }
+  ]
+}

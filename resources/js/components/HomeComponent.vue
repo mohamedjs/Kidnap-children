@@ -70,8 +70,8 @@
                 <label for="gender_select">Gender</label>
                 <select id="gender_select" class="form-control" v-model="post.gender" aria-label="Select gender">
                   <option value="">Select gender</option>
-                  <option value="1">Male</option>
-                  <option value="2">Female</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
             </div>
