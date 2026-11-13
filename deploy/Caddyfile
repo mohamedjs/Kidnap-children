@@ -1,0 +1,38 @@
+# Edge proxy for production. Automatic HTTPS (Let's Encrypt) for every real domain.
+#   SITE_ADDRESS   the app:    /api/* and /health* -> api, everything else -> web
+#   FILES_ADDRESS  the bucket: presigned PUT/GET URLs point here -> bundled S3 store
+# Use "example.org" for HTTPS, "http://app.localhost" for a local HTTP-only test.
+{
+	email {$ACME_EMAIL:admin@example.org}
+}
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+	request_body {
+		max_size 2MB
+	}
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options DENY
+		-Server
+	}
+	handle /api/* {
+		reverse_proxy api:4100
+	}
+	handle /health* {
+		reverse_proxy api:4100
+	}
+	handle {
+		reverse_proxy web:80
+	}
+}
+
+# The Host header is passed through unchanged, so S3 signatures made for this host stay valid.
+{$FILES_ADDRESS} {
+	request_body {
+		max_size 12MB
+	}
+	reverse_proxy s3:8333
+}

@@ -1,0 +1,144 @@
+# Production stack for Kidnap-children v2.
+#
+#   cp .env.production.example .env.production   (or: python3 scripts/gen-prod-env.py app.example.org files.example.org)
+#   docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+#
+# Services: caddy (HTTPS edge) -> web (static Vue build) + api (FastAPI) ; worker ; migrate (one-shot) ;
+#           postgres ; s3 (bundled SeaweedFS S3 store, profile "bundled-s3" - drop it for an external bucket).
+name: kidnap-children
+
+x-backend: &backend
+  build:
+    context: ./backend
+  image: kidnap-children/backend:${IMAGE_TAG:-latest}
+  restart: unless-stopped
+  environment: &backend-env
+    APP_ENV: production
+    DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-kidnap}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-kidnap}
+    JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+    JWT_TTL_MINUTES: ${JWT_TTL_MINUTES:-720}
+    CORS_ORIGINS: ${PUBLIC_WEB_URL:?set PUBLIC_WEB_URL}
+    PUBLIC_WEB_URL: ${PUBLIC_WEB_URL}
+    S3_ENDPOINT: ${S3_ENDPOINT:-http://s3:8333}
+    S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:?set S3_PUBLIC_ENDPOINT}
+    S3_REGION: ${S3_REGION:-us-east-1}
+    S3_BUCKET: ${S3_BUCKET:-kidnap-media}
+    S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
+    S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
+    S3_FORCE_PATH_STYLE: ${S3_FORCE_PATH_STYLE:-true}
+    S3_ALLOWED_ORIGINS: ${PUBLIC_WEB_URL}
+    UPLOAD_URL_TTL_SECONDS: ${UPLOAD_URL_TTL_SECONDS:-300}
+    DOWNLOAD_URL_TTL_SECONDS: ${DOWNLOAD_URL_TTL_SECONDS:-300}
+    ADMIN_SEED_EMAIL: ${ADMIN_SEED_EMAIL:-}
+    ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-}
+    N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL:-}
+    N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:-}
+    GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+  networks: [internal]
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kidnap}
+      POSTGRES_USER: ${POSTGRES_USER:-kidnap}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [internal]
+
+  # Bundled S3-compatible store (SeaweedFS, the vendor's official image). Private: only
+  # reachable through Caddy on FILES_ADDRESS with valid presigned signatures.
+  s3:
+    image: chrislusf/seaweedfs:4.50
+    profiles: ["bundled-s3"]
+    restart: unless-stopped
+    environment:
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?set S3_ACCESS_KEY}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?set S3_SECRET_KEY}
+      S3_ALLOWED_ORIGINS: ${PUBLIC_WEB_URL}
+    entrypoint: ["/bin/sh", "/s3-entrypoint.sh"]
+    volumes:
+      - s3data:/data
+      - ./deploy/s3-entrypoint.sh:/s3-entrypoint.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:8333/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+    networks: [internal]
+
+  # One-shot: schema migrations + bucket creation, then exits 0.
+  migrate:
+    <<: *backend
+    restart: "no"
+    command: ["sh", "-c", "alembic upgrade head && for i in 1 2 3 4 5 6 7 8 9 10; do python -m scripts.init_storage && exit 0; sleep 3; done; exit 1"]
+    healthcheck:
+      disable: true
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *backend
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    <<: *backend
+    command: ["python", "-m", "app.worker"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "scripts.healthcheck", "worker"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: ./web
+    image: kidnap-children/web:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    networks: [internal]
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS}
+      FILES_ADDRESS: ${FILES_ADDRESS:?set FILES_ADDRESS}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+      - "${HTTPS_PORT:-443}:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    networks: [internal]
+
+networks:
+  internal:
+
+volumes:
+  pgdata:
+  s3data:
+  caddy_data:
+  caddy_config:

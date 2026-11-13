@@ -1,0 +1,17 @@
+# Static server for the built SPA (inside the web container, plain HTTP on :80).
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	root * /srv
+	encode zstd gzip
+
+	@assets path /assets/*
+	header @assets Cache-Control "public, max-age=31536000, immutable"
+	header ?Cache-Control "no-cache"
+
+	try_files {path} /index.html
+	file_server
+}

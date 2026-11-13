@@ -32,4 +32,8 @@ cd backend && .venv/bin/pytest && .venv/bin/mypy && .venv/bin/ruff check app
 cd backend && .venv/bin/python -m scripts.smoke            # 19 end-to-end API/bucket checks
 cd web && npm run build && node scripts/e2e.mjs ../.data/e2e-photo.jpg
 cd web && node scripts/screenshots.mjs                     # refresh site/assets/screens
+
+# production (one server, automatic HTTPS) - see README "Deploy"
+python3 scripts/gen-prod-env.py app.example.org files.example.org
+docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
 ```
