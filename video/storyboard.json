@@ -1,0 +1,324 @@
+{
+ "brand": {
+  "logo": "img/logo.png",
+  "accent": "#2563eb",
+  "dark": "#1e2440",
+  "flow": "#16a34a"
+ },
+ "scenes": [
+  {
+   "id": "problem",
+   "type": "shot",
+   "vo": [
+    "n1",
+    "n2",
+    "n3"
+   ],
+   "clip": "report",
+   "fps": 30,
+   "frame": "screen",
+   "title": "خرج من المدرسة… وما رجعش",
+   "icon": "parent",
+   "points": [
+    {
+     "icon": "time",
+     "text": "كل دقيقة كأنها سنة"
+    },
+    {
+     "icon": "share-forward",
+     "text": "بوست في كل الجروبات… وتستنى"
+    }
+   ]
+  },
+  {
+   "id": "other",
+   "type": "shot",
+   "vo": [
+    "n4",
+    "n5"
+   ],
+   "clip": "live-heba",
+   "fps": 30,
+   "frame": "screen",
+   "title": "وفي حتة تانية… هبة لقت طفل تايه",
+   "icon": "user-heart",
+   "points": [
+    {
+     "icon": "login-box",
+     "text": "هبة بتدخل على أنا فين؟"
+    },
+    {
+     "icon": "arrow-left-right",
+     "text": "والاتنين بيدوّروا على بعض"
+    }
+   ]
+  },
+  {
+   "id": "title",
+   "type": "title",
+   "vo": "n6",
+   "title": "أنا فين؟",
+   "sub": "معًا نرجّع كل طفل لأهله",
+   "tiles": [
+    {
+     "icon": "user-search",
+     "text": "مفقود"
+    },
+    {
+     "icon": "user-heart",
+     "text": "معثور عليه"
+    },
+    {
+     "icon": "links",
+     "text": "تطابق"
+    },
+    {
+     "icon": "chat-3",
+     "text": "رسائل"
+    }
+   ]
+  },
+  {
+   "id": "home",
+   "type": "shot",
+   "vo": "n7",
+   "clip": "home",
+   "fps": 30,
+   "frame": "screen",
+   "title": "كل البلاغات في مكان واحد",
+   "icon": "file-list-3",
+   "points": [
+    {
+     "icon": "user-search",
+     "text": "بلاغات الأطفال المفقودين"
+    },
+    {
+     "icon": "user-heart",
+     "text": "وبلاغات اللي اتلقوا"
+    }
+   ],
+   "from": 398
+  },
+  {
+   "id": "post",
+   "type": "shot",
+   "vo": "n8",
+   "clip": "live-heba",
+   "fps": 44,
+   "frame": "screen",
+   "title": "بلاغ في دقيقة",
+   "icon": "add-circle",
+   "points": [
+    {
+     "icon": "user-3",
+     "text": "النوع والسن"
+    },
+    {
+     "icon": "map-pin-2",
+     "text": "المكان والتاريخ"
+    },
+    {
+     "icon": "lock",
+     "text": "الصورة على تخزين آمن"
+    }
+   ],
+   "from": 225
+  },
+  {
+   "id": "engine",
+   "type": "title",
+   "vo": "n9",
+   "title": "وهنا الشغل الحقيقي",
+   "sub": "المطابقة بتبدأ لوحدها",
+   "tiles": [
+    {
+     "icon": "user-3",
+     "text": "النوع"
+    },
+    {
+     "icon": "cake-2",
+     "text": "السن"
+    },
+    {
+     "icon": "map-pin-2",
+     "text": "المكان"
+    },
+    {
+     "icon": "calendar",
+     "text": "التاريخ"
+    }
+   ]
+  },
+  {
+   "id": "match",
+   "type": "shot",
+   "vo": "n10",
+   "clip": "live-heba",
+   "from": 795,
+   "fps": 30,
+   "frame": "screen",
+   "title": "درجة التطابق قدام عينك",
+   "icon": "links",
+   "points": [
+    {
+     "icon": "scales-3",
+     "text": "بيقارن بكل بلاغات الفقد"
+    },
+    {
+     "icon": "image-2",
+     "text": "النوع والسن والمكان والتاريخ والصور"
+    },
+    {
+     "icon": "percent",
+     "text": "ويطلّع درجة التطابق"
+    }
+   ]
+  },
+  {
+   "id": "notify",
+   "type": "duo",
+   "vo": "n11",
+   "title": "في نفس اللحظة… الإشعار وصل",
+   "icon": "notification-3",
+   "left": {
+    "clip": "live-heba",
+    "from": 1086,
+    "fps": 30,
+    "label": "هبة · لقت الطفل",
+    "icon": "user-heart"
+   },
+   "right": {
+    "clip": "live-mona",
+    "from": 1086,
+    "fps": 30,
+    "label": "منى · مامة يوسف",
+    "icon": "parent"
+   },
+   "points": [
+    {
+     "icon": "notification-badge",
+     "text": "تطابق محتمل جديد"
+    }
+   ]
+  },
+  {
+   "id": "messages",
+   "type": "shot",
+   "vo": "n12",
+   "clip": "live-mona",
+   "from": 1296,
+   "fps": 66,
+   "frame": "screen",
+   "title": "منى بتشوف البلاغين… وتبعت لهبة",
+   "icon": "chat-3",
+   "points": [
+    {
+     "icon": "eye",
+     "text": "البلاغين جنب بعض"
+    },
+    {
+     "icon": "mail-send",
+     "text": "رسالة خاصة من غير وسيط"
+    }
+   ]
+  },
+  {
+   "id": "reply",
+   "type": "duo",
+   "min": 8.3,
+   "title": "والرد وصل في ساعتها",
+   "icon": "chat-heart",
+   "left": {
+    "clip": "live-heba",
+    "from": 2355,
+    "fps": 30,
+    "label": "هبة · بتردّ",
+    "icon": "user-heart"
+   },
+   "right": {
+    "clip": "live-mona",
+    "from": 2355,
+    "fps": 30,
+    "label": "منى · بتستنى",
+    "icon": "parent"
+   },
+   "points": [
+    {
+     "icon": "heart-3",
+     "text": "«يوسف معايا في أمان»"
+    }
+   ]
+  },
+  {
+   "id": "search",
+   "type": "shot",
+   "vo": "n13",
+   "clip": "search",
+   "fps": 30,
+   "frame": "screen",
+   "title": "دوّر بنفسك",
+   "icon": "search",
+   "points": [
+    {
+     "icon": "keyboard",
+     "text": "اكتب اللي فاكره"
+    },
+    {
+     "icon": "filter-3",
+     "text": "مفقود أو معثور عليه، النوع والسن والمدينة"
+    }
+   ]
+  },
+  {
+   "id": "community",
+   "type": "shot",
+   "vo": "n14",
+   "clip": "report",
+   "from": 500,
+   "fps": 30,
+   "frame": "screen",
+   "title": "كل واحد فينا ممكن يكون السبب",
+   "icon": "hand-heart",
+   "points": [
+    {
+     "icon": "chat-quote",
+     "text": "تعليق"
+    },
+    {
+     "icon": "heart-3",
+     "text": "تضامن"
+    },
+    {
+     "icon": "share-forward",
+     "text": "مشاركة"
+    }
+   ]
+  },
+  {
+   "id": "outro",
+   "type": "outro",
+   "vo": "n15",
+   "title": "أنا فين؟",
+   "sub": "معًا نرجّع كل طفل لأهله",
+   "tiles": [
+    {
+     "icon": "file-list-3",
+     "text": "بلاغات"
+    },
+    {
+     "icon": "links",
+     "text": "تطابق"
+    },
+    {
+     "icon": "notification-3",
+     "text": "إشعارات"
+    },
+    {
+     "icon": "chat-3",
+     "text": "رسائل"
+    }
+   ],
+   "url": "mohamedjs.github.io/Kidnap-children"
+  }
+ ]
+}

@@ -6,6 +6,7 @@
     "hero.eyebrow": "A free community platform",
     "hero.title": "Every missing-child report meets the report of a child someone found",
     "hero.lead": "Post a report with photos in a minute. The platform compares missing reports with found reports automatically and alerts the family and the finder at the same moment.",
+    "video.title": "See Ana Fein in action",
     "hero.cta": "See the app", "hero.cta2": "How it works",
     "hero.t1": "Missing or found reports with photos",
     "hero.t2": "Automatic matching by age, place and date",

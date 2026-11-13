@@ -10,7 +10,7 @@ const HERE = import.meta.dirname;
 const FPS = 30;
 const [W, H] = [1440, 810];
 const only = process.argv.slice(2);
-const photo = path.join(HERE, "demo/found.jpg");
+const photo = path.join(HERE, "photos/youssef-found.jpg");
 const yesterday = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
 
 const CURSOR = `(() => { if (document.getElementById('__cur')) return;
@@ -53,11 +53,33 @@ const clips = {
   async home(p) {
     await p.goto(WEB); await settle(p);
     return async () => {
-      await p.waitForTimeout(800);
-      await glide(p, ".report-card >> nth=1"); await p.waitForTimeout(500);
-      await scroll(p, 520, 2200); await p.waitForTimeout(700);
-      await glide(p, ".report-card >> nth=4"); await p.waitForTimeout(600);
-      await scroll(p, -520, 1600); await p.waitForTimeout(600);
+      await p.waitForTimeout(900);
+      await glide(p, ".report-card >> nth=0"); await p.waitForTimeout(900);
+      await glide(p, ".report-card >> nth=2"); await p.waitForTimeout(700);
+      await scroll(p, 430, 2600); await p.waitForTimeout(900);
+      await glide(p, ".report-card >> nth=5"); await p.waitForTimeout(900);
+      await scroll(p, -430, 2000); await p.waitForTimeout(800);
+      await click(p, ".segmented button >> nth=1"); await settle(p); await p.waitForTimeout(1600);
+      await click(p, ".segmented button >> nth=2"); await settle(p); await p.waitForTimeout(1600);
+      await click(p, ".segmented button >> nth=0"); await settle(p); await p.waitForTimeout(1400);
+    };
+  },
+
+  // Youssef's report: the family's photos, then the community's comments and solidarity
+  async report(p) {
+    await p.goto(WEB); await settle(p);
+    const href = await p.locator(".report-card", { hasText: "يوسف" }).first().getAttribute("href");
+    await p.goto(WEB + href); await settle(p);
+    return async () => {
+      await p.waitForTimeout(1500);
+      await glide(p, "img.main"); await p.waitForTimeout(1800);
+      await click(p, ".thumbs button >> nth=1").catch(() => {}); await p.waitForTimeout(2200);
+      await click(p, ".thumbs button >> nth=0").catch(() => {}); await p.waitForTimeout(2000);
+      await glide(p, "text=سويتر أزرق"); await p.waitForTimeout(2600);
+      await scroll(p, 560, 2400); await p.waitForTimeout(1200);
+      await glide(p, ".comment >> nth=0"); await p.waitForTimeout(1800);
+      await glide(p, ".comment >> nth=1"); await p.waitForTimeout(1800);
+      await glide(p, "button:has-text('♥')"); await p.waitForTimeout(2200);
     };
   },
 
@@ -66,7 +88,7 @@ const clips = {
     await p.goto(`${WEB}/login`); await settle(p);
     return async () => {
       await p.waitForTimeout(500);
-      await type(p, 'input[type="email"]', "heba@demo.local", 45);
+      await type(p, 'input[type="email"]', "heba.farouk@example.com", 45);
       await p.waitForTimeout(250);
       await glide(p, 'input[type="password"]'); await tap(p);
       await p.locator('input[type="password"]').fill(demoPassword());
@@ -78,7 +100,7 @@ const clips = {
 
   // post a "found" report with a photo (presigned PUT straight to the bucket)
   async post(p) {
-    await login(p, "heba@demo.local");
+    await login(p, "heba.farouk@example.com");
     const prev = path.join(HERE, "clips/posted-report.txt");
     if (fs.existsSync(prev)) { // remove the previous take through the app (also deletes its photos from the bucket)
       await p.goto(fs.readFileSync(prev, "utf8").trim()); await settle(p);
@@ -103,7 +125,7 @@ const clips = {
       await type(p, inputs.nth(2), "شبرا", 60);
       await click(p, "text=📍");
       await p.waitForTimeout(500);
-      await type(p, "form textarea", "لقيت ولد تايه جنب محطة المترو، حوالي ٦ سنين، لابس سويتر أزرق. هو معانا دلوقتي وفي أمان.", 28);
+      await type(p, "form textarea", "لقيت ولد قاعد لوحده على رصيف محطة مترو روض الفرج، حوالي ٦ سنين، لابس سويتر أزرق تريكو. هو معايا دلوقتي وفي أمان.", 28);
       await glide(p, ".field:has(input[type=file])").catch(() => {});
       await tap(p);
       await p.setInputFiles('input[type="file"]', photo);
@@ -138,7 +160,7 @@ const clips = {
 
   // the parent of the missing child: notification, then the suggested match
   async match(p) {
-    await login(p, "mona@demo.local");
+    await login(p, "mona.salem@example.com");
     await p.goto(`${WEB}/notifications`); await settle(p);
     return async () => {
       await p.waitForTimeout(800);
@@ -152,17 +174,20 @@ const clips = {
     };
   },
 
-  // private message to the reporter
+  // Youssef's mother opens the finder's report and messages her directly
   async messages(p) {
-    await login(p, "mona@demo.local");
-    await p.goto(`${WEB}/messages`); await settle(p);
+    await login(p, "mona.salem@example.com");
+    await p.goto(fs.readFileSync(path.join(HERE, "clips/posted-report.txt"), "utf8").trim()); await settle(p);
     return async () => {
-      await p.waitForTimeout(500);
-      await click(p, ".conv >> nth=0");
-      await p.locator(".msg").first().waitFor(); await p.waitForTimeout(1200);
-      const box = p.locator("form textarea, form input.input").last();
-      await type(p, box, "شكرًا جدًا، أنا جاية حالًا على القسم 🙏", 55);
       await p.waitForTimeout(1200);
+      await glide(p, "img.main"); await p.waitForTimeout(1000);
+      await click(p, "a.btn:has-text('✉')");
+      await settle(p); await p.waitForTimeout(700);
+      const box = p.locator("input.input.grow").last();
+      await type(p, box, "السلام عليكم، ده ابني يوسف 😭 أنا مامته، إنتي فين دلوقتي؟", 45);
+      await p.waitForTimeout(400);
+      await box.press("Enter");
+      await p.waitForTimeout(2200);
     };
   },
 };

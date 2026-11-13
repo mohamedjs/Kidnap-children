@@ -51,6 +51,8 @@ h1 { font-size: clamp(32px, 4.4vw, 52px); }
 .phone.big { inline-size: 300px; justify-self: center; }
 
 .section { padding-block: 72px; }
+.video-frame { margin: 0 auto; max-width: 1100px; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 30px 80px var(--glow); background: #000; }
+.video-frame video { display: block; width: 100%; height: auto; }
 .section h2 { font-size: clamp(26px, 3vw, 38px); text-align: center; margin-block-end: 32px; }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .step, .features article { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; }

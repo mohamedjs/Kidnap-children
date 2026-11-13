@@ -3,3 +3,8 @@ stills/
 qa/
 out/
 *.mp4
+raw/
+vo/
+audio/
+preview/
+timing.json

@@ -44,16 +44,16 @@ await p.locator(".report-card").first().waitFor();
 const reportPath = await firstId(p, ".report-card");
 await ctx.close();
 
-await shoot({ name: "report", url: reportPath, user: "mona@demo.local", height: 1000 });
-await shoot({ name: "report-light", url: reportPath, user: "mona@demo.local", theme: "light", height: 1000 });
-await shoot({ name: "matches", url: "/matches", user: "mona@demo.local", height: 980 });
-await shoot({ name: "new-report", url: "/reports/new", user: "heba@demo.local", height: 980 });
+await shoot({ name: "report", url: reportPath, user: "mona.salem@example.com", height: 1000 });
+await shoot({ name: "report-light", url: reportPath, user: "mona.salem@example.com", theme: "light", height: 1000 });
+await shoot({ name: "matches", url: "/matches", user: "mona.salem@example.com", height: 980 });
+await shoot({ name: "new-report", url: "/reports/new", user: "heba.farouk@example.com", height: 980 });
 await shoot({
-  name: "messages", url: "/messages", user: "mona@demo.local",
+  name: "messages", url: "/messages", user: "mona.salem@example.com",
   prep: async (page) => { await page.locator(".conv").first().click(); await page.locator(".msg").first().waitFor(); },
 });
-await shoot({ name: "profile", url: "/me", user: "karim@demo.local" });
-await shoot({ name: "notifications", url: "/notifications", user: "mona@demo.local" });
+await shoot({ name: "profile", url: "/me", user: "karim.adel@example.com" });
+await shoot({ name: "notifications", url: "/notifications", user: "mona.salem@example.com" });
 await shoot({ name: "admin", url: "/admin", user: "admin@demo.local" });
 await shoot({ name: "mobile-home", url: "/", width: 390, height: 844 });
 await shoot({ name: "mobile-report", url: reportPath, width: 390, height: 844 });
