@@ -141,7 +141,7 @@ onMounted(load);
         <button class="btn primary">{{ t("flag.send") }}</button>
       </form>
       <div v-if="mine" class="card pad row owner-tools">
-        <RouterLink :to="`/reports/${report.id}/edit`" class="btn sm">✎ {{ t("profile.edit") }}</RouterLink>
+        <RouterLink :to="`/reports/${report.id}/edit`" class="btn sm">✎ {{ t("report.edit") }}</RouterLink>
         <button v-if="report.status === 'open'" class="btn sm primary" @click="act('resolve')">✓ {{ t("report.resolve") }}</button>
         <button v-if="report.status === 'resolved'" class="btn sm" @click="act('reopen')">{{ t("report.reopen") }}</button>
         <button v-if="report.status === 'open'" class="btn sm" @click="act('rematch')">↻ {{ t("report.rematch") }}</button>

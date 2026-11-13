@@ -16,7 +16,7 @@ defineProps<{ report: Report; counts?: Counts }>();
       <span class="chip kind" :class="report.status === 'resolved' ? 'resolved' : report.kind">
         {{ report.status === "resolved" ? t("status.resolved") : t(`kind.${report.kind}`) }}
       </span>
-      <span v-if="report.photos.length > 1" class="chip count">+{{ report.photos.length - 1 }}</span>
+      <span v-if="report.photos.length > 1" class="chip count" dir="ltr">+{{ report.photos.length - 1 }}</span>
     </div>
     <div class="body">
       <h3>{{ childTitle(report) }}</h3>

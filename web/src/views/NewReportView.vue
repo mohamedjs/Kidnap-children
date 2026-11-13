@@ -69,7 +69,7 @@ async function submit() {
 
 <template>
   <form class="card pad stack form" @submit.prevent="submit">
-    <h1>{{ props.id ? t("profile.edit") : t("form.newTitle") }}</h1>
+    <h1>{{ props.id ? t("report.edit") : t("form.newTitle") }}</h1>
     <div v-if="!props.id" class="segmented">
       <button type="button" :class="{ on: form.kind === 'missing' }" @click="form.kind = 'missing'">{{ t("form.kind.missing") }}</button>
       <button type="button" :class="{ on: form.kind === 'found' }" @click="form.kind = 'found'">{{ t("form.kind.found") }}</button>

@@ -58,5 +58,5 @@ const sides = (m: Match): Report[] => [m.missing, m.found];
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .side { display: grid; gap: 4px; color: var(--text); background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px; justify-items: start; }
 .side:hover { text-decoration: none; outline: 1px solid var(--primary); }
-.side .photo { aspect-ratio: 4 / 3; }
+.side .photo { aspect-ratio: 16 / 10; max-block-size: 240px; }
 </style>
