@@ -1,14 +1,35 @@
-/node_modules
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+# secrets — at every depth
 .env
-.env.backup
-.phpunit.result.cache
-docker-compose.override.yml
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
-ai_service/venv
+.env.*
+!.env.example
+!**/.env.example
+*.key
+*.pem
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# node
+node_modules/
+dist/
+.vite/
+
+# local data / scratch
+.data/
+tmp/
+playwright-report/
+test-results/
+
+# legacy v1 local-only dirs (never tracked)
+legacy/v1-laravel/vendor/
+legacy/v1-laravel/node_modules/
+legacy/v1-laravel/ai_service/venv/
+legacy/v1-laravel/storage/logs/
+legacy/v1-laravel/storage/framework/views/
