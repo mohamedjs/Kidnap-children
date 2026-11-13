@@ -1,0 +1,25 @@
+{
+  "name": "kidnap-children-web",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kidnap-children v2 web app - Vue 3 + Vite, Arabic-first RTL, presentation only",
+  "scripts": {
+    "dev": "vite --port 3100 --strictPort",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview --port 3100 --strictPort"
+  },
+  "dependencies": {
+    "vue": "~3.5.13",
+    "vue-router": "~4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "~5.2.4",
+    "@vue/tsconfig": "~0.7.0",
+    "playwright": "1.61.1",
+    "typescript": "~5.9.3",
+    "vite": "~6.4.1",
+    "vue-tsc": "~3.1.0"
+  }
+}
