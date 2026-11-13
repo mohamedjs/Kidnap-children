@@ -1,0 +1,45 @@
+# Dev infrastructure for Kidnap-children v2.
+# Ports are chosen not to clash with other local stacks (7alm uses 5433/6380/9094/4000/3001).
+#   postgres                    127.0.0.1:5435
+#   s3 (SeaweedFS S3 gateway)   127.0.0.1:9010
+# Values come from ./.env (generate it with scripts/gen-dev-env.sh; never commit it).
+name: kidnap-children-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kidnap}
+      POSTGRES_USER: ${POSTGRES_USER:-kidnap}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run scripts/gen-dev-env.sh}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5435}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # S3-compatible object storage for dev. The minio/minio image is no longer
+  # published on Docker Hub, so dev uses SeaweedFS's S3 gateway. The app only
+  # speaks the S3 API (boto3), so MinIO, AWS S3, R2 or Wasabi work the same in prod.
+  s3:
+    image: chrislusf/seaweedfs:4.50
+    restart: unless-stopped
+    environment:
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:?run scripts/gen-dev-env.sh}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:?run scripts/gen-dev-env.sh}
+      S3_ALLOWED_ORIGINS: ${S3_ALLOWED_ORIGINS:-http://localhost:3100}
+    entrypoint: ["/bin/sh", "/s3-entrypoint.sh"]
+    ports:
+      - "127.0.0.1:${S3_PORT:-9010}:8333"
+    volumes:
+      - s3data:/data
+      - ./deploy/s3-entrypoint.sh:/s3-entrypoint.sh:ro
+
+volumes:
+  pgdata:
+  s3data:
